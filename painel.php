@@ -31,13 +31,13 @@
             href="<?php echo URLROOT ?>/paginas/">Paginas</a>
         <?php }
         **/
-        if (in_array("Vendas", $aplicativo)) { ?>
-            <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/vendas/") {echo " active ";} ?> p-3" 
-            href="<?php echo URLROOT ?>/vendas/">Vendas</a>
-        <?php }
         if (in_array("Crediario", $aplicativo)) { ?>
             <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/crediario/") {echo " active ";} ?> p-3" 
             href="<?php echo URLROOT ?>/crediario/">Crediario</a>
+        <?php }
+        if (in_array("Vendas", $aplicativo)) { ?>
+            <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/vendas/") {echo " active ";} ?> p-3" 
+            href="<?php echo URLROOT ?>/vendas/">Vendas</a>
         <?php }
         if (in_array("Relatorios", $aplicativo)) { ?>
             <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/relatorios/") {echo " active ";} ?> p-3" 

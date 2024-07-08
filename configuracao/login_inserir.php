@@ -90,7 +90,25 @@ $empresas = buscaEmpresas();
                 <button type="submit" class="btn  btn-success"><i class="bi bi-sd-card-fill"></i>&#32;Cadastrar</button>
             </div>
         </form>
-
+        
+        <?php if (isset($_GET['mensagem'])) { ?>
+        <div class="modal" id="avisoModal" tabindex="-1" role="dialog" aria-labelledby="avisoModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- lucas 22092023 ID 358 Modificado titulo do modal-->
+                        <h5 class="modal-title" id="exampleModalLabel">Erro ao criar Login</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid p-0 text-center">
+                            <h4><?php echo $_GET['mensagem'] ?></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
     </div>
 
     <!-- LOCAL PARA COLOCAR OS JS -->
@@ -107,6 +125,12 @@ $empresas = buscaEmpresas();
         }
     </script>
     <script>
+        <?php if (isset($_GET['mensagem'])) { ?>
+            $(document).ready(function(){
+                $('#avisoModal').modal('show');
+            });
+        <?php } ?>
+
         $(document).ready(function() {
             $('input[name="loginNome"]').bind('input', function() {
                 var c = this.selectionStart,

@@ -53,28 +53,21 @@ include_once __DIR__ . "/../config.php";
               ?>
 
               <form role="form" action="verificar_login.php" method="post">
-                <div class="form-group mb-3">
-
-                  <div class="input-group input-group-alternative">
-                    <span class="input-group-text"></i><i class="bi bi-building-fill"></i></span>
-                    <input class="form-control ts-input" type="text" name="nomeEmpresa"
-                      value="<?php echo isset($_COOKIE['Empresa']) ? $_COOKIE['Empresa'] : '' ?>" placeholder="Empresa"
-                      autocomplete="off" autofocus>
-                  </div>
-                </div>
-                <div class="form-group mb-3">
-
-                  <div class="input-group input-group-alternative">
+                <div class="form-group mb-2">
+                  <label><span style="color:red;">*</span> CPF/e-Mail</label>
+                  <div class="input-group input-group-alternative mt-1">
                     <span class="input-group-text"></i><i class="bi bi-person-fill"></i></span>
-                    <input class="form-control ts-input" type="text" name="loginNome"
-                      value="<?php echo isset($_COOKIE['User']) ? $_COOKIE['User'] : '' ?>" placeholder="Usuário"
-                      autocomplete="off" autofocus>
+                    <input class="form-control ts-input" type="text" name="login"
+                      value="<?php echo isset($_COOKIE['User']) ? $_COOKIE['User'] : '' ?>" 
+                      placeholder="Usuário" autocomplete="off" autofocus>
                   </div>
                 </div>
                 <div class="form-group">
-                  <div class="input-group input-group-alternative" id="show_hide_password">
-                    <span class="input-group-text" style="width: 42px;"></i><i class="bi bi-lock-fill"></i></span>
-                    <input class="form-control ts-input" placeholder="Senha" type="password" id="pass" name="password">
+                  <label><span style="color:red;">*</span> Senha</label>
+                  <div class="input-group input-group-alternative mt-1" id="show_hide_password">
+                    <span class="input-group-text"></i><i class="bi bi-lock-fill"></i></span>
+                    <input class="form-control ts-input"  value="<?php echo isset($_COOKIE['password']) ? $_COOKIE['password'] : '' ?>" 
+                      placeholder="Senha" type="password" id="pass" name="password">
                     <i class="bi bi-eye pt-3" aria-hidden="true"
                       style="width:30px; text-align: right;border-bottom:1px solid #40505B"></i>
                   </div>
