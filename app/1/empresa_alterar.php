@@ -27,15 +27,23 @@ if (isset($LOG_NIVEL)) {
 //LOG
 
 if (isset($jsonEntrada['idEmpresa'])) {
-    $idEmpresa = $jsonEntrada['idEmpresa'];
-    $nomeEmpresa = $jsonEntrada['nomeEmpresa'];
-    $timeSessao = $jsonEntrada['timeSessao'];
-    $menu = isset($jsonEntrada['menu']) && $jsonEntrada['menu'] !== "" ? "'" . mysqli_real_escape_string($conexao, $jsonEntrada['menu']) . "'" : "NULL";
-    $idPessoa = isset($jsonEntrada['idPessoa']) && $jsonEntrada['idPessoa'] !== "" ? "'" . mysqli_real_escape_string($conexao, $jsonEntrada['idPessoa']) . "'" : "NULL";
+    $idEmpresa = isset($jsonEntrada['idEmpresa']) && $jsonEntrada['idEmpresa'] !== "" ? $jsonEntrada['idEmpresa'] : "NULL";
+    $nomeEmpresa = isset($jsonEntrada['nomeEmpresa']) && $jsonEntrada['nomeEmpresa'] !== "" ? "'" . $jsonEntrada['nomeEmpresa'] . "'" : "NULL";
+    $host = isset($jsonEntrada['host']) && $jsonEntrada['host'] !== "" ? "'" . $jsonEntrada['host'] . "'" : "NULL";
+    $base = isset($jsonEntrada['base']) && $jsonEntrada['base'] !== "" ? "'" . $jsonEntrada['base'] . "'" : "NULL";
+    $usuario = isset($jsonEntrada['usuario']) && $jsonEntrada['usuario'] !== "" ? "'" . $jsonEntrada['usuario'] . "'" : "NULL";
+    $senhadb = isset($jsonEntrada['senhadb']) && $jsonEntrada['senhadb'] !== "" ? "'" . $jsonEntrada['senhadb'] . "'" : "NULL";
+    $timeSessao = isset($jsonEntrada['timeSessao']) && $jsonEntrada['timeSessao'] !== "" ?  $jsonEntrada['timeSessao']  : "NULL";
+    $menu = isset($jsonEntrada['menu']) && $jsonEntrada['menu'] !== "" ? "'" . $jsonEntrada['menu'] . "'" : "NULL";
     //Lucas 29022024 - id862 adiconado campo administradora
-    $administradora = $jsonEntrada['administradora'];
+    $administradora = isset($jsonEntrada['administradora']) && $jsonEntrada['administradora'] !== "" ?  $jsonEntrada['administradora']  : "NULL";
+    $cnpj = isset($jsonEntrada['cnpj']) && $jsonEntrada['cnpj'] !== "" ? "'" . $jsonEntrada['cnpj'] . "'" : "NULL";
+    $progressdb = isset($jsonEntrada['progressdb']) && $jsonEntrada['progressdb'] !== "" ? "'" . $jsonEntrada['progressdb'] . "'" : "NULL";
+    $progressld = isset($jsonEntrada['progressld']) && $jsonEntrada['progressld'] !== "" ? "'" . $jsonEntrada['progressld'] . "'" : "NULL";
+    $etbcodPadrao = isset($jsonEntrada['etbcodPadrao']) && $jsonEntrada['etbcodPadrao'] !== "" ? "'" . $jsonEntrada['etbcodPadrao'] . "'" : "NULL";
 
-    $sql = "UPDATE empresa SET nomeEmpresa='$nomeEmpresa', timeSessao=$timeSessao, menu=$menu, idPessoa=$idPessoa, administradora=$administradora WHERE idEmpresa = $idEmpresa";
+    $sql = "UPDATE empresa SET nomeEmpresa=$nomeEmpresa, host=$host, base=$base, usuario=$usuario, senhadb=$senhadb, timeSessao=$timeSessao, 
+            menu=$menu, administradora=$administradora, cnpj=$cnpj, progressdb=$progressdb, progressld=$progressld, etbcodPadrao=$etbcodPadrao WHERE idEmpresa = $idEmpresa";
 
     //LOG
     if (isset($LOG_NIVEL)) {
@@ -47,6 +55,24 @@ if (isset($jsonEntrada['idEmpresa'])) {
 
     //TRY-CATCH
     try {
+        $progEntrada = array(
+			'idEmpresa' => $jsonEntrada['idEmpresa'],
+			'nomeEmpresa' => $jsonEntrada['nomeEmpresa'],
+			'host' => $jsonEntrada['host'],
+			'base' => $jsonEntrada['base'],
+			'usuario' => $jsonEntrada['usuario'],
+			'senhadb' => $jsonEntrada['senhadb'],
+			'timeSessao' => $jsonEntrada['timeSessao'],
+			'menu' => $jsonEntrada['menu'],
+			'administradora' => $jsonEntrada['administradora'],
+			'cnpj' => $jsonEntrada['cnpj'],
+			'progressdb' => $jsonEntrada['progressdb'],
+			'progressld' => $jsonEntrada['progressld'],
+			'etbcodPadrao' => $jsonEntrada['etbcodPadrao']
+		);
+        $progr = new chamaprogress();
+        $retorno = $progr->executarprogress("sistema/app/1/empresa_alterar",json_encode($progEntrada));
+        fwrite($arquivo,$identificacao."-RETORNO-PROGRESS>".$retorno."\n");
 
         $atualizar = mysqli_query($conexao, $sql);
         if (!$atualizar)

@@ -72,7 +72,7 @@ function emailEnviar($from,$fromNome,$arrayPara,$assunto,$corpo,$idEmpresa,$envi
 
         if ($enviarTradesis == 1) {
             //gabriel 03062024 id 999 ajustado buscar atendente
-            $apiEntrada = array(
+           /*   $apiEntrada = array(
                 'idEmpresa' => $idEmpresa
             );
             $atendentes = chamaAPI(null, '/cadastros/atendente', json_encode($apiEntrada), 'GET');
@@ -80,7 +80,8 @@ function emailEnviar($from,$fromNome,$arrayPara,$assunto,$corpo,$idEmpresa,$envi
                 if($atendente['nomeUsuario'] !== "Tradesis") {
                     $mail->addCC($atendente['email'], $atendente['nomeUsuario']);
                 }
-            }
+            } */
+            $mail->addCC('gabriel.vieira@tradesis.com.br');
         }
             
 

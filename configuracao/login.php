@@ -45,7 +45,6 @@ $logins = buscaLogins();
                     <tr>
                         <th>Nome</th>
                         <th>E-mail</th>
-                        <th>Empresa</th>
                         <th>Cpf/Cnpj</th>
                         <th>Token</th>
                         <th>Ação</th>
@@ -58,7 +57,6 @@ $logins = buscaLogins();
                     <tr>
                         <td><?php echo $login['loginNome'] ?></td>
                         <td><?php echo $login['email'] ?></td>
-                        <td><?php echo $login['nomeEmpresa'] ?></td>
                         <td><?php echo $login['cpfCnpj'] ?></td>
                         <td><?php echo $login['pedeToken'] == 1 ? 'Sim' : 'Não'; ?></td>
                         <td>

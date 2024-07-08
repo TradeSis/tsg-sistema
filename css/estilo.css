@@ -178,31 +178,6 @@ span.ts-horas {
   /* menu aparece */
 }
 
-/* MENU FILTRO - AGENDA */
-.ts-filtroCalendario{
-  width: 280px;
-  position: fixed;
-  margin-top:35px; 
-  margin-left:130px; 
-  background-color: #d3d3d3;
-  display: flex;
-  z-index: 100;
-  padding: 10px;
-  border-radius: 2%;
-}
-
-.ts-filtroCalendario.mostra{ 
-  display: none;
-}
-
-@media only screen and (max-width: 400px) {
-  .ts-filtroCalendario {
-      margin-left:0px; 
-      margin-top:65px;
-      z-index: 100;
-  }
-}
-
 .ts-btnFiltros:hover {
   background-color: rgba(0, 0, 0, 0.103);
 }
@@ -627,12 +602,6 @@ span.ts-horas {
   touch-action: none;
 }
 
-.ts-inputComFormatoTexto {
-  background: transparent;
-  pointer-events: none;
-  touch-action: none;
-}
-
 .ts-sumir {
   display: none;
 }
@@ -714,7 +683,7 @@ span.ts-horas {
 
 .ts-noScroll::-webkit-scrollbar {
   display: none; 
-}
+
 .ts-cardStatusDemanda {
   font-size: 12px;
   float: left;
