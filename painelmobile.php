@@ -30,7 +30,7 @@ $url = (parse_url($URL_ATUAL, PHP_URL_PATH));
                     <select class="form-select mt-2 ts-selectAplicativos" id="tabaplicativosmobile">
                         <?php
                         if (in_array("Services", $aplicativo)) { ?>
-                        <option value="<?php echo URLROOT ?>/services/" <?php if ($url == URLROOT . "/services/") {
+                        <option value="<?php echo URLROOT ?>/servicos/" <?php if ($url == URLROOT . "/servicos/") {
                                             echo " selected ";
                                         } ?>>Serviços</option>
                         <?php }

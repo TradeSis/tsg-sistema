@@ -10,8 +10,8 @@
         <div class="list-group mt-4" id="menu">
         <?php
         if (in_array("Services", $aplicativo)) { ?>
-            <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/services/") {echo " active ";} ?> p-3" 
-            href="<?php echo URLROOT ?>/services/">Serviços</a>
+            <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/servicos/") {echo " active ";} ?> p-3" 
+            href="<?php echo URLROOT ?>/servicos/">Serviços</a>
         <?php }
         if (in_array("Notas", $aplicativo)) { ?>
             <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/notas/") {echo " active ";} ?> p-3" 
