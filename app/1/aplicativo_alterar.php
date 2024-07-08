@@ -1,8 +1,7 @@
 <?php
-//Lucas 05042023 criado
-//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
-// helio 01/11/2023 - tabela aplicativo, banco padrao, empresa null
-$conexao = conectaMysql(null);
+// PROGRESS
+// ALTERAR E INSERIR
+
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
@@ -25,37 +24,19 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-if (isset($jsonEntrada['idAplicativo'])) {
-    $idAplicativo = $jsonEntrada['idAplicativo'];
-    $nomeAplicativo = $jsonEntrada['nomeAplicativo'];
-    $appLink = $jsonEntrada['appLink'];
-    $imgAplicativo = $jsonEntrada['imgAplicativo'];
-    $pathImg = $jsonEntrada['pathImg'];
+if (isset($jsonEntrada['dadosEntrada'])) {
 
-    $sql = "UPDATE aplicativo SET nomeAplicativo ='$nomeAplicativo', appLink ='$appLink', imgAplicativo ='$imgAplicativo' WHERE idAplicativo = $idAplicativo";
-
-    //echo "-SQL->".json_encode($sql)."\n";
-
-    //LOG
-    if (isset($LOG_NIVEL)) {
-        if ($LOG_NIVEL >= 3) {
-            fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
-        }
-    }
-    //LOG
-
-    //TRY-CATCH
     try {
 
-        $atualizar = mysqli_query($conexao, $sql);
-        if (!$atualizar)
-            throw new Exception(mysqli_error($conexao));
-
-        $jsonSaida = array(
-            "status" => 200,
-            "retorno" => "ok"
-        );
-    } catch (Exception $e) {
+        $progr = new chamaprogress();
+        $retorno = $progr->executarprogress("sistema/app/1/aplicativo_alterar",json_encode($jsonEntrada));
+        fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
+        $conteudoSaida = json_decode($retorno,true);
+        if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
+            $jsonSaida = $conteudoSaida["conteudoSaida"][0];
+        } 
+    } 
+    catch (Exception $e) {
         $jsonSaida = array(
             "status" => 500,
             "retorno" => $e->getMessage()
@@ -67,12 +48,15 @@ if (isset($jsonEntrada['idAplicativo'])) {
         // ACAO EM CASO DE ERRO (CATCH), que mesmo assim precise
     }
     //TRY-CATCH
+
+
 } else {
     $jsonSaida = array(
         "status" => 400,
         "retorno" => "Faltaram parametros"
     );
 }
+
 
 //LOG
 if (isset($LOG_NIVEL)) {
@@ -81,3 +65,9 @@ if (isset($LOG_NIVEL)) {
     }
 }
 //LOG
+
+
+
+fclose($arquivo);
+
+?>

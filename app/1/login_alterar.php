@@ -1,7 +1,7 @@
 <?php
-//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
-// helio 01/11/2023 - banco padrao, empresa null
-$conexao = conectaMysql(null);
+// PROGRESS
+// ALTERAR E INSERIR
+
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
@@ -10,7 +10,7 @@ if (isset($LOG_CAMINHO)) {
     $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "login_alterar";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "sistema_" . date("dmY") . ".log", "a");
+            $arquivo = fopen(defineCaminhoLog() . "sistema_". date("dmY") . ".log", "a");
         }
     }
 }
@@ -24,50 +24,19 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
+if (isset($jsonEntrada['dadosEntrada'])) {
 
-if (isset($jsonEntrada['idLogin'])) {
-    $idLogin = $jsonEntrada['idLogin'];
-
-    if ($jsonEntrada['acao'] == "login") {
-        $loginNome = $jsonEntrada['loginNome'];
-        $email = $jsonEntrada['email'];
-        $cpfCnpj = $jsonEntrada['cpfCnpj'];
-        $pedeToken = $jsonEntrada['pedeToken'];
-    
-        if($cpfCnpj == ''){
-            $sql = "UPDATE `login` SET `loginNome`='$loginNome', `email`='$email', `pedeToken`=$pedeToken WHERE idLogin = $idLogin";
-        }else{
-            $sql = "UPDATE `login` SET `loginNome`='$loginNome', `email`='$email', `cpfCnpj`='$cpfCnpj', `pedeToken`=$pedeToken WHERE idLogin = $idLogin";
-        }
-    }
-    if ($jsonEntrada['acao'] == "senha") {
-        $password = md5($jsonEntrada['password']);
-        $sql = "UPDATE `login` SET `password` = '$password' WHERE idLogin = $idLogin";
-    }
-    
-
-    //echo "-ENTRADA->".$sql."\n"; 
-
-    //LOG
-    if (isset($LOG_NIVEL)) {
-        if ($LOG_NIVEL >= 3) {
-            fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
-        }
-    }
-    //LOG
-
-    //TRY-CATCH
     try {
 
-        $atualizar = mysqli_query($conexao, $sql);
-        if (!$atualizar)
-            throw new Exception(mysqli_error($conexao));
-
-        $jsonSaida = array(
-            "status" => 200,
-            "retorno" => "ok"
-        );
-    } catch (Exception $e) {
+        $progr = new chamaprogress();
+        $retorno = $progr->executarprogress("sistema/app/1/login_alterar",json_encode($jsonEntrada));
+        fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
+        $conteudoSaida = json_decode($retorno,true);
+        if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
+            $jsonSaida = $conteudoSaida["conteudoSaida"][0];
+        } 
+    } 
+    catch (Exception $e) {
         $jsonSaida = array(
             "status" => 500,
             "retorno" => $e->getMessage()
@@ -88,6 +57,7 @@ if (isset($jsonEntrada['idLogin'])) {
     );
 }
 
+
 //LOG
 if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 2) {
@@ -95,3 +65,9 @@ if (isset($LOG_NIVEL)) {
     }
 }
 //LOG
+
+
+
+fclose($arquivo);
+
+?>
