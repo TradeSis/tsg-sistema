@@ -1,0 +1,722 @@
+:root {
+  /*  Variaveis de cores personalizadas */
+  --color-bg-primary: #13216A;
+  --color-bg-secondary: #fff;
+  --color-letra-primary: #13216A;
+  --color-letra-secondary: #ffffff;
+}
+
+html {
+  background-color: #fff;
+  /*VERIFICAR*/
+}
+
+html,
+body {
+  height: 100vh !important;
+  margin: 0 !important;
+}
+
+* {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px;
+}
+
+.ts-iframe {
+  width: 100%;
+  height: 92vh;
+  border: none;
+}
+
+/* FUNDO VISUALIZAR */
+body.ts-fundoVisualizar{
+  background: #F1F2F4;
+}
+
+/* PAINEL */
+.ts-sidebar {
+  height: 100vh;
+  width: 120px;
+}
+
+.ts-itemsiderbar {
+  background-color: var(--color-bg-primary);
+  color: var(--color-letra-secondary);
+  text-decoration: none;
+}
+
+.ts-itemsiderbar.active {
+  background-color: var(--color-letra-secondary);
+  color: var(--color-letra-primary);
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.ts-itemsiderbar:hover,
+.ts-itemsiderbar:focus {
+  color: var(--color-letra-primary);
+  background-color: var(--color-letra-secondary);
+  font-weight: 900;
+  text-decoration: none;
+}
+
+/* fim - PAINEL */
+
+/* FUNDO da barra superior onde fica os aplicativos */
+.ts-bgAplicativos {
+  background-color: var(--color-bg-primary);
+}
+
+/*SELECT  de aplicativos quando estiver em dispositivos tablet e mobile*/
+.ts-selectAplicativos {
+  color: var(--color-letra-secondary);
+  ;
+  background-color: var(--color-bg-primary);
+  border: none;
+  border-bottom: 2px solid #fff
+}
+
+/*SELECT dos sub menus de aplicativos quando estiver em dispositivos tablet e mobile*/
+.ts-selectSubMenuAplicativos {
+  color: #000;
+  width: 160px;
+  text-align: center;
+}
+
+.ts-tituloPrincipal {
+  font-weight: 600;
+  font-size: 18px;
+  text-align: left;
+  color: var(--color-letra-primary);
+}
+
+.ts-headertabelafixo {
+  background-color: var(--color-bg-primary);
+  color: var(--color-letra-secondary);
+  ;
+  top: 0px;
+  position: sticky;
+}
+
+.ts-headertabelafixo tr th {
+  font-weight: 500;
+}
+
+.ts-headerTabelaLinhaCima {
+  background-color: var(--color-bg-primary) !important;
+  position: sticky;
+  top: 0px;
+}
+
+.ts-headerTabelaLinhaBaixo {
+  background-color: var(--color-bg-primary) !important;
+  position: sticky;
+  top: 34px;
+  margin-top: 0px;
+}
+
+.ts-selectFiltrosHeaderTabela {
+  font-size: 14px;
+  color: var(--color-letra-secondary) !important;
+  font-style: italic;
+  background-color: var(--color-bg-primary) !important;
+  margin-top: 0px;
+  height: 25px !important;
+  padding-top: 0px !important;
+}
+
+.ts-divTabela {
+  width: 100%;
+  height: 80vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+.ts-divTabela70 {
+  width: 100%;
+  height: 70vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+/* Style para previsto, quando existe Real */  
+span.ts-previsto {
+  font-weight: lighter;
+}
+
+/* Style para as datas */
+span.ts-datas {
+    font-size:13px;
+    display:flex;
+    width:110px;
+    float:left;
+}
+
+/* Style para as horas */
+span.ts-horas {
+    font-size:13px; 
+    display:flex;
+    width:43px;
+    float:left;
+}
+
+/* MENU FILTROS E DIV DA TEBALA QUE TERA O EFEITO DE MOVIMENTO*/
+.ts-menuFiltros {
+  background-color: #d3d3d3;
+  width: 170px;
+  position: fixed;
+  left: -250px;
+  /* menu desaparece */
+  transition: left 1s;
+  transition: right 0.5s;
+  z-index: 2;
+  border-radius: 2%;
+}
+
+.ts-menuFiltros.mostra {
+  left: 0px;
+  /* menu aparece */
+}
+
+/* MENU FILTRO - AGENDA */
+.ts-filtroCalendario{
+  width: 280px;
+  position: fixed;
+  margin-top:35px; 
+  margin-left:130px; 
+  background-color: #d3d3d3;
+  display: flex;
+  z-index: 100;
+  padding: 10px;
+  border-radius: 2%;
+}
+
+.ts-filtroCalendario.mostra{ 
+  display: none;
+}
+
+@media only screen and (max-width: 400px) {
+  .ts-filtroCalendario {
+      margin-left:0px; 
+      margin-top:65px;
+      z-index: 100;
+  }
+}
+
+.ts-btnFiltros:hover {
+  background-color: rgba(0, 0, 0, 0.103);
+}
+
+.ts-btnFiltros i {
+  color:#000;
+  font-weight: 600px;
+}
+
+.ts-tableFiltros {
+  padding-left: 0px;
+}
+
+.ts-tableFiltros.mostra {
+  padding-left: 163px;
+}
+
+.fonteCorpo td {
+  font-size: 13px;
+}
+
+.ts-click{
+  cursor: pointer;
+}
+
+.ts-btnAcoes{
+  font-size: 13px;
+  font-style:italic;
+}
+/*fim - MENU FILTROS*/
+
+/*TAB DE CONFIGURAÇÔES*/
+.ts-tabConfig {
+  background-color: #567381 !important;
+  margin-bottom: 2px;
+  color: var(--color-letra-secondary);
+}
+
+.ts-tabConfig:hover {
+  color: var(--color-letra-secondary);
+}
+
+.ts-tabConfig.active {
+  background-color: #FFF !important;
+  color: #567381 !important;
+  border: 2px solid #DFDFDF;
+  border-radius: 5px 5px 0px 0px;
+}
+
+/*fim - TAB DE CONFIGURAÇÔES*/
+
+/* TAB DE DENTRO DO MODAL */
+.ts-tabModal {
+  background-color: #567381 !important;
+  color: #EEEEEE !important;
+}
+
+.ts-tabModal .active {
+  background-color: #EEEEEE !important;
+  color: #567381 !important;
+}
+
+/* fim- TAB DE DENTRO DO MODAL */
+
+/* TAB VISUALIZAR  */
+.line {
+  width: 100%;
+  border-bottom: 1px solid #707070;
+}
+
+#ts-tabs .tab {
+  display: inline-block;
+  padding: 5px 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 5;
+  border-radius: 3px 3px 0 0;
+  background-color: #567381;
+  color: #EEEEEE;
+}
+
+#ts-tabs .whiteborder {
+  border: 1px solid #707070;
+  border-bottom: 1px solid #fff;
+  border-radius: 3px 3px 0 0;
+  background-color: #EEEEEE;
+  color: #567381;
+}
+
+#ts-tabs .tabContent {
+  position: relative;
+  top: -1px;
+  z-index: 1;
+  padding: 10px;
+  border-radius: 0 0 3px 3px;
+  color: black;
+}
+
+#ts-tabs .hide {
+  display: none;
+}
+
+#ts-tabs .show {
+  display: block;
+}
+/* fim- TAB VISUALIZAR */
+
+/* CARDS DE TOTAIS DOS PROGRAMAS */
+.ts-cardsTotais {
+  border-left: solid var(--color-bg-primary);
+  height: 65px;
+  background-color: #EEEEEE;
+}
+.ts-cardsTotaisContrato{
+  border-left: solid var(--color-bg-primary);
+  height: 65px;
+  background-color: #FFFFFF;
+}
+
+/* CONTRATO STATUS */
+[class="Orçamento"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #5271FE !important;
+  color: var(--color-letra-secondary);
+ /* width: 160px; */
+}
+
+[class="Faturamento"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #FE5469 !important;
+  color: var(--color-letra-secondary);
+ /* width: 160px; */
+}
+
+[class="Finalizado"] {
+ /* display: inline-block; */
+  background: #C34A36 !important;
+  color: var(--color-letra-secondary);
+ /* width: 160px;*/
+}
+
+[class="Aprovação"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #69419D !important;
+  color: var(--color-letra-secondary);
+  /* width: 160px;*/
+}
+
+[class="Desenvolvimento"] {
+/*  margin-top: 5px;
+  display: inline-block; */
+  background: #FEA051 !important;
+  color: var(--color-letra-secondary);
+ /* width: 160px; */
+}
+
+[class="Recebimento"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #18B376 !important;
+  color: var(--color-letra-secondary);
+ /* width: 160px; */
+}
+/*fim-  CONTRATO STATUS */
+
+/*  */
+/* STATUS DEMANDA */
+[class="1"] {
+  /*margin-top: 5px;
+  display: inline-block; */
+  background: #5271FE !important;
+  color: #fff;
+  /*width: 160px; */
+}
+
+[class="9"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #FE5469 !important;
+  color: #fff;
+ /* width: 160px; */
+}
+
+[class="4"] {
+ /* display: inline-block; */
+  background: #C34A36 !important;
+  color: #fff;
+ /* width: 100px; */
+}
+
+[class="3"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #69419D !important;
+  color: #fff;
+ /* width: 160px; */
+}
+
+[class="5"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #FEA051 !important;
+  color: #fff;
+  /*width: 160px; */
+}
+
+[class="6"] {
+  /*margin-top: 5px;
+  display: inline-block; */
+  background: #18B376 !important;
+  color: #fff;
+/*  width: 160px; */
+}
+
+[class="7"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: #00C2A8 !important;
+ /* width: 160px; */
+  color: #fff;
+}
+
+[class="8"] {
+ /* margin-top: 5px;
+  display: inline-block; */
+  background: blueviolet !important;
+  color: #fff;
+ /* width: 160px; */
+}
+
+[class="2"] {
+  /*margin-top: 5px;
+  display: inline-block; */
+  background: #FFC107!important;
+  color: #fff;
+  /* width: 160px; */
+}
+/* fim - STATUS DEMANDA*/
+
+/* CARDS/BOTOES DE STATUS */
+.ts-cardLink {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  opacity: 0;
+}
+
+.ts-cardLink:hover {
+  cursor: pointer;
+}
+
+.ts-cardColor-active {
+  background-color: #fff !important;
+  box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+  -webkit-box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+  -moz-box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+  border-left: solid #158cee !important;
+
+}
+
+.ts-shadowOff {
+  box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
+}
+/* fim - CARDS/BOTOES DE STATUS */
+
+/*SOMBRA */
+.ts-shadow {
+  box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+  -webkit-box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+  -moz-box-shadow: -2px 3px 10px 0px rgba(207, 169, 169, 0.75);
+}
+
+/*fim-  SOMBRA */
+
+/* CAMPO SENHA PERFIL DE LOGIN */
+#ts-campoSenhaPerfil {
+  display: none;
+}
+
+#ts-campoSenhaPerfil.mostra {
+  display: flex;
+}
+
+/* fim - CAMPO SENHA PERFIL DE LOGIN */
+
+.quill-comentario{
+  background-color: #fff;
+  height:100px !important;  
+  width:100% !important;
+ }
+
+.tituloEditor{
+  font-size: 16px;
+  color: #777;
+}
+/* fim - EDITOR QUILL */
+
+/* IMAGEM EM FORMATO DE PERFIL */
+#imgAplicativo {
+  display: none;
+}
+
+.picture {
+  width: 100px;
+  height: 100px;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #aaa;
+  border: 1px dashed currentcolor;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: sans-serif;
+  transition: color 300ms ease-in-out, background 300ms ease-in-out;
+  outline: none;
+  overflow: hidden;
+}
+
+.picture:hover {
+  color: #777;
+  background: #ccc;
+}
+
+.picture:active {
+  border-color: turquoise;
+  color: turquoise;
+  background: #eee;
+}
+
+.picture:focus {
+  color: #777;
+  background: #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.picture__img {
+  height: 100px;
+  border-radius: 50%;
+}
+
+.custom-file-upload {
+  /* border: 1px solid #ccc; */
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #fff;
+  }
+  ::-webkit-file-upload-button {
+  opacity: 0;
+  
+  padding: 0.5em;
+  }
+/* fim - IMAGEM EM FORMATO DE PERFIL */
+
+
+/* MODAL DEMANDAS/VIZUALIZAR */
+.modal-fullscreen {
+  max-width: 75vw;
+  height: 98vh;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+}
+
+.ts-divLateralModalDemanda {
+  position: sticky;
+  display: flex;
+  height: 98vh;
+  background-color: #F1F2F4;
+}
+
+@media only screen and (max-width: 785px) {
+  .modal-fullscreen {
+      max-width: 100vw;
+      height: 98vh;
+  }
+
+  .ts-divLateralModalDemanda {
+      height: 650px;
+  }
+
+}
+
+.ts-inputSemBorda {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  margin-top: -5px;
+  background: #F1F2F4;
+}
+
+.ts-inputSemBorda:any-link {
+  margin-top: -5px;
+  background: #fff;
+}
+
+.ts-selectDemandaModalVisualizar {
+  border-radius: 3px;
+  border-bottom: 1px solid #C1C1C1;
+  background: #F1F2F4;
+  cursor: pointer;
+}
+
+.ts-tituloPrincipalModal {
+  font-size: 18px;
+  font-weight: 600;
+  color: #172B4D;
+  cursor: pointer;
+}
+/* usado também no modalTarefas_alterar */
+.ts-displayDisable {
+  background: #eee;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.ts-inputComFormatoTexto {
+  background: transparent;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.ts-sumir {
+  display: none;
+}
+
+.ts-containerDescricaoDemanda .ql-toolbar {
+  display: none;
+}
+
+.ts-btnDescricaoEditar {
+  color: #000000;
+  cursor: pointer;
+}
+
+
+/* STYLE SCROLL BAR */
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #C1C1C1;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+.ts-subTitulo {
+  color: #172B4D;
+}
+
+.ts-kanbanFundo {
+  background: #f1f1f1;
+}
+
+/* QUADRO VISAOCLI/KANBAN */
+.ts-kanbanQuadro {
+  min-height: 30px;
+  padding: 10px;
+  background: white;
+  display: inline-block;
+  border-radius: 3px;
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  font-size: 13px;
+}
+
+.ts-kanban {
+  width: 100%;
+  height: 90vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+.ts-kanbanTitulo {
+  position: sticky;
+  top: -8px;
+  background-color: #fff;
+  padding: 3px;
+  z-index: 2;
+}
+
+.ts-cardAtrasado {
+  background-color: rgba(234, 64, 36, 0.7);
+}
+
+.ts-cardDataPrevisao {
+  font-size: 12px;
+  float: right;
+}
+
+
+.ts-noScroll::-webkit-scrollbar {
+  display: none; 
+}
+.ts-cardStatusDemanda {
+  font-size: 12px;
+  float: left;
+
+}

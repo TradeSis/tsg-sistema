@@ -1,0 +1,146 @@
+
+ /*  BOTÕES */
+ .btn-primary{
+  color: #fff;
+  background-color: #4E73DF;
+  border-color: #4E73DF;
+}
+
+.btn-primary:hover{
+  
+  background-color: #2E59D9;
+  border-color: #2E59D9;
+}
+.btn-success{
+  color: #fff;
+  background-color: #1CC88A;
+  border-color: #1CC88A;
+}
+
+.btn-success:hover{
+  color: #fff;
+  background-color: #17A673;
+  border-color: #17A673;
+} 
+
+.btn-warning {
+  color: #fff;
+  background-color: #f0ad4e;
+  border-color: #eea236;
+}
+
+.btn-warning:hover {
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #d58512;
+}
+
+.btn-danger{
+  color: #fff;
+  background-color: #d9534f;
+  border-color: #d9534f;
+}
+
+.btn-danger:hover{
+  color: #fff;
+  background-color: #E02D1B;
+  border-color: #E02D1B;
+}
+
+.btn-info {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-info:hover {
+  color: #fff;
+  background-color: #138496;
+  border-color: #117a8b;
+}
+
+.bg-info {
+  background-color: #17a2b8 !important;
+}
+
+/* INPUT E FORMULARIOS */
+
+.ts-label {
+  margin-bottom: -10px;
+  color: rgb(122, 122, 122);
+  font-size: 14px;
+}
+
+.ts-input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #484848;
+  border-radius: 0px;
+  margin-top: -5px;
+}
+
+.ts-input:hover,
+.ts-input:active,
+.ts-input:focus {
+  box-shadow: 0 0 0 0;
+  border: 1 none;
+  outline: 0;
+}
+
+/*TAB SUBMENUS APLICATIVOS*/
+.nav-link{
+  background-color: transparent; /* tab desativada */
+  border-radius: 3px 3px 0 0;
+  color: #fff!important;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+a.nav-link{
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.nav-link.active{
+  background-color: #fff;
+  border-radius: 3px 3px 0 0;
+  
+  border-top: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  border-bottom: 5px solid #fff;
+  font-weight: 400;
+  color: #13216A!important;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.nav-link.active:any-link{
+  background-color: #ffffff!important;
+}
+/*fim - TAB SUBMENUS APLICATIVOS*/
+
+.container-fluid {
+  padding-left: 8px;
+}
+
+/* ESTILOS DE TABELAS */
+.table-sm tr td {
+  padding: 2px;
+  vertical-align: middle;
+  border-top: 0px solid #dee2e6;
+}
+
+.ts-tablecenter th {
+  text-align: center;
+  border-right: 1px solid #ccc;
+}
+.ts-tablecenter td {
+  border-right: 1px solid #ccc;
+}
+.ts-value {
+  text-align: right;
+}
+.ts-text {
+  text-align: left;
+}
