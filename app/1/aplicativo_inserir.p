@@ -8,10 +8,10 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field nomeAplicativo     like aplicativo.nomeAplicativo
-    field appLink     like aplicativo.appLink
-    field imgAplicativo     like aplicativo.imgAplicativo
-    field pathImg     like aplicativo.pathImg.
+    field nomeAplicativo     like tsaplic.nomeAplicativo
+    field appLink     like tsaplic.appLink
+    field imgAplicativo     like tsaplic.imgAplicativo
+    field pathImg     like tsaplic.pathImg.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
@@ -35,7 +35,7 @@ then do:
 end.
 
 
-find aplicativo where aplicativo.nomeAplicativo = "" + ttentrada.nomeAplicativo + "" no-lock no-error.
+find aplicativo where tsaplic.nomeAplicativo = "" + ttentrada.nomeAplicativo + "" no-lock no-error.
 if avail aplicativo
 then do:
     create ttsaida.
@@ -50,11 +50,11 @@ then do:
 end.
 
 do on error undo:
-	create aplicativo.
-	aplicativo.nomeAplicativo = ttentrada.nomeAplicativo.
-	aplicativo.appLink = ttentrada.appLink.
-	aplicativo.imgAplicativo = ttentrada.imgAplicativo.
-	aplicativo.pathImg = ttentrada.pathImg.
+	create tsaplic.
+	tsaplic.nomeAplicativo = ttentrada.nomeAplicativo.
+	tsaplic.appLink = ttentrada.appLink.
+	tsaplic.imgAplicativo = ttentrada.imgAplicativo.
+	tsaplic.pathImg = ttentrada.pathImg.
 
 end.
 

@@ -13,7 +13,32 @@ def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA
     field password  as CHAR.
 
 def temp-table ttlogin  no-undo serialize-name "login"  /* JSON SAIDA */
-    like login.
+    field idLogin like login.idLogin
+    field loginNome like login.loginNome
+    field statusLogin like login.statusLogin
+    field email like login.email
+    field cpfCnpj like login.cpfCnpj
+    field secret like login.secret
+    field pedeToken like login.pedeToken.
+
+def temp-table ttempresa  no-undo serialize-name "empresa"  /* JSON SAIDA */
+    field idLogin like login.idLogin
+    field idEmpresa like empresa.idEmpresa
+    field nomeEmpresa like empresa.nomeEmpresa
+    field timeSessao like empresa.timeSessao
+    field administradora like empresa.administradora
+    field etbcodPadrao like empresa.etbcodPadrao.
+
+def temp-table ttestab  no-undo serialize-name "estab"  /* JSON SAIDA */
+    like loginestab    
+    field etbnom as CHAR.
+
+
+def dataset conteudoLogin for ttlogin, ttempresa, ttestab
+DATA-RELATION for1 FOR ttlogin, ttempresa         
+    RELATION-FIELDS(ttlogin.idLogin,ttempresa.idLogin) NESTED
+DATA-RELATION for2 FOR ttempresa, ttestab
+    RELATION-FIELDS(ttempresa.idEmpresa,ttestab.idEmpresa) NESTED.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -51,7 +76,32 @@ THEN DO:
                     RETURN.
                 end.
                 else do:
+
+                    for each loginempresa where loginempresa.idLogin = login.idLogin NO-LOCK:
+                        find empresa where empresa.idEmpresa = loginempresa.idEmpresa.
+                        
+                        RUN criaEmpresa.
+                        
+                        for each loginestab where loginestab.idLogin = login.idLogin and
+                        loginestab.idEmpresa = empresa.idEmpresa no-lock.
+
+                            if avail loginestab
+                            then do:
+                        
+                            create ttestab.
+                            ttestab.idLogin    = loginestab.idLogin.
+                            ttestab.etbcod    = loginestab.etbcod.
+                            ttestab.idEmpresa    = loginestab.idEmpresa.
+    
+                            find estab where estab.etbcod = loginestab.etbcod no-lock.
+                            ttestab.etbnom     = estab.etbnom.
+                            
+                            end.
+                        end.
+                    end.
+                    
                     RUN criaLogin.
+
                 end.
             end.
             else do:
@@ -80,7 +130,32 @@ THEN DO:
                         RETURN.
                     end.
                     else do:
+                        
+                        for each loginempresa where loginempresa.idLogin = login.idLogin NO-LOCK:
+                            find empresa where empresa.idEmpresa = loginempresa.idEmpresa.
+                            
+                            RUN criaEmpresa.
+                            
+                            for each loginestab where loginestab.idLogin = login.idLogin and
+                            loginestab.idEmpresa = empresa.idEmpresa no-lock.
+
+                                if avail loginestab
+                                then do:
+                            
+                                create ttestab.
+                                ttestab.idLogin    = loginestab.idLogin.
+                                ttestab.etbcod    = loginestab.etbcod.
+                                ttestab.idEmpresa    = loginestab.idEmpresa.
+        
+                                find estab where estab.etbcod = loginestab.etbcod no-lock.
+                                ttestab.etbnom     = estab.etbnom.
+                                
+                                end.
+                            end.
+                        end.
+                        
                         RUN criaLogin.
+                        
                     end.
                 end.
                 else do:
@@ -101,7 +176,7 @@ then do:
     RETURN.
 end.
 
-hsaida  = TEMP-TABLE ttlogin:handle.
+hsaida  = dataset conteudoLogin:handle.
 
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
@@ -114,11 +189,22 @@ create ttlogin.
 ttlogin.idLogin   = login.idLogin.
 ttlogin.loginNome   = login.loginNome.
 ttlogin.statusLogin   = login.statusLogin.
-ttlogin.password   = login.password.
 ttlogin.email   = login.email.
 ttlogin.cpfCnpj   = login.cpfCnpj.
 ttlogin.secret   = login.secret.
 ttlogin.pedeToken   = login.pedeToken.
+
+END PROCEDURE.
+
+procedure criaEmpresa.
+
+create ttempresa.
+ttempresa.idLogin   = login.idLogin.
+ttempresa.idEmpresa   = empresa.idEmpresa.
+ttempresa.nomeEmpresa   = empresa.nomeEmpresa.
+ttempresa.timeSessao   = empresa.timeSessao.
+ttempresa.administradora   = empresa.administradora.
+ttempresa.etbcodPadrao   = empresa.etbcodPadrao.
 
 END PROCEDURE.
 

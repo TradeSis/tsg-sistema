@@ -10,11 +10,11 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idLogin  like loginaplicativo.idLogin
-    field idAplicativo  like aplicativo.idAplicativo
+    field idAplicativo  like tsaplic.idAplicativo
     field buscaaplicativo  as char.
 
 def temp-table ttaplicativo  no-undo serialize-name "aplicativo"  /* JSON SAIDA */
-    like aplicativo
+    like tsaplic
     FIELD idLogin like loginaplicativo.idLogin.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -38,8 +38,8 @@ end.
 IF ttentrada.idLogin <> ? 
 THEN DO:
     for each loginaplicativo where loginaplicativo.idLogin = ttentrada.idLogin no-lock.
-        find aplicativo where aplicativo.idAplicativo = loginaplicativo.idAplicativo no-lock no-error.
-        if not avail aplicativo
+        find tsaplic where tsaplic.idAplicativo = loginaplicativo.idAplicativo no-lock no-error.
+        if not avail tsaplic
         then do:
             create ttsaida.
             ttsaida.tstatus = 400.
@@ -53,11 +53,11 @@ THEN DO:
         end.
         else do:
             create ttaplicativo.
-            ttaplicativo.idAplicativo    = aplicativo.idAplicativo .
-            ttaplicativo.nomeAplicativo    = aplicativo.nomeAplicativo .
-            ttaplicativo.appLink   = aplicativo.appLink.
-            ttaplicativo.imgAplicativo   = aplicativo.imgAplicativo.
-            ttaplicativo.pathImg   = aplicativo.pathImg.
+            ttaplicativo.idAplicativo    = tsaplic.idAplicativo .
+            ttaplicativo.nomeAplicativo    = tsaplic.nomeAplicativo .
+            ttaplicativo.appLink   = tsaplic.appLink.
+            ttaplicativo.imgAplicativo   = tsaplic.imgAplicativo.
+            ttaplicativo.pathImg   = tsaplic.pathImg.
             ttaplicativo.idLogin   = loginaplicativo.idLogin.
         end.
     end.
@@ -65,19 +65,19 @@ END.
 
 IF ttentrada.idAplicativo <> ? OR ttentrada.buscaaplicativo <> ? OR (ttentrada.idAplicativo = ? and ttentrada.buscaaplicativo = ?)
 THEN DO:
-    for each aplicativo where
+    for each tsaplic where
         (if vidAplicativo = ?
          then true /* TODOS */
-         else aplicativo.idAplicativo = vidAplicativo) AND
-         (ttentrada.buscaaplicativo = ? OR aplicativo.nomeAplicativo MATCHES "*" + ttentrada.buscaaplicativo + "*")
+         else tsaplic.idAplicativo = vidAplicativo) AND
+         (ttentrada.buscaaplicativo = ? OR tsaplic.nomeAplicativo MATCHES "*" + ttentrada.buscaaplicativo + "*")
          no-lock.
 
          create ttaplicativo.
-         ttaplicativo.idAplicativo    = aplicativo.idAplicativo .
-         ttaplicativo.nomeAplicativo    = aplicativo.nomeAplicativo .
-         ttaplicativo.appLink   = aplicativo.appLink.
-         ttaplicativo.imgAplicativo   = aplicativo.imgAplicativo.
-         ttaplicativo.pathImg   = aplicativo.pathImg.
+         ttaplicativo.idAplicativo    = tsaplic.idAplicativo .
+         ttaplicativo.nomeAplicativo    = tsaplic.nomeAplicativo .
+         ttaplicativo.appLink   = tsaplic.appLink.
+         ttaplicativo.imgAplicativo   = tsaplic.imgAplicativo.
+         ttaplicativo.pathImg   = tsaplic.pathImg.
          ttaplicativo.idLogin   = ?.
     end.
 END.

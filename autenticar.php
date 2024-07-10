@@ -15,7 +15,6 @@ if (isset($_POST['token'])) {
         $user = $dados['loginNome'];
         $idLogin = $dados['idLogin'];
         $email = $dados['email'];
-        $timeSessao = $dados['timeSessao'];
 
         session_start();
 
@@ -28,8 +27,7 @@ if (isset($_POST['token'])) {
         setcookie('User', $apiEntrada['dadosEntrada'][0]['login'], strtotime("+1 year"), "/", "", false, true);
         setcookie('password', $apiEntrada['dadosEntrada'][0]['password'], strtotime("+1 year"), "/", "", false, true);
 
-
-        header('Location: loginEmpresa.php');
+        header('Location: loginEmpresa.php?empresa=' . urlencode(json_encode($dados['empresa'])));
 
     } else {
         $mensagem = $dados['retorno'];

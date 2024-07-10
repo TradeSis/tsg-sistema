@@ -32,7 +32,6 @@ if (isset($dados["pedeToken"])) {
         $user = $dados['loginNome'];
         $idLogin = $dados['idLogin'];
         $email = $dados['email'];
-        $timeSessao = $dados['timeSessao'];
 
         session_start();
 
@@ -46,7 +45,8 @@ if (isset($dados["pedeToken"])) {
         setcookie('User', $login, strtotime("+1 year"), "/", "", false, true);
         setcookie('password', "", strtotime("+1 year"), "/", "", false, true);
 
-        header('Location: loginEmpresa.php');
+        header('Location: loginEmpresa.php?empresa=' . urlencode(json_encode($dados['empresa'])));
+
     }
 } else {
 

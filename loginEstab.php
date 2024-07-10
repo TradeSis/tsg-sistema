@@ -1,29 +1,9 @@
 <?php
-// lucas 120320204 id884 bootstrap local - alterado head
 include_once __DIR__ . "/../config.php";
-include_once 'conexao.php';
+session_start();
 
-
-$idLogin = null;
-if (isset($_SESSION['idLogin'])) {
-	$idLogin = $_SESSION['idLogin'];
-}
-$idEmpresa = null;
-if (isset($_SESSION['idEmpresa'])) {
-	$idEmpresa = $_SESSION['idEmpresa'];
-}
-$apiEntrada =
-    array(
-        "dadosEntrada" => array(
-            array(
-                'idLogin' => $idLogin,
-                'etbcod' => null,
-                'idEmpresa' => $idEmpresa,
-                'idEmpresaLogado' => $idEmpresa
-            )
-        )
-    );
-$estabs = chamaAPI(null, '/sistema/loginestab', json_encode($apiEntrada), 'GET');
+$estabJson = urldecode($_GET['estab']);
+$estabs = json_decode($estabJson, true);
 
 if (isset($_POST['etbcod'])) {
 
@@ -38,7 +18,7 @@ if (isset($_POST['etbcod'])) {
 }
 
 
-if (isset($estabs["retorno"])) {
+if (!isset($_GET['estab'])) {
 
     $estabEntrada =
     array(
@@ -93,7 +73,7 @@ if (count($estabs) == 1) {
                     <div class="col-lg-5 col-md-7">
                         <div class="card bg-gray-200 shadow border-1">
                             <div class="card-body px-lg-4 py-lg-6">
-                                <form method="post">
+                                <form role="form" action="loginEstab.php?estab=<?php echo urlencode(json_encode($estabs)) ?>" method="post">
                                     <label class="form-label ts-label">Estabelecimento</label>
                                     <select class="form-select ts-input" name="etbcod" autocomplete="off">
                                         <?php foreach ($estabs as $estab) { ?>

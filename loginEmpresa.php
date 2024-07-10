@@ -1,25 +1,16 @@
 <?php
-// lucas 120320204 id884 bootstrap local - alterado head
 include_once __DIR__ . "/../config.php";
-include_once 'conexao.php';
+session_start();
 
-
-$idLogin = null;
-if (isset($_SESSION['idLogin'])) {
-    $idLogin = $_SESSION['idLogin'];
+if (!isset($_GET['empresa'])) {
+    $mensagem = "Usuario sem empresa";
+    header('Location: login.php?mensagem=' . urlencode($mensagem));
 }
-$apiEntrada =
-    array(
-        "dadosEntrada" => array(
-            array(
-                'idLogin' => $idLogin,
-            )
-        )
-    );
-$empresas = chamaAPI(null, '/sistema/login/empresa', json_encode($apiEntrada), 'GET');
+
+$empresaJson = urldecode($_GET['empresa']);
+$empresas = json_decode($empresaJson, true);
 
 if (isset($_POST['idEmpresa'])) {
-
     $_SESSION['idEmpresa'] = $_POST['idEmpresa'];
     foreach ($empresas as $empresa) {
         if ($empresa['idEmpresa'] == $_POST['idEmpresa']) {
@@ -27,36 +18,29 @@ if (isset($_POST['idEmpresa'])) {
             $_SESSION['timeSessao'] = $empresa['timeSessao'];
             $_SESSION['administradora'] = $empresa['administradora'];
             $_SESSION['etbcod'] = $empresa['etbcodPadrao'];
+
+            if ($_SESSION['etbcod'] !== 0) {
+                header('Location: loginEstab.php?estab=' . urlencode(json_encode($empresa['estab'])));
+            } else {
+                header('Location: ' . URLROOT . '/' . APP_INICIAL);
+            }
         }
     }
-
-    if ($_SESSION['etbcod'] !== 0) {
-        header('Location: loginEstab.php');
-    } else {
-        header('Location: ' . URLROOT . '/' . APP_INICIAL);
-    }
 }
 
-
-if (isset($empresas["retorno"])) {
-    $mensagem = "Usuario sem empresa";
-    header('Location: login.php?mensagem=' . $mensagem);
-}
 if (count($empresas) == 1) {
-
     $_SESSION['idEmpresa'] = $empresas[0]['idEmpresa'];
     $_SESSION['nomeEmpresa'] = $empresas[0]['nomeEmpresa'];
     $_SESSION['timeSessao'] = $empresas[0]['timeSessao'];
     $_SESSION['administradora'] = $empresas[0]['administradora'];
     $_SESSION['etbcod'] = $empresas[0]['etbcodPadrao'];
 
-
     if ($_SESSION['etbcod'] !== 0) {
-        header('Location: loginEstab.php');
+        header('Location: loginEstab.php?estab=' . urlencode(json_encode($empresas[0]['estab'])));
+
     } else {
         header('Location: ' . URLROOT . '/' . APP_INICIAL);
     }
-
 } else { ?>
 
     <!doctype html>
@@ -91,7 +75,7 @@ if (count($empresas) == 1) {
                     <div class="col-lg-5 col-md-7">
                         <div class="card bg-gray-200 shadow border-1">
                             <div class="card-body px-lg-4 py-lg-6">
-                                <form role="form" action="loginEmpresa.php" method="post">
+                                <form role="form" action="loginEmpresa.php?empresa=<?php echo urlencode(json_encode($empresas)) ?>" method="post">
                                     <label class="form-label ts-label">Empresa</label>
                                     <select class="form-select ts-input" name="idEmpresa" autocomplete="off">
                                         <?php foreach ($empresas as $empresa) { ?>

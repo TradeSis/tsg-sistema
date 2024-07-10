@@ -47,12 +47,12 @@ $login = array();
 
 $progr = new chamaprogress();
 $retorno = $progr->executarprogress("sistema/app/1/login_verifica", json_encode($jsonEntrada));
-$logRetorno = json_encode(removePasswords(json_decode($retorno, true)));
-fwrite($arquivo, $identificacao . "-RETORNO->" . $logRetorno . "\n");
+fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
 $login = json_decode($retorno, true);
 if (isset($login["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
     $login = $login["conteudoSaida"][0];
 } else {
+    $login = $login["conteudoLogin"];
     $login = $login["login"][0]; // Retorno sem array
 }
 
@@ -66,13 +66,10 @@ if ($google2fa->verifyKey($login['secret'], $jsonEntrada['dadosEntrada'][0]['tok
 }
 
 
-
-$logJsonSaida = removePasswords($jsonSaida);
-
 // LOG
 if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 2) {
-        fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($logJsonSaida) . "\n\n");
+        fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
     }
 }
 // LOG

@@ -10,12 +10,12 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idLogin  like loginaplicativo.idLogin
-    field nomeAplicativo  like aplicativo.nomeAplicativo.
+    field nomeAplicativo  like tsaplic.nomeAplicativo.
 
 def temp-table ttloginaplicativo  no-undo serialize-name "loginaplicativo"  /* JSON SAIDA */
     like loginaplicativo
     FIELD loginNome like login.loginNome
-    FIELD nomeAplicativo like aplicativo.nomeAplicativo.
+    FIELD nomeAplicativo like tsaplic.nomeAplicativo.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -44,16 +44,16 @@ THEN DO:
          no-lock.
          
          find login where login.idLogin = loginaplicativo.idLogin no-lock.
-         find aplicativo where aplicativo.idAplicativo = loginaplicativo.idAplicativo no-lock.
+         find tsaplic where tsaplic.idAplicativo = loginaplicativo.idAplicativo no-lock.
          
-         if ttentrada.nomeAplicativo = ? OR aplicativo.nomeAplicativo MATCHES "*" + ttentrada.nomeAplicativo + "*"
+         if ttentrada.nomeAplicativo = ? OR tsaplic.nomeAplicativo MATCHES "*" + ttentrada.nomeAplicativo + "*"
          then do:
             create ttloginaplicativo.
             ttloginaplicativo.idLogin    = loginaplicativo.idLogin .
             ttloginaplicativo.idAplicativo    = loginaplicativo.idAplicativo .
             ttloginaplicativo.nivelMenu   = loginaplicativo.nivelMenu.
             ttloginaplicativo.loginNome   = login.loginNome.
-            ttloginaplicativo.nomeAplicativo   = aplicativo.nomeAplicativo.
+            ttloginaplicativo.nomeAplicativo   = tsaplic.nomeAplicativo.
         end.
     end.
 END.

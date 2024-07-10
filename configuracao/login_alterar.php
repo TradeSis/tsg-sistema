@@ -78,10 +78,11 @@ $usuario = buscaLogins($idLogin);
             </div>
 
             <div class="text-end mt-4">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#resetTokenModal" class="btn  btn-warning">Resetar Token</button>
                 <button type="submit" class="btn  btn-success"><i class="bi bi-sd-card-fill"></i>&#32;Salvar</button>
             </div>
         </form>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#alterarSenhaModal" class="btn btn-sm btn-danger mb-3">Alterar Senha</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#alterarSenhaModal" data-source="login_alterar" class="btn btn-sm btn-danger mb-3">Alterar Senha</button>
 
        
 
@@ -194,6 +195,29 @@ $usuario = buscaLogins($idLogin);
                     </div><!--body-->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger">Excluir</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+         <!--------- RESET TOKEN --------->
+        <div class="modal" id="resetTokenModal" tabindex="-1" aria-labelledby="resetTokenLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Resetar Token</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" id="resetTokenForm">
+                            <div class="container-fluid p-0 text-center">
+                                <h4>CONFIRMA RESET DO TOKEN?</h4>
+                            </div>
+                            <input type="hidden" class="form-control" name="idLogin" value="<?php echo $idLogin ?>">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Salvar</button>
                     </div>
                     </form>
                 </div>
@@ -420,6 +444,21 @@ $usuario = buscaLogins($idLogin);
                 success: function () {
                     buscaLoginEstab(<?php echo $idLogin ?>, vidEmpresa, vnomeEmpresa);
                     $('#excluirmodal').modal('hide');
+                }
+            });
+        });
+
+        $("#resetTokenForm").submit(function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "../database/login.php?operacao=resetToken",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    window.location.reload();
                 }
             });
         });

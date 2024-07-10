@@ -72,6 +72,12 @@ do on error undo:
         find login where login.idLogin = ttentrada.idLogin exclusive no-error.
         login.password = vsenhaMD5. 
     end.
+    if ttentrada.acao = "token"
+    then do:
+        find login where login.idLogin = ttentrada.idLogin exclusive no-error.
+        login.statusLogin = 0. 
+        login.secret = ?. 
+    end.
 end.
 
 create ttsaida.

@@ -133,7 +133,22 @@ if (isset($_GET['operacao'])) {
 			);
 		
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
-		header('Location:' . $_POST['ultimaulr']);
+		return $login;
+	}
+
+	if ($operacao == "resetToken") {
+		$apiEntrada =
+			array(
+				"dadosEntrada" => array(
+					array(
+						'acao' => "token",
+						'idLogin' => $_POST['idLogin']
+					)
+				)
+			);
+		
+		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
+		return $login;
 	}
 
 
