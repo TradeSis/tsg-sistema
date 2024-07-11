@@ -1,7 +1,8 @@
 <?php
-// PROGRESS
-// ALTERAR E INSERIR
-
+// gabriel 150523 - criação 
+//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
+// helio 01/11/2023 - banco padrao, empresa null
+$conexao = conectaMysql(null);
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
@@ -10,7 +11,7 @@ if (isset($LOG_CAMINHO)) {
     $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "login_ativar";
     if (isset($LOG_NIVEL)) {
         if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "sistema_". date("dmY") . ".log", "a");
+            $arquivo = fopen(defineCaminhoLog() . "sistema_" . date("dmY") . ".log", "a");
         }
     }
 }
@@ -24,19 +25,35 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-if (isset($jsonEntrada['dadosEntrada'])) {
 
+if (isset($jsonEntrada['idLogin'])) {
+    $idLogin = $jsonEntrada['idLogin'];
+    $secret = $jsonEntrada['secret_key']; /* Guarda secret */
+    $statusLogin = 1;
+
+    $sql = "UPDATE `login` SET `statusLogin` = $statusLogin, `secret` = '$secret' WHERE idLogin = $idLogin";
+    // echo "-ENTRADA->".$sql."\n"; 
+
+    //LOG
+    if (isset($LOG_NIVEL)) {
+        if ($LOG_NIVEL >= 3) {
+            fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
+        }
+    }
+    //LOG
+
+    //TRY-CATCH
     try {
 
-        $progr = new chamaprogress();
-        $retorno = $progr->executarprogress("sistema/app/1/login_ativar",json_encode($jsonEntrada));
-        fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
-        $conteudoSaida = json_decode($retorno,true);
-        if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
-            $jsonSaida = $conteudoSaida["conteudoSaida"][0];
-        } 
-    } 
-    catch (Exception $e) {
+        $atualizar = mysqli_query($conexao, $sql);
+        if (!$atualizar)
+            throw new Exception(mysqli_error($conexao));
+
+        $jsonSaida = array(
+            "status" => 200,
+            "retorno" => "ok"
+        );
+    } catch (Exception $e) {
         $jsonSaida = array(
             "status" => 500,
             "retorno" => $e->getMessage()
@@ -57,7 +74,6 @@ if (isset($jsonEntrada['dadosEntrada'])) {
     );
 }
 
-
 //LOG
 if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 2) {
@@ -65,9 +81,3 @@ if (isset($LOG_NIVEL)) {
     }
 }
 //LOG
-
-
-
-fclose($arquivo);
-
-?>

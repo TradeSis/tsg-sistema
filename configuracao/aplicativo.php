@@ -69,9 +69,9 @@ $aplicativos = buscaAplicativos();
                             <a class="btn btn-warning btn-sm"
                                 href="aplicativo_alterar.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-pencil-square"></i></a>
-                           <!--  <a class="btn btn-danger btn-sm"
+                            <a class="btn btn-danger btn-sm"
                                 href="aplicativo_excluir.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
-                                role="button"><i class="bi bi-trash3"></i></a> -->
+                                role="button"><i class="bi bi-trash3"></i></a>
                         </td>
                     </tr>
                 <?php } ?>

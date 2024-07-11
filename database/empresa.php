@@ -34,18 +34,11 @@ if (isset($_GET['operacao'])) {
 		$menu = strip_tags($_POST['menu']);
 		$apiEntrada = array(
 			'nomeEmpresa' => $_POST['nomeEmpresa'],
-			'host' => $_POST['host'],
-			'base' => $_POST['base'],
-			'usuario' => $_POST['usuario'],
-			'senhadb' => $_POST['senhadb'],
 			'timeSessao' => $_POST['timeSessao'],
 			'menu' => $menu,
+			'idPessoa' => $_POST['idPessoa'],
 			//Lucas 29022024 - id862 adiconado campo administradora
-			'administradora' => $_POST['administradora'],
-			'cnpj' => $_POST['cnpj'],
-			'progressdb' => $_POST['progressdb'],
-			'progressld' => $_POST['progressld'],
-			'etbcodPadrao' => $_POST['etbcodPadrao']
+			'administradora' => $_POST['administradora']
 		);
 		$empresa = chamaAPI(null, '/sistema/empresa', json_encode($apiEntrada), 'PUT');
 	}
@@ -55,18 +48,11 @@ if (isset($_GET['operacao'])) {
 		$apiEntrada = array(
 			'idEmpresa' => $_POST['idEmpresa'],
 			'nomeEmpresa' => $_POST['nomeEmpresa'],
-			'host' => $_POST['host'],
-			'base' => $_POST['base'],
-			'usuario' => $_POST['usuario'],
-			'senhadb' => $_POST['senhadb'],
 			'timeSessao' => $_POST['timeSessao'],
 			'menu' => $menu,
+			'idPessoa' => $_POST['idPessoa'],
 			//Lucas 29022024 - id862 adiconado campo administradora
-			'administradora' => $_POST['administradora'],
-			'cnpj' => $_POST['cnpj'],
-			'progressdb' => $_POST['progressdb'],
-			'progressld' => $_POST['progressld'],
-			'etbcodPadrao' => $_POST['etbcodPadrao']
+			'administradora' => $_POST['administradora']
 		);
 		$empresa = chamaAPI(null, '/sistema/empresa', json_encode($apiEntrada), 'POST');
 	}

@@ -8,14 +8,9 @@ function buscaAplicativos($idAplicativo = null)
 
 	$app = array();
 
-	$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idAplicativo' => $idAplicativo
-				)
-			)
-		);
+	$apiEntrada = array(
+		'idAplicativo' => $idAplicativo
+	);
 	$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
 	return $app;
 }
@@ -25,14 +20,11 @@ function buscaAplicativosMenu($idLogin)
 
 	$app = array();
 
-	$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idLogin' => $idLogin
-				)
-			)
-		);
+
+
+	$apiEntrada = array(
+		'idLogin' => $idLogin
+	);
 	$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
 	return $app;
 }
@@ -60,18 +52,14 @@ if (isset($_GET['operacao'])) {
 		move_uploaded_file($img["tmp_name"], $pathImgFisico);
 
 
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'nomeAplicativo' => $_POST['nomeAplicativo'],
-					'appLink' => $_POST['appLink'],
-					'imgAplicativo' => $_POST['imgAplicativo'],
-					'pathImg' => $pathImg,
-				)
-			)
-		);
+		$apiEntrada = array(
+			'nomeAplicativo' => $_POST['nomeAplicativo'],
+			'appLink' => $_POST['appLink'],
+			'nivelMenu' => $_POST['nivelMenu'],
+			'imgAplicativo' => $imgAplicativo,
+			'pathImg' => $pathImgURL,
 
+		);
 		/*  echo json_encode($_POST);
 		echo "\n";
 		echo json_encode($apiEntrada);
@@ -94,17 +82,13 @@ if (isset($_GET['operacao'])) {
 		$pathImg = $pasta . $novoNomeImg . "." . $extensao;
 		move_uploaded_file($img["tmp_name"], $pathImg);
 
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idAplicativo' => $_POST['idAplicativo'],
-					'nomeAplicativo' => $_POST['nomeAplicativo'],
-					'appLink' => $_POST['appLink'],
-					'imgAplicativo' => $_POST['imgAplicativo'],
-					'pathImg' => $pathImg,
-				)
-			)
+		$apiEntrada = array(
+			'idAplicativo' => $_POST['idAplicativo'],
+			'nomeAplicativo' => $_POST['nomeAplicativo'],
+			'appLink' => $_POST['appLink'],
+			'nivelMenu' => $_POST['nivelMenu'],
+			'imgAplicativo' => $_POST['imgAplicativo'],
+			'pathImg' => $pathImg,
 		);
 
 		/* echo json_encode($apiEntrada);
@@ -112,6 +96,13 @@ if (isset($_GET['operacao'])) {
 		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'POST');
 	}
 
+	if ($operacao == "excluir") {
+		$apiEntrada = array(
+			'idAplicativo' => $_POST['idAplicativo']
+		);
+
+		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'DELETE');
+	}
 
 	//BUSCA PRINCIPAL DA TABELA DE APLICATIVOS
 	if ($operacao == "filtrar") {
@@ -122,14 +113,10 @@ if (isset($_GET['operacao'])) {
 			$buscaaplicativo = null;
 		}
 
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idAplicativo' => null,
-					'buscaaplicativo' => $buscaaplicativo,
-				)
-			)
+
+		$apiEntrada = array(
+			'idAplicativo' => null,
+			'buscaaplicativo' => $buscaaplicativo
 		);
 
 		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
@@ -144,13 +131,8 @@ if (isset($_GET['operacao'])) {
 		if ($idAplicativo == "") {
 			$idAplicativo = null;
 		}
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idAplicativo' => $idAplicativo,
-				)
-			)
+		$apiEntrada = array(
+			'idAplicativo' => $idAplicativo
 		);
 		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
 

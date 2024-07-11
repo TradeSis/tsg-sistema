@@ -49,17 +49,17 @@ $url = (parse_url($URL_ATUAL, PHP_URL_PATH));
                                             echo " selected ";
                                         } ?>>Cadastros</option>
                         <?php }
-                        if (in_array("Crediario", $aplicativo)) { ?>
-                        <option value="<?php echo URLROOT ?>/crediario/" <?php if ($url == URLROOT . "/crediario/") {
-                                            echo " selected ";
-                                        } ?>>Crediario</option>
-                        <?php }
                         if (in_array("Vendas", $aplicativo)) { ?>
                         <option value="<?php echo URLROOT ?>/vendas/" <?php if ($url == URLROOT . "/vendas/") {
                                             echo " selected ";
                                         } ?>>Vendas</option>
                         <?php }
-                        if (in_array("Relatorios", $aplicativo)) { ?>
+                        if (in_array("Crediario", $aplicativo)) { ?>
+                            <option value="<?php echo URLROOT ?>/crediario/" <?php if ($url == URLROOT . "/crediario/") {
+                                                echo " selected ";
+                                            } ?>>Crediario</option>
+                            <?php }
+                            if (in_array("Relatorios", $aplicativo)) { ?>
                         <option value="<?php echo URLROOT ?>/relatorios/" <?php if ($url == URLROOT . "/relatorios/") {
                                             echo " selected ";
                                         } ?>>Relatorios</option>

@@ -65,7 +65,7 @@
                             $this->executa ();
                         }
                     }
-                    //$this->progress = iconv('ISO-8859-1','UTF-8',$this->progress);
+                    $this->progress = iconv('ISO-8859-1','UTF-8',$this->progress);
                     return $this->progress;
 
             }

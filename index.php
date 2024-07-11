@@ -16,7 +16,6 @@ if ($nivelMenuLogin == null) {
 } else {
     $nivelMenu = $nivelMenuLogin['nivelMenu'];
 }
-
 // helio 051023 - TODO PROGRAMA PRECISA TER DOCTYPE/HTML/HEAD no seu inicio
 ?>
 <!doctype html>
@@ -110,7 +109,6 @@ if ($nivelMenuLogin == null) {
 
                         <option value="<?php echo URLROOT ?>/sistema/?tab=anexos" 
                         <?php if ($getTab == "anexos") {echo " selected ";} ?>>Anexos</option>
-
                     </select>
                 </div>
                 

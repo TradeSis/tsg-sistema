@@ -1,7 +1,8 @@
 <?php
-// PROGRESS
-// ALTERAR E INSERIR
-
+//Lucas 05042023 criado
+//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
+// helio 01/11/2023 - tabela aplicativo, banco padrao, empresa null
+$conexao = conectaMysql(null);
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
@@ -24,19 +25,35 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-if (isset($jsonEntrada['dadosEntrada'])) {
+$conexao = conectaMysql($idEmpresa);
+if (isset($jsonEntrada['nomeAplicativo'])) {
+    $nomeAplicativo = $jsonEntrada['nomeAplicativo'];
+    $appLink = $jsonEntrada['appLink'];
+    $imgAplicativo = $jsonEntrada['imgAplicativo'];
+    $pathImg = $jsonEntrada['pathImg'];
 
+    $sql = "INSERT INTO aplicativo(nomeAplicativo, appLink, imgAplicativo, pathImg) VALUES ('$nomeAplicativo', '$appLink', '$imgAplicativo', '$pathImg')";
+
+    //LOG
+    if (isset($LOG_NIVEL)) {
+        if ($LOG_NIVEL >= 3) {
+            fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
+        }
+    }
+    //LOG
+
+    //TRY-CATCH
     try {
 
-        $progr = new chamaprogress();
-        $retorno = $progr->executarprogress("sistema/app/1/aplicativo_inserir",json_encode($jsonEntrada));
-        fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
-        $conteudoSaida = json_decode($retorno,true);
-        if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
-            $jsonSaida = $conteudoSaida["conteudoSaida"][0];
-        } 
-    } 
-    catch (Exception $e) {
+        $atualizar = mysqli_query($conexao, $sql);
+        if (!$atualizar)
+            throw new Exception(mysqli_error($conexao));
+
+        $jsonSaida = array(
+            "status" => 200,
+            "retorno" => "ok"
+        );
+    } catch (Exception $e) {
         $jsonSaida = array(
             "status" => 500,
             "retorno" => $e->getMessage()
@@ -48,15 +65,12 @@ if (isset($jsonEntrada['dadosEntrada'])) {
         // ACAO EM CASO DE ERRO (CATCH), que mesmo assim precise
     }
     //TRY-CATCH
-
-
 } else {
     $jsonSaida = array(
         "status" => 400,
         "retorno" => "Faltaram parametros"
     );
 }
-
 
 //LOG
 if (isset($LOG_NIVEL)) {
@@ -65,9 +79,3 @@ if (isset($LOG_NIVEL)) {
     }
 }
 //LOG
-
-
-
-fclose($arquivo);
-
-?>

@@ -1,74 +1,66 @@
 <?php
-// gabriel 30042024 criado
 //echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
-function removePasswords($data) {
-    if (is_array($data)) {
-        foreach ($data as $key => $value) {
-            if ($key === 'password') {
-                unset($data[$key]);
-            } else if (is_array($value)) {
-                $data[$key] = removePasswords($value);
-            }
-        }
-    }
-    return $data;
-}
+// helio 01/11/2023 - banco padrao, empresa null
+$conexao = conectaMysql(null);
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
-    $LOG_NIVEL = defineNivelLog();
-    $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "login";
-    if (isset($LOG_NIVEL)) {
-        if ($LOG_NIVEL >= 1) {
-            $arquivo = fopen(defineCaminhoLog() . "sistema_" . date("dmY") . ".log", "a");
-        }
+  $LOG_NIVEL = defineNivelLog();
+  $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "login";
+  if (isset($LOG_NIVEL)) {
+    if ($LOG_NIVEL >= 1) {
+      $arquivo = fopen(defineCaminhoLog() . "sistema_" . date("dmY") . ".log", "a");
     }
+  }
 }
 if (isset($LOG_NIVEL)) {
-    if ($LOG_NIVEL == 1) {
-        fwrite($arquivo, $identificacao . "\n");
-    }
-    if ($LOG_NIVEL >= 2) {
-        fwrite($arquivo, $identificacao . "-ENTRADA->" . json_encode($jsonEntrada) . "\n");
-    }
+  if ($LOG_NIVEL == 1) {
+    fwrite($arquivo, $identificacao . "\n");
+  }
+  if ($LOG_NIVEL >= 2) {
+    fwrite($arquivo, $identificacao . "-ENTRADA->" . json_encode($jsonEntrada) . "\n");
+  }
 }
 //LOG
 
 $login = array();
 
+$sql = "SELECT login.*, empresa.nomeEmpresa, empresa.timeSessao FROM login
+        LEFT JOIN empresa on empresa.idEmpresa = login.idEmpresa ";
+if (isset($jsonEntrada["idLogin"])) {
+  $idLogin = $jsonEntrada["idLogin"];
+  $sql = $sql . " where login.idLogin = $idLogin";
+}
 
-$progr = new chamaprogress();
-$retorno = $progr->executarprogress("sistema/app/1/login", json_encode($jsonEntrada));
-$logRetorno = json_encode(removePasswords(json_decode($retorno, true)));
-fwrite($arquivo, $identificacao . "-RETORNO->" . $logRetorno . "\n");
-$login = json_decode($retorno, true);
-if (isset($login["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
-    $login = $login["conteudoSaida"][0];
-} else {
+//LOG
+if (isset($LOG_NIVEL)) {
+  if ($LOG_NIVEL >= 3) {
+    fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
+  }
+}
+//LOG
 
-    if (!isset($login["login"][1]) && ($jsonEntrada['dadosEntrada'][0]['idLogin'] != null)) {  // Verifica se tem mais de 1 registro
-        $login = $login["login"][0]; // Retorno sem array
-    } else {
-        $login = $login["login"];
-    }
+$rows = 0;
+$buscar = mysqli_query($conexao, $sql);
+while ($row = mysqli_fetch_array($buscar, MYSQLI_ASSOC)) {
+  array_push($login, $row);
+  $rows = $rows + 1;
+}
 
+if (isset($jsonEntrada["idLogin"]) && $rows == 1) {
+  $login = $login[0];
 }
 
 
 $jsonSaida = $login;
+//echo "-SAIDA->".json_encode($jsonSaida)."\n";
 
 
-$logJsonSaida = removePasswords($jsonSaida);
-
-// LOG
+//LOG
 if (isset($LOG_NIVEL)) {
-    if ($LOG_NIVEL >= 2) {
-        fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($logJsonSaida) . "\n\n");
-    }
+  if ($LOG_NIVEL >= 2) {
+    fwrite($arquivo, $identificacao . "-SAIDA->" . json_encode($jsonSaida) . "\n\n");
+  }
 }
-// LOG
-
-fclose($arquivo);
-
-?>
+//LOG

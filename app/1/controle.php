@@ -10,10 +10,6 @@ if ($metodo == "GET") {
     $funcao = "login/verifica";
     $parametro = null;
   }
-  if ($funcao == "login" && $parametro == "empresa") {
-    $funcao = "login/empresa";
-    $parametro = null;
-  }
   if ($funcao == "login" && $parametro == "token") {
     $funcao = "login/token";
     $parametro = null;
@@ -37,10 +33,6 @@ if ($metodo == "GET") {
       include 'login_verifica.php';
       break;
 
-    case "login/empresa":
-      include 'login_empresa.php';
-      break;
-
     case "login/token":
       include 'login_token.php';
       break;
@@ -55,10 +47,6 @@ if ($metodo == "GET") {
       
     case "anexos":
       include 'anexos.php';
-      break;  
-      
-    case "loginestab":
-      include 'loginestab.php';
       break;  
 
     default:
@@ -76,12 +64,6 @@ if ($metodo == "GET") {
 }
 
 if ($metodo == "PUT") {
-
-  if ($funcao == "login" && $parametro == "empresa") {
-    $funcao = "login/empresa";
-    $parametro = null;
-  }
-
   switch ($funcao) {
 
     case "secoes":
@@ -100,10 +82,6 @@ if ($metodo == "PUT") {
       include 'loginaplicativo_inserir.php';
       break;
 
-    case "loginestab":
-      include 'loginestab_inserir.php';
-      break;
-
     case "login":
       include 'login_inserir.php';
       break;
@@ -111,11 +89,7 @@ if ($metodo == "PUT") {
     case "anexos":
       include 'anexos_inserir.php';
       break;
-
-    case "login/empresa":
-      include 'loginempresa_inserir.php';
-      break; 
-
+      
     default:
       $jsonSaida = json_decode(
         json_encode(
@@ -154,10 +128,6 @@ if ($metodo == "POST") {
 
     case "loginaplicativo":
       include 'loginaplicativo_alterar.php';
-      break;
-
-    case "loginestab":
-      include 'loginestab_alterar.php';
       break;
 
     case "configuracao/ativar":
@@ -212,11 +182,6 @@ if ($metodo == "DELETE") {
       case "anexos":
         include 'anexos_excluir.php';
         break;
-
-      case "loginestab":
-        include 'loginestab_excluir.php';
-        break;
-
     default:
       $jsonSaida = json_decode(
         json_encode(

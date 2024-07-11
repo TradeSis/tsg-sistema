@@ -8,15 +8,10 @@ function buscaLoginAplicativo($idLogin = null, $nomeAplicativo = null)
 {
 
 	$loginaplicativo = array();
-	$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idLogin' => $idLogin,
-					'nomeAplicativo' => $nomeAplicativo
-				)
-			)
-		);
+	$apiEntrada = array(
+		'idLogin' => $idLogin,
+		'nomeAplicativo' => $nomeAplicativo
+	);
 	$loginaplicativo = chamaAPI(null, '/sistema/loginaplicativo', json_encode($apiEntrada), 'GET');
 	return $loginaplicativo;
 }
@@ -28,15 +23,11 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserir") {
 
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idLogin' => $_POST['idLogin'],
-					'idAplicativo' => $_POST['idAplicativo'],
-					'nivelMenu' => $_POST['nivelMenu']
-				)
-			)
+		$apiEntrada = array(
+			'idLogin' => $_POST['idLogin'],
+			'idAplicativo' => $_POST['idAplicativo'],
+			'nivelMenu' => $_POST['nivelMenu']
+
 		);
 
 		$loginaplicativo = chamaAPI(null, '/sistema/loginaplicativo', json_encode($apiEntrada), 'PUT');
@@ -44,38 +35,24 @@ if (isset($_GET['operacao'])) {
 	}
 
 	if ($operacao == "alterar") {
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idLogin' => $_POST['idLogin'],
-					'idAplicativo' => $_POST['idAplicativo'],
-					'nivelMenu' => $_POST['nivelMenu']
-				)
-			)
+
+		$apiEntrada = array(
+			'idLogin' => $_POST['idLogin'],
+			'idAplicativo' => $_POST['idAplicativo'],
+			'nivelMenu' => $_POST['nivelMenu']
 		);
 
 		$loginaplicativo = chamaAPI(null, '/sistema/loginaplicativo', json_encode($apiEntrada), 'POST');
 
 	}
 
-	if ($operacao == "buscaLoginAplicativo") {
+	if ($operacao == "excluir") {
+		$apiEntrada = array(
+			'idLogin' => $_POST['idLogin'],
+			'idAplicativo' => $_POST['idAplicativo']
+		);
 
-		$idLogin = isset($_POST["idLogin"])  && $_POST["idLogin"] !== "" && $_POST["idLogin"] !== "null" ? $_POST["idLogin"]  : null;
-		$nomeAplicativo = isset($_POST["nomeAplicativo"])  && $_POST["nomeAplicativo"] !== "" && $_POST["nomeAplicativo"] !== "null" ? $_POST["nomeAplicativo"]  : null;
-
-		$apiEntrada =
-			array(
-				"dadosEntrada" => array(
-					array(
-						'idLogin' => $idLogin,
-						'nomeAplicativo' => $nomeAplicativo
-					)
-				)
-			);
-		$loginaplicativo = chamaAPI(null, '/sistema/loginaplicativo', json_encode($apiEntrada), 'GET');
-		echo json_encode($loginaplicativo);
-		return $loginaplicativo;
+		$loginaplicativo = chamaAPI(null, '/sistema/loginaplicativo', json_encode($apiEntrada), 'DELETE');
 
 	}
 

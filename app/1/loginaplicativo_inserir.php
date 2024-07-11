@@ -1,7 +1,8 @@
 <?php
-// PROGRESS
-// ALTERAR E INSERIR
-
+//Lucas 05042023 criado
+//echo "-ENTRADA->".json_encode($jsonEntrada)."\n";
+// helio 01/11/2023 - banco padrao, empresa null
+$conexao = conectaMysql(null);
 
 //LOG
 $LOG_CAMINHO = defineCaminhoLog();
@@ -24,19 +25,33 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-if (isset($jsonEntrada['dadosEntrada'])) {
+if (isset($jsonEntrada['idLogin'])) {
+    $idLogin = $jsonEntrada['idLogin'];
+    $idAplicativo = $jsonEntrada['idAplicativo'];
+    $nivelMenu = $jsonEntrada['nivelMenu'];
 
+    $sql = "INSERT INTO loginaplicativo(idLogin, idAplicativo, nivelMenu) VALUES ($idLogin, '$idAplicativo', $nivelMenu)";
+
+    //LOG
+    if (isset($LOG_NIVEL)) {
+        if ($LOG_NIVEL >= 3) {
+            fwrite($arquivo, $identificacao . "-SQL->" . $sql . "\n");
+        }
+    }
+    //LOG
+
+    //TRY-CATCH
     try {
 
-        $progr = new chamaprogress();
-        $retorno = $progr->executarprogress("sistema/app/1/loginaplicativo_inserir",json_encode($jsonEntrada));
-        fwrite($arquivo,$identificacao."-RETORNO->".$retorno."\n");
-        $conteudoSaida = json_decode($retorno,true);
-        if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
-            $jsonSaida = $conteudoSaida["conteudoSaida"][0];
-        } 
-    } 
-    catch (Exception $e) {
+        $atualizar = mysqli_query($conexao, $sql);
+        if (!$atualizar)
+            throw new Exception(mysqli_error($conexao));
+
+        $jsonSaida = array(
+            "status" => 200,
+            "retorno" => "ok"
+        );
+    } catch (Exception $e) {
         $jsonSaida = array(
             "status" => 500,
             "retorno" => $e->getMessage()
@@ -57,7 +72,6 @@ if (isset($jsonEntrada['dadosEntrada'])) {
     );
 }
 
-
 //LOG
 if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 2) {
@@ -65,9 +79,3 @@ if (isset($LOG_NIVEL)) {
     }
 }
 //LOG
-
-
-
-fclose($arquivo);
-
-?>
