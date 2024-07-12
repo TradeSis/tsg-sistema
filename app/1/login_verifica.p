@@ -29,16 +29,10 @@ def temp-table ttempresa  no-undo serialize-name "empresa"  /* JSON SAIDA */
     field administradora like empresa.administradora
     field etbcodPadrao like empresa.etbcodPadrao.
 
-def temp-table ttestab  no-undo serialize-name "estab"  /* JSON SAIDA */
-    like loginestab    
-    field etbnom as CHAR.
 
-
-def dataset conteudoLogin for ttlogin, ttempresa, ttestab
+def dataset conteudoLogin for ttlogin, ttempresa
 DATA-RELATION for1 FOR ttlogin, ttempresa         
-    RELATION-FIELDS(ttlogin.idLogin,ttempresa.idLogin) NESTED
-DATA-RELATION for2 FOR ttempresa, ttestab
-    RELATION-FIELDS(ttempresa.idEmpresa,ttestab.idEmpresa) NESTED.
+    RELATION-FIELDS(ttlogin.idLogin,ttempresa.idLogin) NESTED.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -82,22 +76,6 @@ THEN DO:
                         
                         RUN criaEmpresa.
                         
-                        for each loginestab where loginestab.idLogin = login.idLogin and
-                        loginestab.idEmpresa = empresa.idEmpresa no-lock.
-
-                            if avail loginestab
-                            then do:
-                        
-                            create ttestab.
-                            ttestab.idLogin    = loginestab.idLogin.
-                            ttestab.etbcod    = loginestab.etbcod.
-                            ttestab.idEmpresa    = loginestab.idEmpresa.
-    
-                            find estab where estab.etbcod = loginestab.etbcod no-lock.
-                            ttestab.etbnom     = estab.etbnom.
-                            
-                            end.
-                        end.
                     end.
                     
                     RUN criaLogin.
@@ -123,7 +101,7 @@ THEN DO:
             
                 if login.password = ttentrada.password
                 then do:
-                    find loginaplicativo where loginaplicativo.idlogin = login.idlogin no-lock no-error.
+                    find first loginaplicativo where loginaplicativo.idlogin = login.idlogin no-lock no-error.
                     if not avail loginaplicativo
                     then do:
                         RUN montasaida (401,"Usuario sem nivel").
@@ -135,23 +113,7 @@ THEN DO:
                             find empresa where empresa.idEmpresa = loginempresa.idEmpresa.
                             
                             RUN criaEmpresa.
-                            
-                            for each loginestab where loginestab.idLogin = login.idLogin and
-                            loginestab.idEmpresa = empresa.idEmpresa no-lock.
-
-                                if avail loginestab
-                                then do:
-                            
-                                create ttestab.
-                                ttestab.idLogin    = loginestab.idLogin.
-                                ttestab.etbcod    = loginestab.etbcod.
-                                ttestab.idEmpresa    = loginestab.idEmpresa.
-        
-                                find estab where estab.etbcod = loginestab.etbcod no-lock.
-                                ttestab.etbnom     = estab.etbnom.
-                                
-                                end.
-                            end.
+                           
                         end.
                         
                         RUN criaLogin.

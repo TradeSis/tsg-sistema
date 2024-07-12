@@ -20,7 +20,7 @@ if (isset($_POST['idEmpresa'])) {
             $_SESSION['etbcod'] = $empresa['etbcodPadrao'];
 
             if ($_SESSION['etbcod'] !== 0) {
-                header('Location: loginEstab.php?estab=' . urlencode(json_encode($empresa['estab'])));
+                header('Location: loginEstab.php');
             } else {
                 header('Location: ' . URLROOT . '/' . APP_INICIAL);
             }
@@ -36,8 +36,7 @@ if (count($empresas) == 1) {
     $_SESSION['etbcod'] = $empresas[0]['etbcodPadrao'];
 
     if ($_SESSION['etbcod'] !== 0) {
-        header('Location: loginEstab.php?estab=' . urlencode(json_encode($empresas[0]['estab'])));
-
+        header('Location: loginEstab.php');
     } else {
         header('Location: ' . URLROOT . '/' . APP_INICIAL);
     }

@@ -90,11 +90,34 @@ $usuario = buscaLogins($idLogin);
 
     <div class="container-fluid mt-3">
             <div id="ts-tabs">
-                <div class="tab whiteborder" id="tab-nfe">Aplicativo</div>
-                <div class="tab" id="tab-empresa">Empresas</div>
+                <div class="tab whiteborder" id="tab-empresa">Empresas</div>
+                <div class="tab" id="tab-app">Aplicativo</div>
                 <div class="tab" id="tab-estab" hidden></div>
                 
                 <div class="line"></div>
+
+                <div class="tabContent">
+                    <div class="table mt-2 ts-divTabela">
+                    <table class="table table-sm table-hover">
+                        <thead class="ts-headertabelafixo">
+                            <tr class="ts-headerTabelaLinhaCima">
+                                <th>Usuário</th>
+                                <th>ID</th>
+                                <th>Empresa</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id='dadosEmpresa' class="fonteCorpo">
+
+                        </tbody> 
+                    </table>
+                        <div class="py-3 px-3 text-end">
+                            <a href="loginEmpresa_inserir.php?idLogin=<?php echo $idLogin ?>" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp
+                                Novo</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="tabContent">
                     <div class="table mt-2 ts-divTabela">
@@ -114,29 +137,6 @@ $usuario = buscaLogins($idLogin);
                         </table>
                         <div class="py-3 px-3 text-end">
                             <a href="loginAplicativo_inserir.php?idLogin=<?php echo $idLogin ?>" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp
-                                Novo</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tabContent">
-                    <div class="table mt-2 ts-divTabela">
-                    <table class="table table-sm table-hover">
-                        <thead class="ts-headertabelafixo">
-                            <tr class="ts-headerTabelaLinhaCima">
-                                <th>Usuário</th>
-                                <th>ID</th>
-                                <th>Empresa</th>
-                                <th>Ação</th>
-                            </tr>
-                        </thead>
-
-                        <tbody id='dadosEmpresa' class="fonteCorpo">
-
-                        </tbody> 
-                    </table>
-                        <div class="py-3 px-3 text-end">
-                            <a href="loginEmpresa_inserir.php?idLogin=<?php echo $idLogin ?>" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp
                                 Novo</a>
                         </div>
                     </div>
@@ -241,8 +241,12 @@ $usuario = buscaLogins($idLogin);
             var urlParams = new URLSearchParams(window.location.search);
             var id = urlParams.get('id');
             if (id === 'empresa') {
+                showTabsContent(0); 
+            }  
+            if (id === 'app') {
                 showTabsContent(1); 
-            } else if (id === 'estab') {
+            } 
+            if (id === 'estab') {
                 showTabsContent(2); 
             } else {
                 showTabsContent(0);

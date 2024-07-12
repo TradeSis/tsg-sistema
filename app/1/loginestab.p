@@ -11,11 +11,14 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idLogin  like loginestab.idLogin
     field etbcod  like loginestab.etbcod
-    field idEmpresa  like loginestab.idEmpresa.
+    field idEmpresa  like loginestab.idEmpresa
+    field idEmpresaLogado  like loginestab.idEmpresa.
 
 def temp-table ttloginestab  no-undo serialize-name "loginestab"  /* JSON SAIDA */
     like loginestab
-    FIELD loginNome like login.loginNome.
+    FIELD loginNome like login.loginNome
+    FIELD etbnom as char
+    FIELD munic as char.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -40,16 +43,24 @@ end.
         (if vetbcod = ?
          then true /* TODOS */
          else loginestab.etbcod = vetbcod) 
-         
+
          no-lock.
 
          create ttloginestab.
          ttloginestab.idLogin    = loginestab.idLogin.
          ttloginestab.etbcod     = loginestab.etbcod.
          ttloginestab.idEmpresa  = loginestab.idEmpresa.
-      
+
          find login where login.idLogin = loginestab.idLogin no-lock.
          ttloginestab.loginNome   = login.loginNome.
+
+         if ttentrada.idEmpresa = ttentrada.idEmpresaLogado
+         then do:
+            find estab where estab.etbcod = loginestab.etbcod no-lock.
+            ttloginestab.etbnom   = estab.etbnom.
+            ttloginestab.munic   = estab.munic.
+         end.
+
     end.
 
 
@@ -75,5 +86,3 @@ hsaida  = TEMP-TABLE ttloginestab:handle.
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
 put unformatted string(vlcSaida).
 return string(vlcSaida).
-
-

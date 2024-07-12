@@ -27,6 +27,10 @@ $estab = array();
 
 
 $progr = new chamaprogress();
+// PASSANDO idEmpresa PARA PROGRESS
+if (isset($jsonEntrada['dadosEntrada'][0]['idEmpresaLogado'])) {
+    $progr->setempresa($jsonEntrada['dadosEntrada'][0]['idEmpresaLogado']);
+ }
 $retorno = $progr->executarprogress("sistema/app/1/loginestab", json_encode($jsonEntrada));
 fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
 $estab = json_decode($retorno, true);
