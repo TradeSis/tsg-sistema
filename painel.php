@@ -9,7 +9,7 @@
         <a href="#"><img src="../img/meucontrole.png" width="100vh 100vw"></a>
         <div class="list-group mt-4" id="menu">
         <?php
-        if (in_array("Services", $_SESSION['aplicativo'])) { ?>
+        if (in_array("Servicos", $_SESSION['aplicativo'])) { ?>
             <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/servicos/") {echo " active ";} ?> p-3" 
             href="<?php echo URLROOT ?>/servicos/">Serviços</a>
         <?php }
