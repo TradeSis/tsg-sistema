@@ -54,7 +54,7 @@ include_once __DIR__ . "/../config.php";
 
               <form role="form" action="verificar_login.php" method="post">
                 <div class="form-group mb-2">
-                  <label><span style="color:red;">*</span> CPF/e-Mail</label>
+                  <label><span style="color:red;">*</span> CPF ou email</label>
                   <div class="input-group input-group-alternative mt-1">
                     <span class="input-group-text"></i><i class="bi bi-person-fill"></i></span>
                     <input class="form-control ts-input" type="text" name="login"
