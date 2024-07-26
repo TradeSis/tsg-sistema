@@ -139,6 +139,20 @@ body.ts-fundoVisualizar{
   overflow-x: auto;
 }
 
+.ts-divTabela60 {
+  width: 100%;
+  height: 60vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+.ts-textareaResponsivo {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 /* Style para previsto, quando existe Real */  
 span.ts-previsto {
   font-weight: lighter;
