@@ -79,7 +79,8 @@ $_SESSION['ultimaulr'] = $_SERVER['HTTP_REFERER'];
                 <button type="submit" class="btn  btn-success"><i class="bi bi-sd-card-fill"></i>&#32;Salvar</button>
             </div>
         </form>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#alterarSenhaModal" class="btn btn-sm btn-danger mb-3">Alterar Senha</button>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#alterarSenhaModal" data-source="loginPerfil_alterar" class="btn btn-sm btn-danger mb-3">Alterar Senha</button>
+
 
     </div>
     

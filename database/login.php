@@ -13,12 +13,31 @@ function buscaLogins($idLogin=null)
 {
 
 	$login = array();	
-	
-	$apiEntrada = array(
-		'idLogin' => $idLogin,
-	);	
+	$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idLogin' => $idLogin,
+				)
+			)
+		);
 	$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'GET');
 	return $login;
+}
+function buscaLoginEmpresa($idLogin=null)
+{
+
+	$loginEmpresa = array();	
+	$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idLogin' => $idLogin,
+				)
+			)
+		);
+	$loginEmpresa = chamaAPI(null, '/sistema/login/empresa', json_encode($apiEntrada), 'GET');
+	return $loginEmpresa;
 }
 
 function buscaAtendente($idUsuario=null)
@@ -36,43 +55,65 @@ if (isset($_GET['operacao'])) {
 	$operacao = $_GET['operacao'];
 
 	if ($operacao == "inserir") {
-		$apiEntrada = array(
-			'loginNome' => $_POST['loginNome'],
-			'email' => $_POST['email'],
-			'cpfCnpj' => $_POST['cpfCnpj'],
-			'idEmpresa' => $_POST['idEmpresa'],
-			'pedeToken' => $_POST['pedeToken'],
-			'password' => $_POST['password']
-			
+
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'loginNome' => $_POST['loginNome'],
+					'email' => $_POST['email'],
+					'cpfCnpj' => $_POST['cpfCnpj'],
+					'idEmpresa' => $_POST['idEmpresa'],
+					'pedeToken' => $_POST['pedeToken'],
+					'password' => $_POST['password']
+				)
+			)
 		);
+
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'PUT');
-		header('Location: ../configuracao/login.php');
+
+		if($login['status'] == 200) {
+			header('Location: ../configuracao/login.php');
+		} else {
+			$mensagem = $login['retorno'];
+			header('Location: ../configuracao/login_inserir.php?mensagem=' . $mensagem);
+		}
 	}
 
 	if ($operacao == "alterar") {
-	
-		$apiEntrada = array(
-			'acao' => "login",
-			'idLogin' => $_POST['idLogin'],
-			'loginNome' => $_POST['loginNome'],
-			'email' => $_POST['email'],
-			'cpfCnpj' => $_POST['cpfCnpj'],
-			'pedeToken' => $_POST['pedeToken']
-		);
 		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'acao' => "login",
+					'idLogin' => $_POST['idLogin'],
+					'loginNome' => $_POST['loginNome'],
+					'email' => $_POST['email'],
+					'cpfCnpj' => $_POST['cpfCnpj'],
+					'pedeToken' => $_POST['pedeToken']
+				)
+			)
+		);
+	
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
 		header('Location: ../configuracao/login.php');
 	}
 
 	if ($operacao == "loginalterar") {
-		
-		$apiEntrada = array(
-			'acao' => "login",
-			'idLogin' => $_POST['idLogin'],
-			'loginNome' => $_POST['loginNome'],
-			'email' => $_POST['email'],
-			'cpfCnpj' => $_POST['cpfCnpj'],
-			'pedeToken' => $_POST['pedeToken']
+
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'acao' => "login",
+					'idLogin' => $_POST['idLogin'],
+					'loginNome' => $_POST['loginNome'],
+					'email' => $_POST['email'],
+					'cpfCnpj' => $_POST['cpfCnpj'],
+					'pedeToken' => $_POST['pedeToken']
+				)
+			)
 		);
 		
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
@@ -80,27 +121,37 @@ if (isset($_GET['operacao'])) {
 	}
 
 	if ($operacao == "senha") {
-		
-		$apiEntrada = array(
-			'acao' => "senha",
-			'idLogin' => $_POST['idLogin'],
-			'password' => $_POST['password']
-		);
+		$apiEntrada =
+			array(
+				"dadosEntrada" => array(
+					array(
+						'acao' => "senha",
+						'idLogin' => $_POST['idLogin'],
+						'password' => $_POST['password']
+					)
+				)
+			);
 		
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
-		header('Location:' . $_POST['ultimaulr']);
+		return $login;
+	}
+
+	if ($operacao == "resetToken") {
+		$apiEntrada =
+			array(
+				"dadosEntrada" => array(
+					array(
+						'acao' => "token",
+						'idLogin' => $_POST['idLogin']
+					)
+				)
+			);
+		
+		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
+		return $login;
 	}
 
 
-	if ($operacao == "excluir") {
-		$apiEntrada = array(
-			'idLogin' => $_POST['idLogin']
-		);
-		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'DELETE');
-
-		header('Location: ../configuracao/login.php');
-	}
-	
 	if ($operacao == "verificaSenha") {
 		$senhaAtual = $_POST['senhaAtual'];
 		$senhaAtualMD5 = md5($senhaAtual);
@@ -108,16 +159,56 @@ if (isset($_GET['operacao'])) {
 	}
 	
 	if ($operacao == "ativar") {
-		$apiEntrada = array(
-			'idLogin' => $_POST['idLogin'],
-			'secret_key' => $_POST['secret_key'] // no ativar, guarda a secret
-		);
+		$apiEntrada =
+			array(
+				"dadosEntrada" => array(
+					array(
+						'idLogin' => $_POST['idLogin'],
+						'secret' => $_POST['secret_key'] // no ativar, guarda a secret
+					)
+				)
+			);
 
 
 		$login = chamaAPI(null, '/sistema/login/ativar', json_encode($apiEntrada), 'POST');
 	
 		header('Location: ../login.php');
 	}
+
+	if ($operacao == "empresaInserir") {
+
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idLogin' => $_POST['idLogin'],
+					'idEmpresa' => $_POST['idEmpresa']
+				)
+			)
+		);
+
+		$loginEmpresa = chamaAPI(null, '/sistema/login/empresa', json_encode($apiEntrada), 'PUT');
+
+		header('Location: ../configuracao/login_alterar.php?id=empresa&&idLogin=' . $_POST['idLogin']);
+	}
+
+	if ($operacao == "buscaLoginEmpresa") {
+		$idLogin = isset($_POST["idLogin"])  && $_POST["idLogin"] !== "" && $_POST["idLogin"] !== "null" ? $_POST["idLogin"]  : null;
+
+		$apiEntrada =
+			array(
+				"dadosEntrada" => array(
+					array(
+						'idLogin' => $idLogin,
+					)
+				)
+			);
+		$loginEmpresa = chamaAPI(null, '/sistema/login/empresa', json_encode($apiEntrada), 'GET');
+		echo json_encode($loginEmpresa);
+		return $loginEmpresa;
+
+	}
+
 
 
 }
