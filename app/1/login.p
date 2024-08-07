@@ -33,8 +33,6 @@ then do:
     vidLogin = ttentrada.idLogin.
 end.
 
-IF ttentrada.idLogin <> ? OR ttentrada.idLogin = ?
-THEN DO:
     for each login where
         (if vidLogin = ?
          then true /* TODOS */
@@ -52,7 +50,6 @@ THEN DO:
          //ttlogin.nomeEmpresa   = empresa.nomeEmpresa.
          //ttlogin.timeSessao   = empresa.timeSessao.
     end.
-END.
 
 
 find first ttlogin no-error.
