@@ -158,13 +158,13 @@ class progress {
             }
 
             $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-            if ($socket === false) {
+            if (!$socket) {
                 //echo "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
                 $this->progress = "ERRO";
                 return;
             } 
             $result = socket_connect($socket, $address, $service_port);
-            if ($result === false) {
+            if (!$result) {
                 //echo "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
                 $this->progress = "ERRO";
                 return;
