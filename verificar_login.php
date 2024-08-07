@@ -5,59 +5,57 @@
 // helio 26012023 16:16
 
 include_once 'conexao.php';
-$nomeEmpresa = $_POST['nomeEmpresa'];
-$loginNome = $_POST['loginNome'];
+$login = $_POST['login'];
 $vpassword = $_POST['password'];
 
-$dados = array();
-$apiEntrada = array(
-        'nomeEmpresa' => $nomeEmpresa,
-        'loginNome' => $loginNome,
-        'vpassword' => $vpassword
-);
+$apiEntrada =
+    array(
+        "dadosEntrada" => array(
+            array(
+                'login' => $login,
+                'password' => $vpassword
+            )
+        )
+    );
+
 $dados = chamaAPI(null, '/sistema/login/verifica', json_encode($apiEntrada), 'GET');
 
 
-$statusLogin = $dados['statusLogin'];
-$user = $dados['loginNome'];
-$idLogin = $dados['idLogin'];
-$idEmpresa = $dados['idEmpresa'];
-$nomeEmpresa = $dados['nomeEmpresa'];
-$email = $dados['email'];
-$pedeToken = $dados['pedeToken'];
-$timeSessao = $dados['timeSessao'];
-//Lucas 29022024 - id862 adicionado campo administradora
-$administradora = $dados['administradora'];
-
-
-if (!$user == "") {
-
-        if ($pedeToken == 1) {
-                if ($statusLogin == 0) {
-                        header('Location: auth.php?idLogin=' . $idLogin . '&email=' . $email);
-                } else {
-                        header('Location: autenticar.php?' . http_build_query(['apiEntrada' => $apiEntrada]));
-                }
+if (isset($dados["pedeToken"])) {
+    if ($dados['pedeToken'] == 1) {
+        if ($dados['statusLogin'] == 0) {
+            header('Location: auth.php?idLogin=' . $dados['idLogin'] . '&email=' . $dados['email']);
         } else {
-                session_start();
-
-                $_SESSION['START'] = time();
-                $_SESSION['LAST_ACTIVITY'] = time(); 
-                $_SESSION['usuario'] = $user;
-                $_SESSION['idLogin'] = $idLogin;
-                $_SESSION['idEmpresa'] = $idEmpresa;
-                $_SESSION['nomeEmpresa'] = $nomeEmpresa;
-                $_SESSION['email'] = $email;
-                $_SESSION['timeSessao'] = $timeSessao;
-                //Lucas 29022024 - id862 adicionado campo administradora
-                $_SESSION['administradora'] = $administradora;
-
-                setcookie('Empresa', $nomeEmpresa, strtotime("+1 year"), "/", "", false, true );
-                setcookie('User', $user, strtotime("+1 year"), "/", "", false, true );
-
-                header('Location: ' . URLROOT . '/' . APP_INICIAL);
+            header('Location: autenticar.php?' . http_build_query(['apiEntrada' => $apiEntrada]));
         }
+    } else {
+        $user = $dados['loginNome'];
+        $idLogin = $dados['idLogin'];
+        $email = $dados['email'];
+
+        session_start();
+
+        $_SESSION['START'] = time();
+        $_SESSION['LAST_ACTIVITY'] = time();
+        $_SESSION['usuario'] = $user;
+        $_SESSION['idLogin'] = $idLogin;
+        $_SESSION['email'] = $email;
+
+
+        setcookie('User', $login, strtotime("+1 year"), "/", "", false, true);
+        setcookie('password', "", strtotime("+1 year"), "/", "", false, true);
+
+        header('Location: loginEmpresa.php?empresa=' . urlencode(json_encode($dados['empresa'])));
+
+    }
 } else {
+
+    if (isset($dados['retorno'])) {
         $mensagem = $dados['retorno'];
-        header('Location: login.php?mensagem=' . $mensagem);
+    } else {
+        $mensagem = "Erro ao conectar";
+    }
+
+    header('Location: login.php?mensagem=' . $mensagem);
 }
+?>
