@@ -47,8 +47,7 @@ end.
          ttlogin.email   = login.email.
          ttlogin.cpfCnpj   = login.cpfCnpj.
          ttlogin.pedeToken   = login.pedeToken.
-         //ttlogin.nomeEmpresa   = empresa.nomeEmpresa.
-         //ttlogin.timeSessao   = empresa.timeSessao.
+        
     end.
 
 
@@ -66,6 +65,7 @@ then do:
     message string(vlcSaida).
     return.
 end.
+
 
 hsaida  = TEMP-TABLE ttlogin:handle.
 
