@@ -40,11 +40,14 @@ if (isset($_POST['etbcod'])) {
 
 if (isset($estabs["retorno"])) {
 
-    $estabEntrada =
-    array(
-        'etbcod' => $_SESSION['etbcod'],
-        'idEmpresa' => $_SESSION['idEmpresa']
-    );
+   
+	$estabEntrada = 
+		array("estab" =>
+		array(array(
+			'etbcod' => $_SESSION['etbcod'],
+			'pagina' => 0,
+			'idEmpresa' => $_SESSION['idEmpresa']
+		)));
     $estabPadrao = chamaAPI(null, '/cadastros/estab', json_encode($estabEntrada), 'GET');
 
     $_SESSION['etbnom'] = $estabPadrao[0]['etbnom'];

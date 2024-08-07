@@ -16,10 +16,15 @@ function buscaEmpresas($idEmpresa=null)
 	
 	$empresa = array();
 	
-	$apiEntrada = array(
-		'idEmpresa' => $idEmpresa,
-	);
-	
+	$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idEmpresa' => $idEmpresa,
+				)
+			)
+		);
+
 	$empresa = chamaAPI(null, '/sistema/empresa', json_encode($apiEntrada), 'GET');
 	
 	return $empresa;
