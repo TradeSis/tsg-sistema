@@ -7,37 +7,28 @@ include_once 'conexao.php';
 if (isset($_POST['token'])) {
     $dados = array();
     $apiEntrada = $_GET['apiEntrada'];
-    $apiEntrada['token'] = $_POST['token'];
+    $apiEntrada['dadosEntrada'][0]['token'] = $_POST['token'];
     $dados = chamaAPI(null, '/sistema/login/token', json_encode($apiEntrada), 'GET');
 
-    $statusLogin = $dados['statusLogin'];
-    $user = $dados['loginNome'];
-    $idLogin = $dados['idLogin'];
-    $idEmpresa = $dados['idEmpresa'];
-    $nomeEmpresa = $dados['nomeEmpresa'];
-    $email = $dados['email'];
-    $pedeToken = $dados['pedeToken'];
-    $timeSessao = $dados['timeSessao'];
-    //Lucas 29022024 - id862 adicionado campo administradora
-    $administradora = $dados['administradora'];
-    if ($dados['token'] == true) {
+    if (isset($dados['idLogin'])) {
+
+        $user = $dados['loginNome'];
+        $idLogin = $dados['idLogin'];
+        $email = $dados['email'];
+
         session_start();
 
         $_SESSION['START'] = time();
-        $_SESSION['LAST_ACTIVITY'] = time(); 
+        $_SESSION['LAST_ACTIVITY'] = time();
         $_SESSION['usuario'] = $user;
         $_SESSION['idLogin'] = $idLogin;
-        $_SESSION['idEmpresa'] = $idEmpresa;
-        $_SESSION['nomeEmpresa'] = $nomeEmpresa;
         $_SESSION['email'] = $email;
-        $_SESSION['timeSessao'] = $timeSessao;
-        //Lucas 29022024 - id862 adicionado campo administradora
-        $_SESSION['administradora'] = $administradora;
 
-        setcookie('Empresa', $nomeEmpresa, strtotime("+1 year"), "/", "", false, true );
-        setcookie('User', $user, strtotime("+1 year"), "/", "", false, true );
+        setcookie('User', $apiEntrada['dadosEntrada'][0]['login'], strtotime("+1 year"), "/", "", false, true);
+        setcookie('password', $apiEntrada['dadosEntrada'][0]['password'], strtotime("+1 year"), "/", "", false, true);
 
-        header('Location: ' . URLROOT . '/' . APP_INICIAL);
+        header('Location: loginEmpresa.php?empresa=' . urlencode(json_encode($dados['empresa'])));
+
     } else {
         $mensagem = $dados['retorno'];
         header('Location: ' . URLROOT . '/sistema/login.php?mensagem=' . $mensagem);

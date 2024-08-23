@@ -139,6 +139,20 @@ body.ts-fundoVisualizar{
   overflow-x: auto;
 }
 
+.ts-divTabela60 {
+  width: 100%;
+  height: 60vh;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+.ts-textareaResponsivo {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
 /* Style para previsto, quando existe Real */  
 span.ts-previsto {
   font-weight: lighter;
@@ -176,31 +190,6 @@ span.ts-horas {
 .ts-menuFiltros.mostra {
   left: 0px;
   /* menu aparece */
-}
-
-/* MENU FILTRO - AGENDA */
-.ts-filtroCalendario{
-  width: 280px;
-  position: fixed;
-  margin-top:35px; 
-  margin-left:130px; 
-  background-color: #d3d3d3;
-  display: flex;
-  z-index: 100;
-  padding: 10px;
-  border-radius: 2%;
-}
-
-.ts-filtroCalendario.mostra{ 
-  display: none;
-}
-
-@media only screen and (max-width: 400px) {
-  .ts-filtroCalendario {
-      margin-left:0px; 
-      margin-top:65px;
-      z-index: 100;
-  }
 }
 
 .ts-btnFiltros:hover {
@@ -627,12 +616,6 @@ span.ts-horas {
   touch-action: none;
 }
 
-.ts-inputComFormatoTexto {
-  background: transparent;
-  pointer-events: none;
-  touch-action: none;
-}
-
 .ts-sumir {
   display: none;
 }
@@ -714,9 +697,29 @@ span.ts-horas {
 
 .ts-noScroll::-webkit-scrollbar {
   display: none; 
-}
+
 .ts-cardStatusDemanda {
   font-size: 12px;
   float: left;
 
+}
+
+.ts-comentario {
+  box-sizing: border-box;
+  line-height: 1.42;
+  height: 100%;
+  outline: none;
+  overflow-y: auto;
+  padding: 7px 10px;
+  tab-size: 4;
+  text-align: left;
+  word-wrap: break-word;
+}
+.ts-comentario > * {
+  cursor: text;
+}
+.ts-comentario p {
+  margin: 0;
+  padding: 0;
+  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
 }

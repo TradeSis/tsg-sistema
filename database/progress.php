@@ -30,7 +30,7 @@
                     }
                     $pf             = $dadosConexao['pf'];
                     if ($pf == null) {
-                        if ($this->socket = false) {
+                        if (!$this->socket) {
                             echo "faltando configuracao pf";
                         }
                     }
@@ -56,7 +56,7 @@
                     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                         $this->executa();
                     } else {
-                        if ($this->socket = true) {
+                        if ($this->socket) {
                                 $this->socket();
                                 if ($this->progress == "ERRO" || $this->progress == "") {
                                     $this->executa ();
