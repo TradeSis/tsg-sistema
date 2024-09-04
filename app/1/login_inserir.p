@@ -17,7 +17,8 @@ def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
-    field retorno   as char.
+    field retorno   as char
+    field idLogin   as int.
 
 def var vMD5 as raw.
 def var vsenhaMD5 as longchar.    
@@ -98,6 +99,7 @@ end.
 create ttsaida.
 ttsaida.tstatus = 200.
 ttsaida.retorno = "Login criado com sucesso".
+ttsaida.idLogin = login.idLogin.
 hsaida  = temp-table ttsaida:handle.
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
