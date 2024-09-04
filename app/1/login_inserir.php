@@ -53,8 +53,12 @@ if (isset($jsonEntrada['dadosEntrada'])) {
         $statusUsuario = 1;
         
         $conexao = conectaMysql($jsonEntrada['dadosEntrada'][0]['idEmpresa']);
-        $sql = "INSERT INTO `usuario`( `nomeUsuario`, `email`, `idLogin`, `statusUsuario`) VALUES ($loginNome, $email, $idLogin, $statusUsuario)";
-        $atualizar = mysqli_query($conexao, $sql);
+        fwrite($arquivo, $identificacao . "-APP_INICIAL->" . APP_INICIAL . "\n");
+        if (APP_INICIAL == "servicos") {
+            fwrite($arquivo, $identificacao . "-SERVICOS->" . APP_INICIAL . "\n");
+            $sql = "INSERT INTO `usuario`( `nomeUsuario`, `email`, `idLogin`, `statusUsuario`) VALUES ($loginNome, $email, $idLogin, $statusUsuario)";
+            $atualizar = mysqli_query($conexao, $sql);
+        }
 
     } 
     catch (Exception $e) {
