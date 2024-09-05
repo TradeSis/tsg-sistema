@@ -52,7 +52,9 @@ $clientes = buscaClientes();
                 <div class="input-group">
                     <input type="text" class="form-control ts-input" id="buscaContrato" placeholder="Buscar por id ou titulo">
                     <button class="btn btn-primary rounded" type="button" id="buscar"><i class="bi bi-search"></i></button>
+                    <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
                     <button type="button" class="ms-4 btn btn-success" data-bs-toggle="modal" data-bs-target="#inserirModal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
+                    <?php } ?>
                 </div>
             </div>
 
@@ -246,8 +248,9 @@ $clientes = buscaClientes();
                         linha = linha + "<td>" + object.nomeAplicativo + "</td>";
                         linha = linha + "<td>" + object.appLink + "</td>";
                         linha = linha + "<td>" + object.imgAplicativo + "</td>";
-
+                        <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?>  
                         linha = linha + "<td>" + "<button type='button' class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#alterarmodal' data-idAplicativo='" + object.idAplicativo + "'><i class='bi bi-pencil-square'></i></button>"
+                        <?php } ?>
                         linha = linha + "</tr>";
                     }
                     $("#dados").html(linha);

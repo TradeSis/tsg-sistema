@@ -35,8 +35,10 @@ $aplicativos = buscaAplicativos();
             </div>
 
             <div class="col-2 text-end">
+                <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
                 <a href="aplicativo_inserir.php" role="button" class="btn btn-success"><i
                         class="bi bi-plus-square"></i>&nbsp Novo</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -46,7 +48,6 @@ $aplicativos = buscaAplicativos();
                     <tr>
                         <th>Aplicativo</th>
                         <th>Caminho</th>
-                        <th>Imagem</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -62,16 +63,17 @@ $aplicativos = buscaAplicativos();
                             <?php echo $aplicativo['appLink'] ?>
                         </td>
 
-
-                        <td><img height="30" width="100" src="<?php echo $aplicativo['pathImg']; ?>" alt=""></td>
-
                         <td>
+                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?> 
                             <a class="btn btn-warning btn-sm"
                                 href="aplicativo_alterar.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-pencil-square"></i></a>
-                           <!--  <a class="btn btn-danger btn-sm"
+                            <?php } ?>
+                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']))) { ?>
+                            <!--  <a class="btn btn-danger btn-sm"
                                 href="aplicativo_excluir.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-trash3"></i></a> -->
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

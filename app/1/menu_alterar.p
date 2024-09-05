@@ -8,16 +8,16 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field nomeAplicativo     like tsaplic.nomeAplicativo
-    field appLink     like tsaplic.appLink.
+    like tsmenu.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
-    field tstatus           as int serialize-name "status"
-    field descricaoStatus   as char.
+    field tstatus        as int serialize-name "status"
+    field descricaoStatus      as char.
 
 hEntrada = temp-table ttentrada:HANDLE.
 lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
 find first ttentrada no-error.
+
 
 if not avail ttentrada
 then do:
@@ -32,13 +32,12 @@ then do:
     return.
 end.
 
-
-find tsaplic where tsaplic.nomeAplicativo = "" + ttentrada.nomeAplicativo + "" no-lock no-error.
-if avail tsaplic
+find tsmenu where tsmenu.idMenu = ttentrada.idMenu no-lock no-error.
+if not avail tsmenu
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "aplicativo ja cadastrado".
+    ttsaida.descricaoStatus = "Menu nao encontrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -48,15 +47,16 @@ then do:
 end.
 
 do on error undo:
-	create tsaplic.
-	tsaplic.nomeAplicativo = ttentrada.nomeAplicativo.
-	tsaplic.appLink = ttentrada.appLink.
-
+    find tsmenu where tsmenu.idMenu = ttentrada.idMenu exclusive no-error.
+    tsmenu.nomeMenu = ttentrada.nomeMenu. 
+    tsmenu.idAplicativo = ttentrada.idAplicativo. 
+    tsmenu.idMenuSuperior = ttentrada.idMenuSuperior. 
 end.
 
 create ttsaida.
 ttsaida.tstatus = 200.
-ttsaida.descricaoStatus = "aplicativo criado com sucesso".
+ttsaida.descricaoStatus = "Menu alterado com sucesso".
+
 hsaida  = temp-table ttsaida:handle.
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).

@@ -32,8 +32,8 @@ then do:
     return.
 end.
 
-find aplicativo where tsaplic.idAplicativo = ttentrada.idAplicativo no-lock no-error.
-if not avail aplicativo
+find tsaplic where tsaplic.idAplicativo = ttentrada.idAplicativo no-lock no-error.
+if not avail tsaplic
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
@@ -47,11 +47,9 @@ then do:
 end.
 
 do on error undo:
-    find aplicativo where tsaplic.idAplicativo = ttentrada.idAplicativo exclusive no-error.
+    find tsaplic where tsaplic.idAplicativo = ttentrada.idAplicativo exclusive no-error.
     tsaplic.nomeAplicativo = ttentrada.nomeAplicativo. 
     tsaplic.appLink = ttentrada.appLink. 
-    tsaplic.imgAplicativo = ttentrada.imgAplicativo. 
-    tsaplic.pathImg = ttentrada.pathImg. 
 end.
 
 create ttsaida.

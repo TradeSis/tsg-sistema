@@ -48,12 +48,6 @@ include_once('../header.php');
                         <input type="text" name="appLink" class="form-control ts-input" required autocomplete="off">
                 </div>
             </div>
-            <label class="form-label ts-label mt-4">Imagem</label>
-            <label class="picture ml-4" for="imgAplicativo" tabIndex="0">
-                <span class="picture__image"></span>
-            </label>
-
-            <input type="file" name="imgAplicativo" id="imgAplicativo">
 
             <div class="text-end mt-4">
                 <button type="submit" class="btn  btn-success"><i class="bi bi-sd-card-fill"></i>&#32;Inserir</button>
@@ -89,35 +83,6 @@ include_once('../header.php');
             }
         });
 
-        //Carregar a imagem na tela
-        const inputFile = document.querySelector("#imgAplicativo");
-        const pictureImage = document.querySelector(".picture__image");
-        const pictureImageTxt = "Carregar imagem";
-        pictureImage.innerHTML = pictureImageTxt;
-
-        inputFile.addEventListener("change", function (e) {
-            const inputTarget = e.target;
-            const file = inputTarget.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-
-                reader.addEventListener("load", function (e) {
-                    const readerTarget = e.target;
-
-                    const img = document.createElement("img");
-                    img.src = readerTarget.result;
-                    img.classList.add("picture__img");
-
-                    pictureImage.innerHTML = "";
-                    pictureImage.appendChild(img);
-                });
-
-                reader.readAsDataURL(file);
-            } else {
-                pictureImage.innerHTML = pictureImageTxt;
-            }
-        });
     </script>
   
     <!-- LOCAL PARA COLOCAR OS JS -FIM -->

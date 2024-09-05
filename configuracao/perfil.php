@@ -1,12 +1,10 @@
 <?php
-// Lucas 06102023 padrao novo
-//Lucas 09032023 - adicionado um segundo parametro no buscaUsuario 
-// helio 01022023 altereado para include_once
-// helio 26012023 16:16
+//Helio 05102023 padrao novo
+//Lucas 04042023 criado
 include_once(__DIR__ . '/../header.php');
-include_once(__DIR__ . '/../database/login.php');
-include_once(__DIR__ . '/../database/empresa.php');
-$logins = buscaLogins();
+include_once(__DIR__ . '/../database/perfil.php');
+
+$perfis = buscaPerfil();
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -25,10 +23,11 @@ $logins = buscaLogins();
         <div class="row">
             <BR> <!-- BOTOES AUXILIARES -->
         </div>
+        
         <div class="row align-items-center"> <!-- LINHA SUPERIOR A TABLE -->
             <div class="col-3 text-start">
                 <!-- TITULO -->
-                <h2 class="ts-tituloPrincipal">Login</h2>
+                <h2 class="ts-tituloPrincipal">Perfils</h2>
             </div>
             <div class="col-7">
                 <!-- FILTROS -->
@@ -36,7 +35,7 @@ $logins = buscaLogins();
 
             <div class="col-2 text-end">
                 <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
-                    <a href="login_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
+                <a href="perfil_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
                 <?php } ?>
             </div>
         </div>
@@ -45,35 +44,39 @@ $logins = buscaLogins();
             <table class="table table-hover table-sm align-middle">
                 <thead class="ts-headertabelafixo">
                     <tr>
-                        <th>Nome</th>
-                        <th>E-mail</th>
-                        <th>Cpf/Cnpj</th>
-                        <th>Token</th>
-                        <th>Ação</th>
+                        <th>Nome Perfil</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
 
-                <?php
-                foreach ($logins as $login) {
-                ?>
+                <?php 
+                foreach ($perfis as $perfil) {
+                    ?>
                     <tr>
-                        <td><?php echo $login['loginNome'] ?></td>
-                        <td><?php echo $login['email'] ?></td>
-                        <td><?php echo $login['cpfCnpj'] ?></td>
-                        <td><?php echo $login['pedeToken'] == 1 ? 'Sim' : 'Não'; ?></td>
                         <td>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?>
-                            <a class=" btn btn-warning btn-sm" href="login_alterar.php?idLogin=<?php echo $login['idLogin'] ?>" role="button"><i class="bi bi-pencil-square"></i></a>
+                            <?php echo $perfil['nomePerfil'] ?>
+                        </td>
+
+                        <td>
+                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?>     
+                            <a class="btn btn-warning btn-sm"
+                                href="perfil_alterar.php?idPerfil=<?php echo $perfil['idPerfil'] ?>"
+                                role="button"><i class="bi bi-pencil-square"></i></a>
+                            <?php } ?>
+                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']))) { ?>     
+                            <!-- <a class="btn btn-danger btn-sm"
+                                href="perfil_excluir.php?idPerfil=<?php echo $perfil['idPerfil'] ?>"
+                                role="button"><i class="bi bi-trash3"></i></a> -->
                             <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
 
-
             </table>
         </div>
-    </div>
 
+
+    </div>
 
     <!-- LOCAL PARA COLOCAR OS JS -->
 

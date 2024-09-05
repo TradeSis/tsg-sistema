@@ -36,6 +36,23 @@ function buscaAplicativosMenu($idLogin)
 	$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
 	return $app;
 }
+function buscaMenus($nomeAplicativo=null, $idMenu=null)
+{
+
+	$menu = array();
+
+	$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'nomeAplicativo' => $nomeAplicativo,
+					'idMenu' => $idMenu
+				)
+			)
+		);
+	$menu = chamaAPI(null, '/sistema/aplicativo/menu', json_encode($apiEntrada), 'GET');
+	return $menu;
+} 
 
 
 if (isset($_GET['operacao'])) {
@@ -44,55 +61,21 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserir") {
 
-
-		$img = $_FILES['imgAplicativo'];
-
-		$pasta = "/img/brand/";
-		$imgAplicativo = $img['name'];
-		$novoNomeImg = uniqid(); //gerar nome aleatorio para ser guardado na pasta 
-		$extensao = strtolower(pathinfo($imgAplicativo, PATHINFO_EXTENSION)); //extensao do arquivo
-
-		if ($extensao != "" && $extensao != "jpg" && $extensao != "png")
-			die("Tipo de aquivo não aceito");
-
-		$pathImgFisico = ROOT . $pasta . $novoNomeImg . "." . $extensao;
-		$pathImgURL = "/ts" . $pasta . $novoNomeImg . "." . $extensao;
-		move_uploaded_file($img["tmp_name"], $pathImgFisico);
-
-
 		$apiEntrada =
 		array(
 			"dadosEntrada" => array(
 				array(
 					'nomeAplicativo' => $_POST['nomeAplicativo'],
 					'appLink' => $_POST['appLink'],
-					'imgAplicativo' => $_POST['imgAplicativo'],
-					'pathImg' => $pathImg,
 				)
 			)
 		);
 
-		/*  echo json_encode($_POST);
-		echo "\n";
-		echo json_encode($apiEntrada);
-		return;  */
 		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'PUT');
 	}
 
 	if ($operacao == "alterar") {
 
-		$img = $_FILES['imgAplicativo'];
-
-		$pasta = "../img/imgAplicativo/";
-		$imgAplicativo = $img['name'];
-		$novoNomeImg = uniqid(); //gerar nome aleatorio para ser guardado na pasta 
-		$extensao = strtolower(pathinfo($imgAplicativo, PATHINFO_EXTENSION)); //extensao do arquivo
-
-		if ($extensao != "" && $extensao != "jpg" && $extensao != "png")
-			die("Tipo de aquivo não aceito");
-
-		$pathImg = $pasta . $novoNomeImg . "." . $extensao;
-		move_uploaded_file($img["tmp_name"], $pathImg);
 
 		$apiEntrada =
 		array(
@@ -101,14 +84,10 @@ if (isset($_GET['operacao'])) {
 					'idAplicativo' => $_POST['idAplicativo'],
 					'nomeAplicativo' => $_POST['nomeAplicativo'],
 					'appLink' => $_POST['appLink'],
-					'imgAplicativo' => $_POST['imgAplicativo'],
-					'pathImg' => $pathImg,
 				)
 			)
 		);
 
-		/* echo json_encode($apiEntrada);
-		return; */
 		$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'POST');
 	}
 
@@ -156,6 +135,61 @@ if (isset($_GET['operacao'])) {
 
 		echo json_encode($app);
 		return $app;
+	}
+
+	if ($operacao == "inserirMenu") {
+
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'nomeMenu' => $_POST['nomeMenu'],
+					'idAplicativo' => $_POST['idAplicativo'],
+					'idMenuSuperior' => $_POST['idMenuSuperior']
+				)
+			)
+		);
+
+		$menu = chamaAPI(null, '/sistema/aplicativo/menu', json_encode($apiEntrada), 'PUT');
+		header('Location: ../configuracao/aplicativo_alterar.php?idAplicativo='.$_POST['idAplicativo']);
+	}
+	
+	if ($operacao == "alterarMenu") {
+		
+		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idMenu' => $_POST['idMenu'],
+					'nomeMenu' => $_POST['nomeMenu'],
+					'idAplicativo' => $_POST['idAplicativo'],
+					'idMenuSuperior' => $_POST['idMenuSuperior']
+				)
+			)
+		);
+				
+		$menu = chamaAPI(null, '/sistema/aplicativo/menu', json_encode($apiEntrada), 'POST');
+		header('Location: ../configuracao/aplicativo_alterar.php?idAplicativo='.$_POST['idAplicativo']);
+	}
+	if ($operacao == "buscarMenu") {
+
+		$nomeAplicativo = isset($_POST["nomeAplicativo"]) && $_POST["nomeAplicativo"] !== "" ? $_POST["nomeAplicativo"] : null;
+		$idMenu = isset($_POST["idMenu"]) && $_POST["idMenu"] !== "" ? $_POST["idMenu"] : null;
+		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'nomeAplicativo' => $nomeAplicativo,
+					'idMenu' => $idMenu
+				)
+			)
+		);
+				
+		$menu = chamaAPI(null, '/sistema/aplicativo/menu', json_encode($apiEntrada), 'GET');
+		echo json_encode($menu);
+		return $menu;
 	}
 
 

@@ -8,8 +8,12 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field nomeAplicativo     like tsaplic.nomeAplicativo
-    field appLink     like tsaplic.appLink.
+    field nomePerfil     like tsperfil.nomePerfil
+    field aplicativos     like tsperfil.aplicativos
+    field menus     like tsperfil.menus
+    field pEXC     like tsperfil.pEXC
+    field pALT     like tsperfil.pALT
+    field pINS     like tsperfil.pINS.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
@@ -33,12 +37,12 @@ then do:
 end.
 
 
-find tsaplic where tsaplic.nomeAplicativo = "" + ttentrada.nomeAplicativo + "" no-lock no-error.
-if avail tsaplic
+find tsperfil where tsperfil.nomePerfil = "" + ttentrada.nomePerfil + "" no-lock no-error.
+if avail tsperfil
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "aplicativo ja cadastrado".
+    ttsaida.descricaoStatus = "Menu ja cadastrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -48,15 +52,19 @@ then do:
 end.
 
 do on error undo:
-	create tsaplic.
-	tsaplic.nomeAplicativo = ttentrada.nomeAplicativo.
-	tsaplic.appLink = ttentrada.appLink.
+	create tsperfil.
+	tsperfil.nomePerfil = ttentrada.nomePerfil.
+	tsperfil.aplicativos = ttentrada.aplicativos.
+	tsperfil.menus = ttentrada.menus.
+	tsperfil.pEXC = ttentrada.pEXC.
+	tsperfil.pALT = ttentrada.pALT.
+	tsperfil.pINS = ttentrada.pINS.
 
 end.
 
 create ttsaida.
 ttsaida.tstatus = 200.
-ttsaida.descricaoStatus = "aplicativo criado com sucesso".
+ttsaida.descricaoStatus = "Menu criado com sucesso".
 hsaida  = temp-table ttsaida:handle.
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).

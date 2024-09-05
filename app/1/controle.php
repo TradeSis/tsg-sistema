@@ -18,6 +18,10 @@ if ($metodo == "GET") {
     $funcao = "login/token";
     $parametro = null;
   }
+  if ($funcao == "aplicativo" && $parametro == "menu") {
+    $funcao = "aplicativo/menu";
+    $parametro = null;
+  }
 
   switch ($funcao) {
 
@@ -59,7 +63,15 @@ if ($metodo == "GET") {
       
     case "loginestab":
       include 'loginestab.php';
-      break;  
+      break; 
+      
+    case "aplicativo/menu":
+      include 'menu.php';
+      break;
+
+    case "perfil":
+      include 'perfil.php';
+      break;
 
     default:
       $jsonSaida = json_decode(
@@ -79,6 +91,10 @@ if ($metodo == "PUT") {
 
   if ($funcao == "login" && $parametro == "empresa") {
     $funcao = "login/empresa";
+    $parametro = null;
+  }
+  if ($funcao == "aplicativo" && $parametro == "menu") {
+    $funcao = "aplicativo/menu";
     $parametro = null;
   }
 
@@ -116,6 +132,14 @@ if ($metodo == "PUT") {
       include 'loginempresa_inserir.php';
       break; 
 
+    case "aplicativo/menu":
+      include 'menu_inserir.php';
+      break; 
+
+    case "perfil":
+      include 'perfil_inserir.php';
+      break; 
+
     default:
       $jsonSaida = json_decode(
         json_encode(
@@ -133,6 +157,10 @@ if ($metodo == "PUT") {
 if ($metodo == "POST") {
   if ($funcao == "login" && $parametro == "ativar") {
     $funcao = "configuracao/ativar";
+    $parametro = null;
+  }
+  if ($funcao == "aplicativo" && $parametro == "menu") {
+    $funcao = "aplicativo/menu";
     $parametro = null;
   }
 
@@ -170,6 +198,10 @@ if ($metodo == "POST") {
             
     case "anexos":
       include 'anexos_alterar.php';
+      break;
+
+    case "aplicativo/menu":
+      include 'menu_alterar.php';
       break;
 
     default:
