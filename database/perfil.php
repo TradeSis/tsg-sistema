@@ -19,6 +19,24 @@ function buscaPerfil($idPerfil=null)
 	$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'GET');
 	return $perfil;
 }
+function buscaPerfilMenu($idPerfil=null,$idAplicativo=null,$idMenu=null)
+{
+
+	$perfilmenu = array();
+
+	$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idPerfil' => $idPerfil,
+					'idAplicativo' => $idAplicativo,
+					'idMenu' => $idMenu
+				)
+			)
+		);
+	$perfilmenu = chamaAPI(null, '/sistema/perfilmenu', json_encode($apiEntrada), 'GET');
+	return $perfilmenu;
+}
 
 
 if (isset($_GET['operacao'])) {
@@ -62,22 +80,14 @@ if (isset($_GET['operacao'])) {
 
 	if ($operacao == "inserirPerfilMenu") {
 		
-		
 		$apiEntrada =
 		array(
-			"dadosEntrada" => array(
-				array(
-					'idPerfil' => $_POST['idPerfil'],
-					'idAplicativo' => $_POST['idAplicativo'],
-					'idMenu' => $_POST['idMenu'],
-					'operacoes' => $_POST['operacoes']
-				)
-			)
+			"dadosEntrada" => $_POST['apiEntrada']
 		);
 				
 		$perfilmenu = chamaAPI(null, '/sistema/perfilmenu', json_encode($apiEntrada), 'PUT');
-		echo json_encode($apiEntrada);
-		return $apiEntrada;
+		echo json_encode($perfilmenu);
+		return $perfilmenu;
 	} 
 
 	if ($operacao == "buscarPerfilMenu") {
@@ -105,3 +115,4 @@ if (isset($_GET['operacao'])) {
 
 	header('Location: ../configuracao/perfil.php');
 }
+

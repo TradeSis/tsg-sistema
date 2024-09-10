@@ -35,9 +35,7 @@ $logins = buscaLogins();
             </div>
 
             <div class="col-2 text-end">
-                <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
-                    <a href="login_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
-                <?php } ?>
+                <a href="login_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
             </div>
         </div>
 
@@ -62,9 +60,7 @@ $logins = buscaLogins();
                         <td><?php echo $login['cpfCnpj'] ?></td>
                         <td><?php echo $login['pedeToken'] == 1 ? 'Sim' : 'Não'; ?></td>
                         <td>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?>
                             <a class=" btn btn-warning btn-sm" href="login_alterar.php?idLogin=<?php echo $login['idLogin'] ?>" role="button"><i class="bi bi-pencil-square"></i></a>
-                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

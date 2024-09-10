@@ -8,10 +8,12 @@ include_once('../header.php');
 include_once('../database/login.php');
 include_once('../database/aplicativo.php');
 include_once('../database/loginAplicativo.php');
+include_once('../database/perfil.php');
 
 $idLogin = $_GET['idLogin'];
 $aplicativos = buscaAplicativos();
 $usuario = buscaLogins($idLogin);
+$perfis = buscaPerfil();
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -64,7 +66,19 @@ $usuario = buscaLogins($idLogin);
                     <label class="form-label ts-label">Cpf/Cnpj</label>
                     <input type="text" class="form-control ts-input" name="cpfCnpj" value="<?php echo $usuario['cpfCnpj'] ?>">
                 </div>
-                <div class="col-sm">
+                <div class="col-sm-4">
+                    <label class="form-label ts-label">Perfil</label>
+                    <select class="form-select ts-input" name="idPerfil">
+                        <option value="<?php echo null ?>"></option>
+                        <?php
+                            foreach ($perfis as $perfil) { ?>
+                                <option <?php if ($usuario['idPerfil'] == $perfil['idPerfil']) {
+                                    echo "selected";
+                                } ?> value="<?php echo $perfil['idPerfil'] ?>"><?php echo $perfil['idPerfil'] ?></option>
+                            <?php } ?>
+                    </select>
+                </div>
+                <div class="col-sm-2">
                     <label class="form-label ts-label">Pede Token</label>
                     <select class="form-select ts-input" name="pedeToken">
                         <option <?php if ($usuario['pedeToken'] == "1") {
@@ -91,7 +105,7 @@ $usuario = buscaLogins($idLogin);
     <div class="container-fluid mt-3">
             <div id="ts-tabs">
                 <div class="tab whiteborder" id="tab-empresa">Empresas</div>
-                <div class="tab" id="tab-app">Aplicativo</div>
+                <!-- <div class="tab" id="tab-app">Aplicativo</div> -->
                 <div class="tab" id="tab-estab" hidden></div>
                 
                 <div class="line"></div>
@@ -119,7 +133,7 @@ $usuario = buscaLogins($idLogin);
                     </div>
                 </div>
 
-                <div class="tabContent">
+            <!--     <div class="tabContent">
                     <div class="table mt-2 ts-divTabela">
                         <table class="table table-sm table-hover">
                             <thead class="ts-headertabelafixo">
@@ -140,7 +154,7 @@ $usuario = buscaLogins($idLogin);
                                 Novo</a>
                         </div>
                     </div>
-                </div>
+                </div> -->
                   
                 <div class="tabContent">
                     <div class="table mt-2 ts-divTabela">
@@ -243,11 +257,11 @@ $usuario = buscaLogins($idLogin);
             if (id === 'empresa') {
                 showTabsContent(0); 
             }  
-            if (id === 'app') {
+            /* if (id === 'app') {
                 showTabsContent(1); 
-            } 
+            }  */
             if (id === 'estab') {
-                showTabsContent(2); 
+                showTabsContent(1); 
             } else {
                 showTabsContent(0);
             }
@@ -407,7 +421,7 @@ $usuario = buscaLogins($idLogin);
                     }
                     document.getElementById('tab-estab').removeAttribute('hidden');
                     document.getElementById('tab-estab').textContent = nomeEmpresa + " Estabelecimentos";
-                    showTabsContent(2); 
+                    showTabsContent(1); 
                 }
             });
         }

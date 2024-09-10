@@ -13,6 +13,7 @@ def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA
     field email   like login.email
     field cpfCnpj   like login.cpfCnpj
     field pedeToken   like login.pedeToken
+    field idPerfil   like login.idPerfil
     field password     like login.password
     field acao     as char.
 
@@ -61,8 +62,10 @@ do on error undo:
         find login where login.idLogin = ttentrada.idLogin exclusive no-error.
         login.loginNome = ttentrada.loginNome. 
         login.email = ttentrada.email. 
-        login.cpfCnpj = ttentrada.cpfCnpj. 
         login.pedeToken = ttentrada.pedeToken. 
+        login.idPerfil = ttentrada.idPerfil.
+        if ttentrada.cpfCnpj <> ""
+        then login.cpfCnpj = ttentrada.cpfCnpj. 
     end.
     if ttentrada.acao = "senha"
     then do:

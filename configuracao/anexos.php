@@ -34,9 +34,7 @@ $anexos = buscaAnexos();
             </div>
 
             <div class="col-2 text-end">
-                <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
                 <a href="anexos_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
-                <?php } ?>
             </div>
         </div>
 
@@ -61,12 +59,8 @@ $anexos = buscaAnexos();
                         <td><?php echo '<img src="' . $anexo['base64'] . '" width="60px" height="60px" alt=""/>' ?></td>
 
                         <td>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?>    
                             <a class="btn btn-warning btn-sm" href="anexos_alterar.php?idAnexo=<?php echo $anexo['idAnexo'] ?>" role="button"><i class="bi bi-pencil-square"></i></a>
-                            <?php } ?>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']))) { ?>  
                             <a class="btn btn-danger btn-sm" href="anexos_excluir.php?idAnexo=<?php echo $anexo['idAnexo'] ?>" role="button"><i class="bi bi-trash3"></i></a>
-                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

@@ -91,7 +91,8 @@ if (isset($_GET['operacao'])) {
 					'loginNome' => $_POST['loginNome'],
 					'email' => $_POST['email'],
 					'cpfCnpj' => $_POST['cpfCnpj'],
-					'pedeToken' => $_POST['pedeToken']
+					'pedeToken' => $_POST['pedeToken'],
+					'idPerfil' => $_POST['idPerfil']
 				)
 			)
 		);

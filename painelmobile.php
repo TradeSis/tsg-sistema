@@ -3,20 +3,10 @@
 include_once 'header.php';
 
 if(!isset($_SESSION['aplicativo'])){
-include_once ROOT . "/sistema/database/aplicativo.php";
-$aplicativos = buscaAplicativosMenu($_SESSION['idLogin']);
-
-
-$aplicativo = array();
-if (isset($aplicativos['nomeAplicativo'])) {
-    $aplicativo[] = $aplicativos["nomeAplicativo"];
-} else {
-    foreach ($aplicativos as $unico) {
-        //echo '<hr> aplicativos -> ' . json_encode($unico);
-        $aplicativo[] = $unico["nomeAplicativo"];
-    }
-}
-$_SESSION['aplicativo'] = $aplicativo;
+    include_once ROOT . "/sistema/database/perfil.php";
+    $aplicativos = buscaPerfil($_SESSION['idPerfil']);
+    $aplicativo = explode(',', $aplicativos['aplicativos']);
+    $_SESSION['aplicativo'] = $aplicativo;
 } 
 
 $URL_ATUAL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";

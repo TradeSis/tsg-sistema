@@ -34,30 +34,26 @@ then do:
     return.
 end.
 
-
-find perfilmenu where perfilmenu.idPerfil = "" + ttentrada.idPerfil + "" and
-                      perfilmenu.idAplicativo = ttentrada.idAplicativo and perfilmenu.idMenu = "" + ttentrada.idMenu + "" no-lock no-error.
-if avail perfilmenu
-then do:
-    create ttsaida.
-    ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Perfil Menu ja cadastrado".
-
-    hsaida  = temp-table ttsaida:handle.
-
-    lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
-    message string(vlcSaida).
-    return.
+for each perfilmenu where perfilmenu.idPerfil = "" + ttentrada.idPerfil + "" and
+                      perfilmenu.idAplicativo = ttentrada.idAplicativo.
+    if avail perfilmenu
+    then do:
+        delete perfilmenu.
+    end.
 end.
+
+
 
 do on error undo:
-	create perfilmenu.
-	perfilmenu.idPerfil = ttentrada.idPerfil.
-	perfilmenu.idAplicativo = ttentrada.idAplicativo.
-	perfilmenu.idMenu = ttentrada.idMenu.
-	perfilmenu.operacoes = ttentrada.operacoes.
-
+    for each ttentrada. 
+        create perfilmenu.
+        perfilmenu.idPerfil = ttentrada.idPerfil.
+        perfilmenu.idAplicativo = ttentrada.idAplicativo.
+        perfilmenu.idMenu = ttentrada.idMenu.
+        perfilmenu.operacoes = ttentrada.operacoes.
+    end.
 end.
+
 
 create ttsaida.
 ttsaida.tstatus = 200.

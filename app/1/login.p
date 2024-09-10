@@ -47,6 +47,7 @@ end.
          ttlogin.email   = login.email.
          ttlogin.cpfCnpj   = login.cpfCnpj.
          ttlogin.pedeToken   = login.pedeToken.
+         ttlogin.idPerfil   = login.idPerfil.
         
     end.
 

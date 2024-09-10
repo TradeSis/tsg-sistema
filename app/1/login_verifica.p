@@ -19,7 +19,8 @@ def temp-table ttlogin  no-undo serialize-name "login"  /* JSON SAIDA */
     field email like login.email
     field cpfCnpj like login.cpfCnpj
     field secret like login.secret
-    field pedeToken like login.pedeToken.
+    field pedeToken like login.pedeToken
+    field idPerfil like login.idPerfil.
 
 def temp-table ttempresa  no-undo serialize-name "empresa"  /* JSON SAIDA */
     field idLogin like login.idLogin
@@ -63,8 +64,7 @@ THEN DO:
         
             if login.password = ttentrada.password
             then do:
-                find first loginaplicativo where loginaplicativo.idlogin = login.idlogin no-lock no-error.
-                if not avail loginaplicativo
+                if login.idPerfil = ? or login.idPerfil = ""
                 then do:
                     RUN montasaida (401,"Usuario sem nivel").
                     RETURN.
@@ -101,8 +101,7 @@ THEN DO:
             
                 if login.password = ttentrada.password
                 then do:
-                    find first loginaplicativo where loginaplicativo.idlogin = login.idlogin no-lock no-error.
-                    if not avail loginaplicativo
+                    if login.idPerfil = ? or login.idPerfil = ""
                     then do:
                         RUN montasaida (401,"Usuario sem nivel").
                         RETURN.
@@ -155,6 +154,7 @@ ttlogin.email   = login.email.
 ttlogin.cpfCnpj   = login.cpfCnpj.
 ttlogin.secret   = login.secret.
 ttlogin.pedeToken   = login.pedeToken.
+ttlogin.idPerfil   = login.idPerfil.
 
 END PROCEDURE.
 

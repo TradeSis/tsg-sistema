@@ -32,6 +32,7 @@ if (isset($dados["pedeToken"])) {
         $user = $dados['loginNome'];
         $idLogin = $dados['idLogin'];
         $email = $dados['email'];
+        $idPerfil = $dados['idPerfil'];
 
         session_start();
 
@@ -40,6 +41,7 @@ if (isset($dados["pedeToken"])) {
         $_SESSION['usuario'] = $user;
         $_SESSION['idLogin'] = $idLogin;
         $_SESSION['email'] = $email;
+        $_SESSION['idPerfil'] = $idPerfil;
 
 
         setcookie('User', $login, strtotime("+1 year"), "/", "", false, true);

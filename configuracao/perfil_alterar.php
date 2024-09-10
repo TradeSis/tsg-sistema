@@ -109,7 +109,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
         <div class="modal-dialog modal-md modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Operações *menu*</h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="post" id="operacoesForm">
@@ -156,7 +156,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
 
         $(document).ready(function () {
             var apps = [];
-            var appName;
+            var apiEntradaList = []; 
 
             $.ajax({
                 type: 'POST',
@@ -277,41 +277,62 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                         registeredMenus.forEach(function (menu) {
                                             var menuSelector = 'input.menu-checkbox-' + appNome + '[value="' + menu.idMenu + '"]';
                                             $(menuSelector).prop('checked', true);
+
+                                            apiEntradaList.push({
+                                                idPerfil: menu.idPerfil,
+                                                idAplicativo: menu.idAplicativo,
+                                                idMenu: menu.idMenu,
+                                                operacoes: menu.operacoes
+                                            });
                                         });
                                     }
                                 }
                             });
 
-
-                            $('.menu-checkbox-' + appNome).on('click', function () {
+                            $('.menu-checkbox-' + appNome).on('change', function () {
                                 var idMenu = $(this).val();
                                 var idAplicativo = $(this).data('appid');
-                                $('body').css('cursor', 'wait');
-                                $.ajax({
-                                    type: 'POST',
-                                    dataType: 'json',
-                                    url: '../database/perfil.php?operacao=buscarPerfilMenu',
-                                    data: {
+                                var isChecked = $(this).is(':checked');
+                                if (isChecked) {
+                                    $('body').css('cursor', 'wait');
+                                    $('#operacoesmodal input[type="checkbox"]').prop('checked', false);
+                                    $.ajax({
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        url: '../database/perfil.php?operacao=buscarPerfilMenu',
+                                        data: {
+                                            idPerfil: '<?php echo $perfil['idPerfil']; ?>',
+                                            idAplicativo: idAplicativo,
+                                            idMenu: idMenu
+                                        },
+                                        success: function (msg) {
+                                            if (msg.operacoes) {
+                                                var operacoesArray = msg.operacoes.split(',');
+                                                operacoesArray.forEach(function (operacao) {
+                                                    var selector = '#operacoesmodal input[type="checkbox"][value="' + operacao.trim() + '"]';
+                                                    $(selector).prop('checked', true);
+                                                });
+                                            }
+                                            $('body').css('cursor', 'default');
+                                        },
+                                        error: function () {
+                                            $('body').css('cursor', 'default');
+                                        }
+                                    });
+                                    $('#operacoesmodal .modal-title').text('Operações ' + idMenu);
+                                    $('#operacoesmodal').modal('show');
+
+                                    apiEntradaList.push({
                                         idPerfil: '<?php echo $perfil['idPerfil']; ?>',
                                         idAplicativo: idAplicativo,
-                                        idMenu: idMenu
-                                    },
-                                    success: function (msg) {
-                                        if (msg.operacoes) {
-                                            var operacoesArray = msg.operacoes.split(',');
-                                            operacoesArray.forEach(function (operacao) {
-                                                var selector = '#operacoesmodal input[type="checkbox"][value="' + operacao.trim() + '"]';
-                                                $(selector).prop('checked', true);
-                                            });
-                                        }
-                                        $('body').css('cursor', 'default');
-                                    },
-                                    error: function () {
-                                        $('body').css('cursor', 'default');
-                                    }
-                                });
-                                $('#operacoesmodal .modal-title').text('Operações ' + idMenu);
-                                $('#operacoesmodal').modal('show');
+                                        idMenu: idMenu,
+                                        operacoes: '' 
+                                    });
+                                } else {
+                                    apiEntradaList = apiEntradaList.filter(function (entry) {
+                                        return !(entry.idMenu === idMenu && entry.idAplicativo === idAplicativo);
+                                    });
+                                }
                             });
                         },
                         complete: function () {
@@ -325,36 +346,38 @@ $perfil = buscaPerfil($_GET['idPerfil']);
 
             $('#operacoesForm').submit(function (e) {
                 e.preventDefault();
-                var idPerfil = $('input[name="idPerfil"]').val();
+                var idMenu = $('#operacoesmodal .modal-title').text().replace('Operações ', '');
                 var operacoes = [];
-                var apiEntradaList = []; 
-
-                $('input[name="menus[]"]:checked').each(function () {
-                    var idMenu = $(this).val();
-                    var idAplicativo = $(this).data('appid');
-                    var operacoes = [];
-
-                    $('.operacao-checkbox:checked').each(function () {
-                        operacoes.push($(this).val());
-                    });
-
+                $('#operacoesmodal input[type="checkbox"]:checked').each(function () {
+                    operacoes.push($(this).val());
+                });
+                var existingEntry = apiEntradaList.find(function (entry) {
+                    return entry.idMenu === idMenu;
+                });
+                if (existingEntry) {
+                    existingEntry.operacoes = operacoes.join(',');
+                } else {
                     apiEntradaList.push({
-                        idPerfil: idPerfil,
-                        idAplicativo: idAplicativo,
+                        idPerfil: '<?php echo $perfil['idPerfil']; ?>',
+                        idAplicativo: existingEntry.idAplicativo,
                         idMenu: idMenu,
                         operacoes: operacoes.join(',')
                     });
-                });
+                }
+                $('#operacoesmodal').modal('hide');
+            });
 
-                apiEntradaList.forEach(function (apiEntrada) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '../database/perfil.php?operacao=inserirPerfilMenu',
-                        data: apiEntrada,
-                        success: function (response) {
-                            $('#operacoesmodal').modal('hide');
-                        }
-                    });
+            $('#perfilForm').submit(function (e) {
+                e.preventDefault(); 
+                $.ajax({
+                    type: 'POST',
+                    url: '../database/perfil.php?operacao=inserirPerfilMenu',
+                    data: {
+                        apiEntrada : apiEntradaList
+                    },
+                    success: function (response) {
+                        console.log(response)
+                    }
                 });
             });
 
