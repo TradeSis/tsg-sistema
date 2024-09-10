@@ -35,10 +35,10 @@ $aplicativos = buscaAplicativos();
             </div>
 
             <div class="col-2 text-end">
-                <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
+                <?php //if (in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']))) { ?>
                 <a href="aplicativo_inserir.php" role="button" class="btn btn-success"><i
                         class="bi bi-plus-square"></i>&nbsp Novo</a>
-                <?php } ?>
+                <?php// } ?>
             </div>
         </div>
 
@@ -64,16 +64,16 @@ $aplicativos = buscaAplicativos();
                         </td>
 
                         <td>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?> 
+                            <?php // if (in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']))) { ?> 
                             <a class="btn btn-warning btn-sm"
                                 href="aplicativo_alterar.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-pencil-square"></i></a>
-                            <?php } ?>
-                            <?php if (in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']))) { ?>
+                            <?php //} ?>
+                            <?php //if (in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']))) { ?>
                             <!--  <a class="btn btn-danger btn-sm"
                                 href="aplicativo_excluir.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-trash3"></i></a> -->
-                            <?php } ?>
+                            <?php //} ?>
                         </td>
                     </tr>
                 <?php } ?>

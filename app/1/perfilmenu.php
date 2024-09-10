@@ -6,7 +6,7 @@
 $LOG_CAMINHO = defineCaminhoLog();
 if (isset($LOG_CAMINHO)) {
   $LOG_NIVEL = defineNivelLog();
-  $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "perfil";
+  $identificacao = date("dmYHis") . "-PID" . getmypid() . "-" . "perfilmenu";
   if (isset($LOG_NIVEL)) {
     if ($LOG_NIVEL >= 1) {
       $arquivo = fopen(defineCaminhoLog() . "sistema_" . date("dmY") . ".log", "a");
@@ -23,29 +23,29 @@ if (isset($LOG_NIVEL)) {
 }
 //LOG
 
-$perfil = array();
+$perfilmenu = array();
 
 
 $progr = new chamaprogress();
-$retorno = $progr->executarprogress("sistema/app/1/perfil", json_encode($jsonEntrada));
+$retorno = $progr->executarprogress("sistema/app/1/perfilmenu", json_encode($jsonEntrada));
 fwrite($arquivo, $identificacao . "-RETORNO->" . $retorno . "\n");
-$perfil = json_decode($retorno, true);
-if (isset($perfil["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
-  $perfil = $perfil["conteudoSaida"][0];
+$perfilmenu = json_decode($retorno, true);
+if (isset($perfilmenu["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
+  $perfilmenu = $perfilmenu["conteudoSaida"][0];
 } else {
 
-  $idPerfil = isset($jsonEntrada['dadosEntrada'][0]['idPerfil']) ? $jsonEntrada['dadosEntrada'][0]['idPerfil'] : null;
+  $idPerfil = isset($jsonEntrada['dadosEntrada'][0]['idMenu']) ? $jsonEntrada['dadosEntrada'][0]['idMenu'] : null;
 
-  if (!isset($perfil["perfil"][1]) && $idPerfil !== null) {  // Verifica se tem mais de 1 registro 
-          $perfil = $perfil["perfil"][0];  // Retorno sem array
+  if (!isset($perfilmenu["perfilmenu"][1]) && $idPerfil !== null) {  // Verifica se tem mais de 1 registro 
+          $perfilmenu = $perfilmenu["perfilmenu"][0];  // Retorno sem array
   } else {
-      $perfil = $perfil["perfil"];  
+      $perfilmenu = $perfilmenu["perfilmenu"];  
   }
 
 }
 
 
-$jsonSaida = $perfil;
+$jsonSaida = $perfilmenu;
 
 
 //LOG

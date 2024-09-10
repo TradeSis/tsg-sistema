@@ -8,7 +8,7 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field nomeMenu     like tsmenu.nomeMenu
+    field idMenu     like tsmenu.idMenu
     field idAplicativo     like tsmenu.idAplicativo
     field idMenuSuperior     like tsmenu.idMenuSuperior.
 
@@ -34,7 +34,7 @@ then do:
 end.
 
 
-find tsmenu where tsmenu.idAplicativo = ttentrada.idAplicativo and tsmenu.nomeMenu = "" + ttentrada.nomeMenu + "" no-lock no-error.
+find tsmenu where tsmenu.idAplicativo = ttentrada.idAplicativo and tsmenu.idMenu = "" + ttentrada.idMenu + "" no-lock no-error.
 if avail tsmenu
 then do:
     create ttsaida.
@@ -50,7 +50,7 @@ end.
 
 do on error undo:
 	create tsmenu.
-	tsmenu.nomeMenu = ttentrada.nomeMenu.
+	tsmenu.idMenu = ttentrada.idMenu.
 	tsmenu.idAplicativo = ttentrada.idAplicativo.
 	tsmenu.idMenuSuperior = ttentrada.idMenuSuperior.
 

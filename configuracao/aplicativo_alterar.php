@@ -35,7 +35,7 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
             </div>
 
             <div class="col-2 text-end">
-                <a href="/sistema/configuracao/aplicativo.php" role="button" class="btn btn-primary"><i
+                <a href="aplicativo.php" role="button" class="btn btn-primary"><i
                         class="bi bi-arrow-left-square"></i></i>&#32;Voltar</a>
             </div>
         </div>
@@ -49,7 +49,7 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                         <input type="text" name="nomeAplicativo" class="form-control ts-input"
                             value="<?php echo $aplicativo['nomeAplicativo'] ?>">
                         <input type="hidden" class="form-control ts-input" name="idAplicativo"
-                            value="<?php echo $aplicativo['idAplicativo'] ?> ">
+                            value="<?php echo $aplicativo['idAplicativo'] ?>">
                 </div>
                 <div class="col-sm">
                     <label class='form-label ts-label'>Caminho</label>
@@ -110,18 +110,19 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                             <div class="row">
                                 <div class="col-md">
                                     <label class="form-label ts-label">Nome Menu</label>
-                                    <input type="text" class="form-control ts-input" name="nomeMenu">
+                                    <input type="text" class="form-control ts-input" name="idMenu">
                                     <input type="hidden" class="form-control ts-input" name="idAplicativo" value="<?php echo $aplicativo['idAplicativo'] ?>">
                                 </div>
                                 <div class="col-md">
                                     <label class="form-label ts-label">Menu Superior</label>
                                     <select class="form-select ts-input" name="idMenuSuperior">
                                         <option value="<?php echo null ?>">Nenhum</option>
-                                        <?php foreach ($menus as $menu) { ?>
+                                        <?php if (isset($menus[0]['idMenu'])) { 
+                                        foreach ($menus as $menu) { ?>
                                             <option value="<?php echo $menu['idMenu']; ?>">
-                                                <?php echo $menu['nomeMenu']; ?>
+                                                <?php echo $menu['idMenu']; ?>
                                             </option>
-                                        <?php } ?>
+                                        <?php } } ?>
                                     </select>
                                 </div>
                             </div>
@@ -147,19 +148,19 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                             <div class="row">
                                 <div class="col-md">
                                     <label class="form-label ts-label">Nome Menu</label>
-                                    <input type="text" class="form-control ts-input" name="nomeMenu" id="nomeMenu">
+                                    <input type="text" class="form-control ts-input" name="idMenu" id="idMenu">
                                     <input type="hidden" class="form-control ts-input" name="idAplicativo" value="<?php echo $aplicativo['idAplicativo'] ?>">
-                                    <input type="hidden" class="form-control ts-input" name="idMenu" id="idMenu">
                                 </div>
                                 <div class="col-md">
                                     <label class="form-label ts-label">Menu Superior</label>
                                     <select class="form-select ts-input" name="idMenuSuperior" id="idMenuSuperior">
                                         <option value="<?php echo null ?>">Nenhum</option>
-                                        <?php foreach ($menus as $menu) { ?>
+                                        <?php if (isset($menus[0]['idMenu'])) { 
+                                        foreach ($menus as $menu) { ?>
                                             <option value="<?php echo $menu['idMenu']; ?>">
-                                                <?php echo $menu['nomeMenu']; ?>
+                                                <?php echo $menu['idMenu']; ?>
                                             </option>
-                                        <?php } ?>
+                                        <?php } } ?>
                                     </select>
                                 </div>
                             </div>
@@ -188,9 +189,10 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                     $("#dadosMenu").html("Carregando...");
                 },
                 data: {
-                    nomeAplicativo: '<?php echo $aplicativo['nomeAplicativo'] ?>'
+                    idAplicativo: '<?php echo $aplicativo['idAplicativo'] ?>'
                 },
                 success: function(msg) {
+                    console.log(msg);
                     var json = JSON.parse(msg);
                     var linha = "";
 
@@ -201,9 +203,9 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                             var object = json[i];
 
                             linha = linha + "<tr>";
-                            linha = linha + "<td><?php echo $aplicativo['nomeAplicativo'] ?></td>";
-                            linha = linha + "<td>" + object.nomeMenu + "</td>";
-                            linha = linha + "<td>" + object.nomeMenuSuperior + "</td>";
+                            linha = linha + "<td>" + object.nomeAplicativo + "</td>";
+                            linha = linha + "<td>" + object.idMenu + "</td>";
+                            linha = linha + "<td>" + object.idMenuSuperior + "</td>";
                             linha = linha + "<td><a class='btn btn-warning btn-sm' data-bs-target='#alterarmodal'  data-idMenu='" + object.idMenu + "' role='button'><i class='bi bi-pencil-square'></i></a></td>";
                             linha = linha + "</tr>";
                         }
@@ -220,12 +222,11 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                 dataType: 'json',
                 url: '../database/aplicativo.php?operacao=buscarMenu',
                 data: {
-                    nomeAplicativo: '<?php echo $aplicativo['nomeAplicativo'] ?>',
+                    idAplicativo: '<?php echo $aplicativo['idAplicativo'] ?>',
                     idMenu: idMenu
                 },
                 success: function (msg) {
                     $('#idMenu').val(msg.idMenu);
-                    $('#nomeMenu').val(msg.nomeMenu);
                     $('#idMenuSuperior').val(msg.idMenuSuperior);
                     $('#alterarmodal').modal('show');
                 }
@@ -244,7 +245,7 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                 success: function () {
                     buscaMenu();
                     $('#inserirmodal').modal('hide');
-                    $("input[name='nomeMenu']").val("");
+                    $("input[name='idMenu']").val("");
                 }
             });
         });

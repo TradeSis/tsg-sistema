@@ -143,7 +143,7 @@ if (isset($_GET['operacao'])) {
 		array(
 			"dadosEntrada" => array(
 				array(
-					'nomeMenu' => $_POST['nomeMenu'],
+					'idMenu' => $_POST['idMenu'],
 					'idAplicativo' => $_POST['idAplicativo'],
 					'idMenuSuperior' => $_POST['idMenuSuperior']
 				)
@@ -162,7 +162,6 @@ if (isset($_GET['operacao'])) {
 			"dadosEntrada" => array(
 				array(
 					'idMenu' => $_POST['idMenu'],
-					'nomeMenu' => $_POST['nomeMenu'],
 					'idAplicativo' => $_POST['idAplicativo'],
 					'idMenuSuperior' => $_POST['idMenuSuperior']
 				)
@@ -174,14 +173,14 @@ if (isset($_GET['operacao'])) {
 	}
 	if ($operacao == "buscarMenu") {
 
-		$nomeAplicativo = isset($_POST["nomeAplicativo"]) && $_POST["nomeAplicativo"] !== "" ? $_POST["nomeAplicativo"] : null;
+		$idAplicativo = isset($_POST["idAplicativo"]) && $_POST["idAplicativo"] !== "" ? $_POST["idAplicativo"] : null;
 		$idMenu = isset($_POST["idMenu"]) && $_POST["idMenu"] !== "" ? $_POST["idMenu"] : null;
 		
 		$apiEntrada =
 		array(
 			"dadosEntrada" => array(
 				array(
-					'nomeAplicativo' => $nomeAplicativo,
+					'idAplicativo' => $idAplicativo,
 					'idMenu' => $idMenu
 				)
 			)

@@ -31,41 +31,17 @@ if (isset($_GET['operacao'])) {
 		array(
 			"dadosEntrada" => array(
 				array(
-					'nomePerfil' => $_POST['nomePerfil'],
-					'aplicativos' => $_POST['aplicativos'],
-					'menus' => $_POST['menus'],
-					'pEXC' => $_POST['pEXC'],
-					'pALT' => $_POST['pALT'],
-					'pINS' => $_POST['pINS']
+					'idPerfil' => $_POST['idPerfil'],
+					'aplicativos' => $_POST['aplicativos']
 				)
 			)
 		);
 
 		$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'PUT');
-		//header('Location: ../configuracao/aplicativo_alterar.php?idAplicativo='.$_POST['idAplicativo']);
+		echo json_encode($perfil);
+		return $perfil;
 	}
 
-	/*if ($operacao == "alterar") {
-		
-		
-		$apiEntrada =
-		array(
-			"dadosEntrada" => array(
-				array(
-					'idPerfil' => $_POST['idPerfil'],
-					'nomePerfil' => $_POST['nomePerfil'],
-					'aplicativos' => $_POST['aplicativos'],
-					'menus' => $_POST['menus'],
-					'pEXC' => $_POST['pEXC'],
-					'pALT' => $_POST['pALT'],
-					'pINS' => $_POST['pINS']
-				)
-			)
-		);
-				
-		$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'POST');
-		//header('Location: ../configuracao/aplicativo_alterar.php?idAplicativo='.$_POST['idAplicativo']);
-	} */
 	if ($operacao == "buscar") {
 
 		$idPerfil = isset($_POST["idPerfil"]) && $_POST["idPerfil"] !== "" ? $_POST["idPerfil"] : null;
@@ -82,6 +58,48 @@ if (isset($_GET['operacao'])) {
 		$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'GET');
 		echo json_encode($perfil);
 		return $perfil;
+	}
+
+	if ($operacao == "inserirPerfilMenu") {
+		
+		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idPerfil' => $_POST['idPerfil'],
+					'idAplicativo' => $_POST['idAplicativo'],
+					'idMenu' => $_POST['idMenu'],
+					'operacoes' => $_POST['operacoes']
+				)
+			)
+		);
+				
+		$perfilmenu = chamaAPI(null, '/sistema/perfilmenu', json_encode($apiEntrada), 'PUT');
+		echo json_encode($apiEntrada);
+		return $apiEntrada;
+	} 
+
+	if ($operacao == "buscarPerfilMenu") {
+
+		$idPerfil = isset($_POST["idPerfil"]) && $_POST["idPerfil"] !== "" ? $_POST["idPerfil"] : null;
+		$idAplicativo = isset($_POST["idAplicativo"]) && $_POST["idAplicativo"] !== "" ? $_POST["idAplicativo"] : null;
+		$idMenu = isset($_POST["idMenu"]) && $_POST["idMenu"] !== "" ? $_POST["idMenu"] : null;
+		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idPerfil' => $idPerfil,
+					'idAplicativo' => $idAplicativo,
+					'idMenu' => $idMenu
+				)
+			)
+		);
+				
+		$perfilmenu = chamaAPI(null, '/sistema/perfilmenu', json_encode($apiEntrada), 'GET');
+		echo json_encode($perfilmenu);
+		return $perfilmenu;
 	}
 
 

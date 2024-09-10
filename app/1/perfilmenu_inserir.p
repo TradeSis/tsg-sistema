@@ -8,8 +8,10 @@ def var hentrada as handle.             /* HANDLE ENTRADA */
 def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field idPerfil     like tsperfil.idPerfil
-    field aplicativos     like tsperfil.aplicativos.
+    field idPerfil     like perfilmenu.idPerfil
+    field idAplicativo     like perfilmenu.idAplicativo
+    field idMenu     like perfilmenu.idMenu
+    field operacoes     like perfilmenu.operacoes.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
@@ -33,12 +35,13 @@ then do:
 end.
 
 
-find tsperfil where tsperfil.idPerfil = "" + ttentrada.idPerfil + "" no-lock no-error.
-if avail tsperfil
+find perfilmenu where perfilmenu.idPerfil = "" + ttentrada.idPerfil + "" and
+                      perfilmenu.idAplicativo = ttentrada.idAplicativo and perfilmenu.idMenu = "" + ttentrada.idMenu + "" no-lock no-error.
+if avail perfilmenu
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.descricaoStatus = "Perfil ja cadastrado".
+    ttsaida.descricaoStatus = "Perfil Menu ja cadastrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -48,15 +51,17 @@ then do:
 end.
 
 do on error undo:
-	create tsperfil.
-	tsperfil.idPerfil = ttentrada.idPerfil.
-	tsperfil.aplicativos = ttentrada.aplicativos.
+	create perfilmenu.
+	perfilmenu.idPerfil = ttentrada.idPerfil.
+	perfilmenu.idAplicativo = ttentrada.idAplicativo.
+	perfilmenu.idMenu = ttentrada.idMenu.
+	perfilmenu.operacoes = ttentrada.operacoes.
 
 end.
 
 create ttsaida.
 ttsaida.tstatus = 200.
-ttsaida.descricaoStatus = "Perfil criado com sucesso".
+ttsaida.descricaoStatus = "Perfil Menu criado com sucesso".
 hsaida  = temp-table ttsaida:handle.
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).

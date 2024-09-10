@@ -73,6 +73,10 @@ if ($metodo == "GET") {
       include 'perfil.php';
       break;
 
+    case "perfilmenu":
+      include 'perfilmenu.php';
+      break;
+
     default:
       $jsonSaida = json_decode(
         json_encode(
@@ -138,6 +142,10 @@ if ($metodo == "PUT") {
 
     case "perfil":
       include 'perfil_inserir.php';
+      break; 
+
+    case "perfilmenu":
+      include 'perfilmenu_inserir.php';
       break; 
 
     default:

@@ -23,10 +23,10 @@ if (
     } else {
         $_SESSION['nivelMenu'] = $nivelMenuLogin['nivelMenu'];
     }
-}
-
+} 
+/*
 include_once ROOT . "/sistema/database/perfil.php";
-$perfil = buscaPerfil("4"); 
+$perfil = buscaPerfil("1"); 
 $_SESSION['perfil'] = $perfil;
 $menusData = json_decode($_SESSION['perfil']['menus'], true);
 
@@ -34,10 +34,7 @@ if (isset($menusData['Sistema'])) {
     $menus = explode(',', $menusData['Sistema']);
 } else {
     $menus = [];
-}
-$sistemaINS = in_array("Sistema", explode(',', $_SESSION['perfil']['pINS']));
-$sistemaALT = in_array("Sistema", explode(',', $_SESSION['perfil']['pALT']));
-$sistemaEXC = in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']));
+} */
 
 // helio 051023 - TODO PROGRAMA PRECISA TER DOCTYPE/HTML/HEAD no seu inicio
 ?>
@@ -71,7 +68,7 @@ $sistemaEXC = in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']));
                             $tab = $_GET['tab'];
                         }
                         ?>
-                        <?php if (in_array("Empresa", $menus)) {
+                        <?php if ($_SESSION['nivelMenu'] == 5) {
                             if ($tab == '') {
                                 $tab = 'empresa';
                             } ?>
@@ -81,35 +78,35 @@ $sistemaEXC = in_array("Sistema", explode(',', $_SESSION['perfil']['pEXC']));
                                 href="?tab=empresa" role="tab">Empresa</a>
                             </li>
                         <?php }
-                        if (in_array("Empresa", $menus)) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "login") {echo " active ";} ?>" 
                                 href="?tab=login" role="tab">Login</a>
                             </li>
                         <?php }
-                        if (in_array("Aplicativos", $menus)) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "aplicativo") {echo " active ";} ?>" 
                                 href="?tab=aplicativo" role="tab">Aplicativos</a>
                             </li>
                         <?php }
-                         if (in_array("Aplicativo padrao", $menus)) { ?>
+                         if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "aplicativo_padrao") {echo " active ";} ?>" 
                                 href="?tab=aplicativo_padrao" role="tab">Aplicativo padrão</a>
                             </li>
                         <?php }
-                        if (in_array("Anexos", $menus)) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "anexos") {echo " active ";} ?>" 
                                 href="?tab=anexos" role="tab">Anexos</a>
                             </li>
                         <?php } 
-                        if (in_array("Perfil", $menus)) { ?>
+                        if ($_SESSION['nivelMenu'] == 5) { ?>
                             <li class="nav-item mr-1 ">
                                 <a class="nav-link 
                                 <?php if ($tab == "perfil") {echo " active ";} ?>" 

@@ -9,13 +9,12 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
-    field idMenu  like tsmenu.idMenu
-    field idAplicativo  like tsmenu.idAplicativo.
-    
+    field idPerfil  like perfilmenu.idPerfil
+    field idAplicativo  like perfilmenu.idAplicativo
+    field idMenu  like perfilmenu.idMenu.
 
-def temp-table ttmenu  no-undo serialize-name "menu"  /* JSON SAIDA */
-    like tsmenu
-    field nomeAplicativo  like tsaplic.nomeAplicativo.
+def temp-table ttperfilmenu  no-undo serialize-name "perfilmenu"  /* JSON SAIDA */
+    like perfilmenu.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -27,40 +26,34 @@ lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
 find first ttentrada no-error.
 
 
-IF ttentrada.idMenu <> ? OR ttentrada.idMenu = ?
+IF ttentrada.idPerfil <> ? OR (ttentrada.idPerfil = ? and ttentrada.idAplicativo = ? and ttentrada.idMenu = ?)
 THEN DO:
-
-    for each tsmenu where
-        (if ttentrada.idMenu = ?
+    for each perfilmenu where
+        (if ttentrada.idPerfil = ?
          then true /* TODOS */
-         else tsmenu.idMenu = ttentrada.idMenu) AND
+         else perfilmenu.idPerfil = ttentrada.idPerfil) AND
         (if ttentrada.idAplicativo = ?
          then true /* TODOS */
-         else tsmenu.idAplicativo = ttentrada.idAplicativo) 
+         else perfilmenu.idAplicativo = ttentrada.idAplicativo) AND
+        (if ttentrada.idMenu = ?
+         then true /* TODOS */
+         else perfilmenu.idMenu = ttentrada.idMenu) 
          no-lock.
          
-         
-         create ttmenu.
-         BUFFER-COPY tsmenu TO ttmenu.
-            find tsaplic where tsaplic.idAplicativo = tsmenu.idAplicativo no-lock no-error.
-            if avail tsaplic
-            then do:
-                ttmenu.nomeAplicativo   = tsaplic.nomeAplicativo.
-            end.
-            else do:
-                ttmenu.nomeAplicativo   = "".
-            end.
+
+        create ttperfilmenu.
+        BUFFER-COPY perfilmenu TO ttperfilmenu.
     end.
 END.
 
 
-find first ttmenu no-error.
+find first ttperfilmenu no-error.
 
-if not avail ttmenu
+if not avail ttperfilmenu
 then do:
     create ttsaida.
     ttsaida.tstatus = 400.
-    ttsaida.retorno = "Menu nao encontrado".
+    ttsaida.retorno = "PerfilMenu nao encontrado".
 
     hsaida  = temp-table ttsaida:handle.
 
@@ -69,7 +62,7 @@ then do:
     return.
 end.
 
-hsaida  = TEMP-TABLE ttmenu:handle.
+hsaida  = TEMP-TABLE ttperfilmenu:handle.
 
 
 lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
