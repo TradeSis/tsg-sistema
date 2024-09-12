@@ -3,7 +3,7 @@
 include_once('../header.php');
 include_once('../database/aplicativo.php');
 $aplicativo = buscaAplicativos($_GET['idAplicativo']);
-$menus = buscaMenus($aplicativo['nomeAplicativo']);
+$menus = buscaMenus($_GET['idAplicativo']);
 //echo json_encode($aplicativo);
 ?>
 <!doctype html>
@@ -164,6 +164,19 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mt-4">
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Adicionar Operacoes</label>
+                                    <input type="text" class="form-control ts-input" name="addOP" id="addOP">
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-group col">
+                                        <label>Selecione Operações</label>
+                                        <select class="form-control" name="operacoes[]" id="operacoes" multiple style="height: 90px; overflow-y: hidden;">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                     </div><!--body-->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-warning">Salvar</button>
@@ -192,7 +205,6 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
                     idAplicativo: '<?php echo $aplicativo['idAplicativo'] ?>'
                 },
                 success: function(msg) {
-                    console.log(msg);
                     var json = JSON.parse(msg);
                     var linha = "";
 
@@ -215,55 +227,101 @@ $menus = buscaMenus($aplicativo['nomeAplicativo']);
             });
         }
 
-        $(document).on('click', "a[data-bs-target='#alterarmodal']", function () {
-            var idMenu = $(this).attr("data-idMenu");
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: '../database/aplicativo.php?operacao=buscarMenu',
-                data: {
-                    idAplicativo: '<?php echo $aplicativo['idAplicativo'] ?>',
-                    idMenu: idMenu
-                },
-                success: function (msg) {
-                    $('#idMenu').val(msg.idMenu);
-                    $('#idMenuSuperior').val(msg.idMenuSuperior);
-                    $('#alterarmodal').modal('show');
+        $(document).ready(function() {
+            $('#addOP').on('keypress', function(e) {
+                if (e.which == 13) {  
+                    e.preventDefault();
+                    var newOp = $(this).val().trim();
+                    if (newOp) {
+                        $('#operacoes').append('<option value="' + newOp + '" selected>' + newOp + '</option>');
+                        $(this).val('');  
+                    }
                 }
             });
-        });
 
-        $("#inserirForm").submit(function (event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: "../database/aplicativo.php?operacao=inserirMenu",
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
-                    buscaMenu();
-                    $('#inserirmodal').modal('hide');
-                    $("input[name='idMenu']").val("");
+            window.onmousedown = function(e) {
+                var el = e.target;
+                if (el.tagName.toLowerCase() == 'option' && el.parentNode.hasAttribute('multiple')) {
+                    e.preventDefault();
+
+                    if (el.hasAttribute('selected')) el.removeAttribute('selected');
+                    else el.setAttribute('selected', '');
+
+                    var select = el.parentNode.cloneNode(true);
+                    el.parentNode.parentNode.replaceChild(select, el.parentNode);
                 }
+            };
+
+            $(document).on('click', "a[data-bs-target='#alterarmodal']", function () {
+                var idMenu = $(this).attr("data-idMenu");
+                $('#operacoes').empty();
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '../database/aplicativo.php?operacao=buscarMenu',
+                    data: {
+                        idAplicativo: '<?php echo $aplicativo["idAplicativo"] ?>',
+                        idMenu: idMenu
+                    },
+                    success: function (msg) {
+                        $('#idMenu').val(msg.idMenu);
+                        $('#idMenuSuperior').val(msg.idMenuSuperior);
+                        $('#menuOp').val(msg.menuOp);
+
+                        if (msg.menuOp) {
+                            var ops = msg.menuOp.split(',');  
+                            ops.forEach(function(op) {
+                                op = op.trim(); 
+                                if (op && !$('#operacoes option[value="' + op + '"]').length) {
+                                    $('#operacoes').append('<option value="' + op + '" selected>' + op + '</option>');
+                                }
+                            });
+                        }
+                        $('#alterarmodal').modal('show');
+                    }
+                });
+            });
+        
+            $("#inserirForm").submit(function (event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                $.ajax({
+                    url: "../database/aplicativo.php?operacao=inserirMenu",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        buscaMenu();
+                        $('#inserirmodal').modal('hide');
+                        $("input[name='idMenu']").val("");
+                    }
+                });
+            });
+            $("#alterarForm").submit(function (event) {
+                event.preventDefault();
+                var formData = new FormData(this);
+                var selectedOperacoes = $('#operacoes option:selected').map(function() {
+                    return this.value;
+                }).get().join(',');
+
+                formData.set('operacoes', selectedOperacoes);
+                $.ajax({
+                    url: "../database/aplicativo.php?operacao=alterarMenu",
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        buscaMenu();
+                        $('#alterarmodal').modal('hide'); 
+                    }
+                });
             });
         });
-        $("#alterarForm").submit(function (event) {
-            event.preventDefault();
-            var formData = new FormData(this);
-            $.ajax({
-                url: "../database/aplicativo.php?operacao=alterarMenu",
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
-                    buscaMenu();
-                    $('#alterarmodal').modal('hide');
-                }
-            });
-        });
+        
+
+       
     </script>
 
     <!-- LOCAL PARA COLOCAR OS JS -FIM -->

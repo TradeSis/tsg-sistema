@@ -15,8 +15,8 @@ def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CA
     field descricaoStatus      as char.
 
 hEntrada = temp-table ttentrada:HANDLE.
-lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
-find first ttentrada no-error.
+lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") .
+find first ttentrada .
 
 
 if not avail ttentrada
@@ -48,9 +48,9 @@ end.
 
 do on error undo:
     find tsmenu where tsmenu.idMenu = ttentrada.idMenu exclusive no-error.
-    tsmenu.nomeMenu = ttentrada.nomeMenu. 
     tsmenu.idAplicativo = ttentrada.idAplicativo. 
     tsmenu.idMenuSuperior = ttentrada.idMenuSuperior. 
+    tsmenu.menuOp = ttentrada.menuOp. 
 end.
 
 create ttsaida.

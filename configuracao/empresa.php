@@ -34,7 +34,9 @@ $empresas = buscaEmpresas();
             </div>
 
             <div class="col-2 text-end">
+                <?php if (operacaoDisponivel("Empresa", "INS")) { ?>
                 <a href="empresa_inserir.php" role="button" class="btn btn-success"><i class="bi bi-plus-square"></i>&nbsp Novo</a>
+                <?php } ?>
             </div>
         </div>
 
@@ -56,7 +58,9 @@ $empresas = buscaEmpresas();
                         <td><?php echo $empresa['nomeEmpresa'] ?></td>
                         <td><?php echo $empresa['timeSessao'] ?></td>
                         <td>
+                            <?php if (operacaoDisponivel("Empresa", "ALT")) { ?>
                             <a class="btn btn-warning btn-sm" href="empresa_alterar.php?idEmpresa=<?php echo $empresa['idEmpresa'] ?>" role="button"><i class="bi bi-pencil-square"></i></a>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

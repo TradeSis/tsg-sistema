@@ -36,7 +36,9 @@ $aplicativos = buscaAplicativos();
             </div>
 
             <div class="col-2 text-end">
+                <?php if (operacaoDisponivel("Perfil", "INS")) { ?>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#inserirmodal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
+                <?php } ?>
             </div>
         </div>
 
@@ -59,12 +61,16 @@ $aplicativos = buscaAplicativos();
                         </td>
 
                         <td>
+                            <?php if (operacaoDisponivel("Perfil", "ALT")) { ?>
                             <a class="btn btn-warning btn-sm"
                                 href="perfil_alterar.php?idPerfil=<?php echo $perfil['idPerfil'] ?>" role="button"><i
                                     class="bi bi-pencil-square"></i></a>
+                            <?php } ?>
+                            <?php if (operacaoDisponivel("Perfil", "EXC")) { ?>
                             <!-- <a class="btn btn-danger btn-sm"
                             href="perfil_excluir.php?idPerfil=<?php echo $perfil['idPerfil'] ?>"
                             role="button"><i class="bi bi-trash3"></i></a> -->
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php }} ?>

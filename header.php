@@ -21,4 +21,19 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
 $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
 $logado = $_SESSION['usuario'];
 // helio 051023 - retirado toda parte HTML, HEAD, que precisa ficar em cada programa
+
+function operacaoDisponivel($idMenu, $operacao) {
+    foreach ($_SESSION['menu'] as $menuItem) {
+        if ($menuItem['idMenu'] === $idMenu) {
+            $operacoes = explode(',', $menuItem['operacoes']);
+            return in_array($operacao, $operacoes);
+        }
+    }
+    return false;
+}
+
+function menuDisponivel($idMenu) {
+    $idMenus = array_column($_SESSION['menu'], 'idMenu');
+    return in_array($idMenu, $idMenus);
+}
 ?>

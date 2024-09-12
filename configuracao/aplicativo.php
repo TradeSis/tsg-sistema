@@ -35,8 +35,10 @@ $aplicativos = buscaAplicativos();
             </div>
 
             <div class="col-2 text-end">
+            <?php if (operacaoDisponivel("Aplicativos", "INS")) { ?>
                 <a href="aplicativo_inserir.php" role="button" class="btn btn-success"><i
                         class="bi bi-plus-square"></i>&nbsp Novo</a>
+            <?php } ?>
             </div>
         </div>
 
@@ -62,12 +64,16 @@ $aplicativos = buscaAplicativos();
                         </td>
 
                         <td>
+                            <?php if (operacaoDisponivel("Aplicativos", "ALT")) { ?>
                             <a class="btn btn-warning btn-sm"
                                 href="aplicativo_alterar.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-pencil-square"></i></a>
+                            <?php } ?>
+                            <?php if (operacaoDisponivel("Aplicativos", "EXC")) { ?>
                             <!--  <a class="btn btn-danger btn-sm"
                                 href="aplicativo_excluir.php?idAplicativo=<?php echo $aplicativo['idAplicativo'] ?>"
                                 role="button"><i class="bi bi-trash3"></i></a> -->
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

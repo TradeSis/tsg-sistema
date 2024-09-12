@@ -36,7 +36,7 @@ function buscaAplicativosMenu($idLogin)
 	$app = chamaAPI(null, '/sistema/aplicativo', json_encode($apiEntrada), 'GET');
 	return $app;
 }
-function buscaMenus($nomeAplicativo=null, $idMenu=null)
+function buscaMenus($idAplicativo=null, $idMenu=null)
 {
 
 	$menu = array();
@@ -45,7 +45,7 @@ function buscaMenus($nomeAplicativo=null, $idMenu=null)
 		array(
 			"dadosEntrada" => array(
 				array(
-					'nomeAplicativo' => $nomeAplicativo,
+					'idAplicativo' => $idAplicativo,
 					'idMenu' => $idMenu
 				)
 			)
@@ -163,13 +163,15 @@ if (isset($_GET['operacao'])) {
 				array(
 					'idMenu' => $_POST['idMenu'],
 					'idAplicativo' => $_POST['idAplicativo'],
-					'idMenuSuperior' => $_POST['idMenuSuperior']
+					'idMenuSuperior' => $_POST['idMenuSuperior'],
+					'menuOp' => $_POST['operacoes']
 				)
 			)
 		);
 				
 		$menu = chamaAPI(null, '/sistema/aplicativo/menu', json_encode($apiEntrada), 'POST');
 		header('Location: ../configuracao/aplicativo_alterar.php?idAplicativo='.$_POST['idAplicativo']);
+
 	}
 	if ($operacao == "buscarMenu") {
 

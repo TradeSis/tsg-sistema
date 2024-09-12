@@ -2,7 +2,10 @@
 <?php 
 include_once 'header.php';
 
-if(!isset($_SESSION['aplicativo'])){
+if (
+    !isset($_SESSION['aplicativo']) || 
+    $_SESSION['aplicativo'] === [""]
+) {
     include_once ROOT . "/sistema/database/perfil.php";
     $aplicativos = buscaPerfil($_SESSION['idPerfil']);
     $aplicativo = explode(',', $aplicativos['aplicativos']);

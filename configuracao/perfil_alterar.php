@@ -117,37 +117,21 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                         <div class="row mt-2">
                             <div class="row">
                                 <div class="col"><label>Operacões:</label></div>
-                                <div class="col"><input type="checkbox" id="checarTodos" class="form-check-input">
+                                <div class="col">
+                                    <input type="checkbox" id="checarTodos" class="form-check-input">
                                     <label for="checarTodos">Marcar tudo</label>
                                 </div>
-                                <div class="row mt-3 mb-3">
-                                    <div class="col-md-3">
-                                        <input class="form-check-input operacao-checkbox" type="checkbox" value="INS">
-                                        <label>&nbsp;Inserir</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input class="form-check-input operacao-checkbox" type="checkbox" value="ALT">
-                                        <label>&nbsp;Alterar</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input class="form-check-input operacao-checkbox" type="checkbox" value="EXC">
-                                        <label>&nbsp;Excluir</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input class="form-check-input operacao-checkbox" type="checkbox" value="CSV">
-                                        <label>&nbsp;CSV</label>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3" id="operacoesCheckboxContainer">
                             </div>
                         </div><!--body-->
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-warning">Salvar</button>
-                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-
     <!-- LOCAL PARA COLOCAR OS JS -->
 
     <?php include_once ROOT . "/vendor/footer_js.php"; ?>
@@ -155,7 +139,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
     <script>
 
         $(document).ready(function () {
-            var apps = [];
+            var aplicativos = [];
             var apiEntradaList = []; 
 
             $.ajax({
@@ -168,7 +152,6 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                 success: function (msg) {
                     var json = JSON.parse(msg);
                     var perfilAplicativos = "<?php echo $perfil['aplicativos'] ?>".split(',');
-
                     var tabs = {
                         "Sistema": "tab-sis",
                         "Servicos": "tab-svc",
@@ -182,35 +165,43 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                         "Relatorios": "tab-rel"
                     };
 
-                    json.forEach(function (app) {
-                        var appNome = app.nomeAplicativo;
-                        var appId = app.idAplicativo;
+                    json.forEach(function (aplicativo) {
+                        var aplicativoNome = aplicativo.nomeAplicativo;
+                        var aplicativoID = aplicativo.idAplicativo;
 
-                        if (perfilAplicativos.includes(appNome)) {
-                            apps.push({ nome: appNome, id: appId });
-                        }
+                        if (perfilAplicativos.includes(aplicativoNome)) {
+                            aplicativos.push({ nome: aplicativoNome, id: aplicativoID });
 
-                        if (tabs[appNome]) {
-                            $("#" + tabs[appNome]).removeAttr('hidden');
+                            if (tabs[aplicativoNome]) {
+                                $("#" + tabs[aplicativoNome]).removeAttr('hidden');
+                            }
                         }
                     });
-                    buscaMenus();
+
+                    var visibleApps = aplicativos.filter(function (aplicativo) {
+                        return !$("#" + tabs[aplicativo.nome]).is(':hidden');
+                    });
+
+                    buscaMenus(visibleApps);
                 }
             });
 
-            function buscaMenus() {
+            function buscaMenus(visibleApps) {
                 $('body').css('cursor', 'wait');
-                apps.forEach(function (app, index, array) {
-                    var appNome = app.nome;
-                    var appId = app.id;
-                    var targetDiv = "#dados" + appNome;
+                visibleApps.forEach(function (aplicativo, index, array) {
+                    var aplicativoNome = aplicativo.nome;
+                    var aplicativoID = aplicativo.id;
+                    var htmldiv = "#dados" + aplicativoNome;
 
                     $.ajax({
                         type: 'POST',
                         dataType: 'html',
                         url: '../database/aplicativo.php?operacao=buscarMenu',
+                        beforeSend: function() {
+                            $(htmldiv).html("Carregando...");
+                        },
                         data: {
-                            idAplicativo: appId,
+                            idAplicativo: aplicativoID,
                             idMenu: null
                         },
                         success: function (msg) {
@@ -227,29 +218,33 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                             if (json.status === 400) {
                                 html += 'Sem Menus cadastrados';
                             } else {
-                                var mainMenus = json.filter(menu => menu.idMenuSuperior === "");
-                                var subMenus = json.filter(menu => menu.idMenuSuperior !== "");
+                                var mainmenus = json.filter(menu => menu.idMenuSuperior === "");
+                                var submenus = json.filter(menu => menu.idMenuSuperior !== "");
 
-                                mainMenus.forEach(function (menu) {
+                                mainmenus.forEach(function (menu) {
+                                    var menuID = menu.idMenu.replace(/\s+/g, '_'); 
                                     if (count % 4 == 0) {
                                         if (count > 0) { html += '</div>'; }
                                         html += '<div class="row mt-2">';
                                     }
                                     html += '<div class="col-md-3">';
-                                    html += '<input class="form-check-input menu-checkbox-' + appNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (appNome + '-' + (count + 1)) + '" value="' + menu.idMenu + '" data-appid="' + appId + '">';
-                                    html += '<label for="inlineCheckbox' + (appNome + '-' + (count + 1)) + '">&nbsp;' + menu.idMenu + '</label>';
+                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + menu.idMenu + '" data-appid="' + aplicativoID + '">';
+                                    html += '<label for="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '">&nbsp;' + menu.idMenu + '&nbsp;&nbsp;</label>';
+                                    html += '<a class="btn btn-primary btn-sm p-1" id="operacoes-menu-' + aplicativoNome + '-' + menuID + '" role="button" value="' + menu.idMenu + '" data-appid="' + aplicativoID + '" style="font-size: 0.5rem;" hidden><i class="bi bi-eye-fill"></i></a>';
                                     html += '</div>';
                                     count++;
                                 });
 
-                                subMenus.forEach(function (submenu) {
+                                submenus.forEach(function (submenu) {
+                                    var submenuID = submenu.idMenu.replace(/\s+/g, '_');
                                     if (count % 4 == 0) {
                                         if (count > 0) { html += '</div>'; }
                                         html += '<div class="row mt-2">';
                                     }
                                     html += '<div class="col-md-3">';
-                                    html += '<input class="form-check-input menu-checkbox-' + appNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (appNome + '-' + (count + 1)) + '" value="' + submenu.idMenu + '" data-appid="' + appId + '">';
-                                    html += '<label for="inlineCheckbox' + (appNome + '-' + (count + 1)) + '">&nbsp;' + submenu.idMenuSuperior + ' &gt; ' + submenu.idMenu + '</label>';
+                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + submenu.idMenu + '" data-appid="' + aplicativoID + '">';
+                                    html += '<label for="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '">&nbsp;' + submenu.idMenuSuperior + ' &gt; ' + submenu.idMenu + '&nbsp;&nbsp;</label>';
+                                    html += '<a class="btn btn-primary btn-sm p-1" id="operacoes-menu-' + aplicativoNome + '-' + submenuID + '" role="button" value="' + submenu.idMenu + '" data-appid="' + aplicativoID + '" style="font-size: 0.5rem;" hidden><i class="bi bi-eye-fill"></i></a>';
                                     html += '</div>';
                                     count++;
                                 });
@@ -261,7 +256,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                             html += '</div>';
                             html += '</div>';
 
-                            $(targetDiv).html(html);
+                            $(htmldiv).html(html);
 
                             $.ajax({
                                 type: 'POST',
@@ -269,14 +264,17 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                 url: '../database/perfil.php?operacao=buscarPerfilMenu',
                                 data: {
                                     idPerfil: '<?php echo $perfil['idPerfil']; ?>',
-                                    idAplicativo: appId
+                                    idAplicativo: aplicativoID
                                 },
                                 success: function (msg) {
                                     if (msg.status !== 400) {
-                                        var registeredMenus = msg;
-                                        registeredMenus.forEach(function (menu) {
-                                            var menuSelector = 'input.menu-checkbox-' + appNome + '[value="' + menu.idMenu + '"]';
+                                        var menusCadastrados = msg;
+                                        menusCadastrados.forEach(function (menu) {
+                                            var menuID = menu.idMenu.replace(/\s+/g, '_'); 
+                                            var menuSelector = 'input.menu-checkbox-' + aplicativoNome + '[value="' + menu.idMenu + '"]';
                                             $(menuSelector).prop('checked', true);
+
+                                            $('#operacoes-menu-' + aplicativoNome + '-' + menuID).removeAttr('hidden')
 
                                             apiEntradaList.push({
                                                 idPerfil: menu.idPerfil,
@@ -289,13 +287,59 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                 }
                             });
 
-                            $('.menu-checkbox-' + appNome).on('change', function () {
+                            $('.menu-checkbox-' + aplicativoNome).on('change', function () {
+                                var isChecked = $(this).is(':checked');
                                 var idMenu = $(this).val();
                                 var idAplicativo = $(this).data('appid');
-                                var isChecked = $(this).is(':checked');
+                                var menuID = idMenu.replace(/\s+/g, '_'); 
                                 if (isChecked) {
+                                    $('#operacoes-menu-' + aplicativoNome + '-' + menuID).removeAttr('hidden');
+                                    apiEntradaList.push({
+                                        idPerfil: '<?php echo $perfil['idPerfil']; ?>',
+                                        idAplicativo: idAplicativo,
+                                        idMenu: idMenu,
+                                        operacoes: '' 
+                                    });
+                                } else {
+                                    $('#operacoes-menu-' + aplicativoNome + '-' + menuID).attr('hidden', true);
+                                    apiEntradaList = apiEntradaList.filter(function (entry) {
+                                        return !(entry.idMenu === idMenu && entry.idAplicativo === idAplicativo);
+                                    });
+                                }
+                            });
+                            $('[id^="operacoes-menu-' + aplicativoNome + '"]').on('click', function () {
+                                var idMenu = $(this).attr('value');  
+                                var idAplicativo = $(this).data('appid');
                                     $('body').css('cursor', 'wait');
+                                    $('#operacoesCheckboxContainer').empty();
                                     $('#operacoesmodal input[type="checkbox"]').prop('checked', false);
+                                    $('#operacoesmodal .modal-title').text('Operações ' + idMenu);
+                                    $.ajax({
+                                        type: 'POST',
+                                        dataType: 'json',
+                                        beforeSend: function() {
+                                            $("#operacoesCheckboxContainer").html("Carregando...");
+                                        },
+                                        url: '../database/aplicativo.php?operacao=buscarMenu',
+                                        data: {
+                                            idAplicativo: idAplicativo,
+                                            idMenu: idMenu
+                                        },
+                                        success: function (msg) {
+                                            var operacoesArray = msg.menuOp.split(',');
+                                            var checkboxHtml = ''; 
+                                            operacoesArray.forEach(function (operacao) {
+                                                operacao = operacao.trim();
+                                                if (operacao) {
+                                                    checkboxHtml += `<div class="col-md-3">`;
+                                                    checkboxHtml += `<input class="form-check-input operacao-checkbox" type="checkbox" value="${operacao}">`;
+                                                    checkboxHtml += `<label>&nbsp;${operacao}</label>`;
+                                                    checkboxHtml += `</div>`;
+                                                }
+                                            });
+                                            $('#operacoesCheckboxContainer').html(checkboxHtml);
+                                        },
+                                    });
                                     $.ajax({
                                         type: 'POST',
                                         dataType: 'json',
@@ -319,20 +363,8 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                             $('body').css('cursor', 'default');
                                         }
                                     });
-                                    $('#operacoesmodal .modal-title').text('Operações ' + idMenu);
                                     $('#operacoesmodal').modal('show');
-
-                                    apiEntradaList.push({
-                                        idPerfil: '<?php echo $perfil['idPerfil']; ?>',
-                                        idAplicativo: idAplicativo,
-                                        idMenu: idMenu,
-                                        operacoes: '' 
-                                    });
-                                } else {
-                                    apiEntradaList = apiEntradaList.filter(function (entry) {
-                                        return !(entry.idMenu === idMenu && entry.idAplicativo === idAplicativo);
-                                    });
-                                }
+                                    
                             });
                         },
                         complete: function () {
@@ -349,7 +381,10 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                 var idMenu = $('#operacoesmodal .modal-title').text().replace('Operações ', '');
                 var operacoes = [];
                 $('#operacoesmodal input[type="checkbox"]:checked').each(function () {
-                    operacoes.push($(this).val());
+                    var val = $(this).val();
+                    if (val && val !== "on") {
+                        operacoes.push(val);
+                    }
                 });
                 var existingEntry = apiEntradaList.find(function (entry) {
                     return entry.idMenu === idMenu;
@@ -365,6 +400,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                     });
                 }
                 $('#operacoesmodal').modal('hide');
+                console.log(apiEntradaList);
             });
 
             $('#perfilForm').submit(function (e) {
@@ -376,7 +412,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                         apiEntrada : apiEntradaList
                     },
                     success: function (response) {
-                        console.log(response)
+                        window.location.href = '../configuracao/perfil.php';
                     }
                 });
             });
