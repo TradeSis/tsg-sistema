@@ -14,18 +14,21 @@ if (
         foreach ($menus as $unico) {
             $menu[] = array(
                 "idMenu" => $unico["idMenu"],
+                "nomeMenu" => $unico["nomeMenu"],
+                "idMenuSuperior" => $unico["idMenuSuperior"],
                 "operacoes" => $unico["operacoes"]
             );
         }
     } else {
         $menu[] = array(
             "idMenu" => $menus["idMenu"],
+            "nomeMenu" => $menus["nomeMenu"],
+            "idMenuSuperior" => $menus["idMenuSuperior"],
             "operacoes" => $menus["operacoes"]
         );
     }
     $_SESSION['menu'] = $menu;
 } 
-
 // helio 051023 - TODO PROGRAMA PRECISA TER DOCTYPE/HTML/HEAD no seu inicio
 ?>
 <!doctype html>
@@ -57,59 +60,18 @@ if (
                         if (isset($_GET['tab'])) {
                             $tab = $_GET['tab'];
                         }
-                        ?>
-                        <?php if (menuDisponivel("Empresa")) {
-                            if ($tab == '') {
-                                $tab = 'empresa';
-                            } ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "empresa") {echo " active ";} ?>" 
-                                href="?tab=empresa" role="tab">Empresa</a>
-                            </li>
-                        <?php }
-                        if (menuDisponivel("Login")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "login") {echo " active ";} ?>" 
-                                href="?tab=login" role="tab">Login</a>
-                            </li>
-                        <?php }
-                        if (menuDisponivel("Aplicativos")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "aplicativo") {echo " active ";} ?>" 
-                                href="?tab=aplicativo" role="tab">Aplicativos</a>
-                            </li>
-                        <?php }
-                         if (menuDisponivel("Aplicativo Padrao")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "aplicativo_padrao") {echo " active ";} ?>" 
-                                href="?tab=aplicativo_padrao" role="tab">Aplicativo padrão</a>
-                            </li>
-                        <?php }
-                        if (menuDisponivel("Anexos")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "anexos") {echo " active ";} ?>" 
-                                href="?tab=anexos" role="tab">Anexos</a>
-                            </li>
-                        <?php } 
-                        if (menuDisponivel("Perfil")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "perfil") {echo " active ";} ?>" 
-                                href="?tab=perfil" role="tab">Perfil</a>
-                            </li>
-                        <?php } 
-                        if (menuDisponivel("Clientes")) { ?>
-                            <li class="nav-item mr-1 ">
-                                <a class="nav-link 
-                                <?php if ($tab == "clientes") {echo " active ";} ?>" 
-                                href="?tab=clientes" role="tab">Clientes</a>
-                            </li>
-                        <?php } ?>
+                        if ($tab == '') {
+                            $tab = 'empresa';
+                        } ?>
+                        <?php 
+                            foreach ($_SESSION['menu'] as $menu) { 
+                            if ($menu['idMenuSuperior'] === "") { ?>
+                                <li class="nav-item mr-1 ">
+                                    <a class="nav-link 
+                                    <?php if ($tab == $menu['nomeMenu']) {echo " active ";} ?>" 
+                                    href="?tab=<?php echo $menu['nomeMenu'] ?>" role="tab"><?php echo $menu['idMenu'] ?></a>
+                                </li>
+                        <?php } } ?>
 
                     </ul>
                 </div>
@@ -123,40 +85,12 @@ if (
                 }?>
                     <select class="form-select mt-2 ts-selectSubMenuAplicativos" id="subtabSistema">
 
-                        <?php if (menuDisponivel("Empresa")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=empresa"
-                        <?php if ($getTab == "empresa") {echo " selected ";} ?>>Empresa</option>
-                        <?php }
-
-                        if (menuDisponivel("Login")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=login" 
-                        <?php if ($getTab == "login") {echo " selected ";} ?>>Login</option>
-                        <?php }
-
-                        if (menuDisponivel("Aplicativos")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=aplicativo" 
-                        <?php if ($getTab == "aplicativo") {echo " selected ";} ?>>Aplicativos</option>
-                        <?php }
-
-                        if (menuDisponivel("Aplicativo Padrao")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=aplicativo_padrao" 
-                        <?php if ($getTab == "aplicativo_padrao") {echo " selected ";} ?>>Aplicativo padrão</option>
-                        <?php }
-
-                        if (menuDisponivel("Anexos")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=anexos" 
-                        <?php if ($getTab == "anexos") {echo " selected ";} ?>>Anexos</option>
-                        <?php } 
-
-                        if (menuDisponivel("Perfil")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=perfil" 
-                        <?php if ($getTab == "perfil") {echo " selected ";} ?>>Perfil</option>
-                        <?php } 
-
-                        if (menuDisponivel("Clientes")) { ?>
-                        <option value="<?php echo URLROOT ?>/sistema/?tab=clientes" 
-                        <?php if ($getTab == "clientes") {echo " selected ";} ?>>Clientes</option>
-                        <?php } ?>
+                        <?php 
+                            foreach ($_SESSION['menu'] as $menu) { 
+                            if ($menu['idMenuSuperior'] === "") {?>
+                                <option value="<?php echo URLROOT ?>/sistema/?tab=<?php echo $menu['nomeMenu'] ?>"
+                                <?php if ($getTab == $menu['nomeMenu']) {echo " selected ";} ?>><?php echo $menu['idMenu'] ?></option>
+                        <?php } } ?>
 
                     </select>
                 </div>

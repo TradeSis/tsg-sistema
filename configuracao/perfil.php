@@ -3,10 +3,8 @@
 //Lucas 04042023 criado
 include_once(__DIR__ . '/../header.php');
 include_once(__DIR__ . '/../database/perfil.php');
-include_once(__DIR__ . '/../database/aplicativo.php');
 
 $perfis = buscaPerfil();
-$aplicativos = buscaAplicativos();
 ?>
 <!doctype html>
 <html lang="pt-BR">
@@ -37,7 +35,7 @@ $aplicativos = buscaAplicativos();
 
             <div class="col-2 text-end">
                 <?php if (operacaoDisponivel("Perfil", "INS")) { ?>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#inserirmodal"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
+                    <button type="button" class="btn btn-success" id="modalBtn"><i class="bi bi-plus-square"></i>&nbsp Novo</button>
                 <?php } ?>
             </div>
         </div>
@@ -104,19 +102,8 @@ $aplicativos = buscaAplicativos();
                                         class="form-check-input"> <label for="checarTodos">Marcar tudo</label>
                                 </div>
                             </div>
-                            <?php $counter = 0; 
-                            foreach ($aplicativos as $aplicativo) {
-                                if ($counter % 3 == 0) {
-                                    if ($counter > 0) { echo '</div>'; }
-                                    echo '<div class="row mt-2">'; 
-                                }
-                                ?>
-                            <div class="col-md-4">
-                                <input class="form-check-input menu-checkbox" type="checkbox" value="<?php echo $aplicativo['idAplicativo'] ?>">
-                                <label>&nbsp;<?php echo $aplicativo['nomeAplicativo'] ?></label>
+                            <div class="row mt-2" id="aplicativosContainer">
                             </div>
-                            <?php $counter++; }
-                            if ($counter % 3 != 0) { echo '</div>'; } ?>
                         </div>
                 </div><!--body-->
                 <div class="modal-footer">
@@ -159,8 +146,41 @@ $aplicativos = buscaAplicativos();
                 var allChecked = $('.menu-checkbox').length === $('.menu-checkbox:checked').length;
                 $('#checarTodos').prop('checked', allChecked);
             });
-        });
 
+            $('#modalBtn').on('click', function () {
+                $('body').css('cursor', 'wait');
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '../database/aplicativo.php?operacao=buscar',
+                    data: {
+                        idAplicativo: null
+                    },
+                    success: function (aplicativos) {
+                        var aplicativosHtml = '';
+                        var counter = 0;
+                        aplicativos.forEach(function (aplicativo) {
+                            if (counter % 3 === 0) {
+                                if (counter > 0) { aplicativosHtml += '</div>'; }
+                                aplicativosHtml += '<div class="row mt-2">';
+                            }
+                            aplicativosHtml += `
+                                <div class="col-md-4">
+                                    <input class="form-check-input menu-checkbox" type="checkbox" value="${aplicativo.idAplicativo}">
+                                    <label>&nbsp;${aplicativo.nomeAplicativo}</label>
+                                </div>`;
+                            counter++;
+                        });
+                        if (counter % 3 !== 0) {
+                            aplicativosHtml += '</div>';
+                        }
+                        $('#aplicativosContainer').html(aplicativosHtml);
+                        $('#inserirmodal').modal('show');
+                        $('body').css('cursor', 'default');
+                    }
+                });
+            });
+        });
     </script>
 
     <!-- LOCAL PARA COLOCAR OS JS -FIM -->

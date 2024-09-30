@@ -14,7 +14,9 @@ def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA
     field idMenu  like perfilmenu.idMenu.
 
 def temp-table ttperfilmenu  no-undo serialize-name "perfilmenu"  /* JSON SAIDA */
-    like perfilmenu.
+    like perfilmenu
+    field nomeMenu  like tsmenu.nomeMenu
+    field idMenuSuperior  like tsmenu.idMenuSuperior.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus        as int serialize-name "status"
@@ -43,6 +45,13 @@ THEN DO:
 
         create ttperfilmenu.
         BUFFER-COPY perfilmenu TO ttperfilmenu.
+
+            find tsmenu where tsmenu.idMenu = perfilmenu.idMenu no-lock no-error.
+            if avail tsmenu
+            then do:
+                ttperfilmenu.nomeMenu   = tsmenu.nomeMenu.
+                ttperfilmenu.idMenuSuperior   = tsmenu.idMenuSuperior.
+            end.
     end.
 END.
 

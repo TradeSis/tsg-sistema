@@ -60,6 +60,23 @@ if (isset($_GET['operacao'])) {
 		return $perfil;
 	}
 
+    if ($operacao == "alterar") {
+
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idPerfil' => $_POST['idPerfil'],
+					'aplicativos' => $_POST['aplicativos']
+				)
+			)
+		);
+
+		$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'POST');
+		echo json_encode($perfil);
+		return $perfil;
+	}
+
 	if ($operacao == "buscar") {
 
 		$idPerfil = isset($_POST["idPerfil"]) && $_POST["idPerfil"] !== "" ? $_POST["idPerfil"] : null;
@@ -108,6 +125,24 @@ if (isset($_GET['operacao'])) {
 		);
 				
 		$perfilmenu = chamaAPI(null, '/sistema/perfilmenu', json_encode($apiEntrada), 'GET');
+		echo json_encode($perfilmenu);
+		return $perfilmenu;
+	}
+
+	if ($operacao == "buscarPerfilMenuAlterar") {
+
+		$idPerfil = isset($_POST["idPerfil"]) && $_POST["idPerfil"] !== "" ? $_POST["idPerfil"] : null;
+		
+		$apiEntrada =
+		array(
+			"dadosEntrada" => array(
+				array(
+					'idPerfil' => $idPerfil
+				)
+			)
+		);
+				
+		$perfilmenu = chamaAPI(null, '/sistema/perfilmenu/alterar', json_encode($apiEntrada), 'GET');
 		echo json_encode($perfilmenu);
 		return $perfilmenu;
 	}

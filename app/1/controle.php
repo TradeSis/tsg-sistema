@@ -22,6 +22,10 @@ if ($metodo == "GET") {
     $funcao = "aplicativo/menu";
     $parametro = null;
   }
+  if ($funcao == "perfilmenu" && $parametro == "alterar") {
+    $funcao = "perfilmenu/alterar";
+    $parametro = null;
+  }
 
   switch ($funcao) {
 
@@ -75,6 +79,10 @@ if ($metodo == "GET") {
 
     case "perfilmenu":
       include 'perfilmenu.php';
+      break;
+
+    case "perfilmenu/alterar":
+      include 'perfilmenu_busca.php';
       break;
 
     default:
@@ -210,6 +218,10 @@ if ($metodo == "POST") {
 
     case "aplicativo/menu":
       include 'menu_alterar.php';
+      break;
+
+    case "perfil":
+      include 'perfil_alterar.php';
       break;
 
     default:
