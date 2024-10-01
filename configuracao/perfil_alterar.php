@@ -44,7 +44,7 @@ $perfil = buscaPerfil($_GET['idPerfil']);
             <div class="row mt-3">
                 <div class="col-sm">
                     <label class='form-label ts-label'>Nome do Perfil</label>
-                    <input type="text" value="<?php echo $perfil['idPerfil'] ?>" name="idPerfil"
+                    <input type="text" value="<?php echo $perfil['idPerfil'] . ($perfil['restrito'] ? ' (Restrito)' : ''); ?>" name="idPerfil"
                         class="form-control ts-input" disabled>
                 </div>
             </div>
@@ -60,7 +60,9 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                     <div class="tab" id="tab-ven" hidden>Vendas</div>
                     <div class="tab" id="tab-cre" hidden>Crediario</div>
                     <div class="tab" id="tab-rel" hidden>Relatorios</div>
+                    <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] == 1 || $perfil['restrito'] == false) { ?>
                     <button type="button" class="btn btn-sm btn-success mb-1" id="modalBtn"><i class="bi bi-plus-square"></i></button>
+                    <?php } ?>
 
                     <div class="line"></div>
 
@@ -98,7 +100,9 @@ $perfil = buscaPerfil($_GET['idPerfil']);
             </div>
 
             <div class="text-end mt-4">
+                <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] == 1 || $perfil['restrito'] == false) { ?>
                 <button type="submit" class="btn  btn-success"><i class="bi bi-sd-card-fill"></i>&#32;Salvar</button>
+                <?php } ?>
             </div>
         </form>
 
@@ -129,7 +133,9 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                         </div>
                     </div> <!-- Close modal-body -->
                     <div class="modal-footer">
+                        <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] == 1 || $perfil['restrito'] == false) { ?>
                         <button type="submit" class="btn btn-warning">Salvar</button>
+                        <?php } ?>
                     </div>
                 </form>
             </div>
@@ -233,9 +239,15 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                         html += '<div class="row mt-2">';
                                     }
                                     html += '<div class="col-md-3">';
-                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + menu.idMenu + '" data-appid="' + aplicativoID + '">';
+                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + menu.idMenu + '" data-appid="' + aplicativoID + '" ';
+                                    <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] !== 1): ?>
+                                    html += 'disabled';
+                                    <?php endif; ?>
+                                    html += '>';
                                     html += '<label for="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '">&nbsp;' + menu.idMenu + '&nbsp;&nbsp;</label>';
+                                    if (menu.menuOp !== "") {
                                     html += '<a class="btn btn-primary btn-sm p-1" id="operacoes-menu-' + aplicativoNome + '-' + menuID + '" role="button" value="' + menu.idMenu + '" data-appid="' + aplicativoID + '" style="font-size: 0.5rem;" hidden><i class="bi bi-eye-fill"></i></a>';
+                                    }
                                     html += '</div>';
                                     count++;
                                 });
@@ -247,9 +259,15 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                         html += '<div class="row mt-2">';
                                     }
                                     html += '<div class="col-md-3">';
-                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + submenu.idMenu + '" data-appid="' + aplicativoID + '">';
+                                    html += '<input class="form-check-input menu-checkbox-' + aplicativoNome + '" type="checkbox" name="menus[]" id="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '" value="' + submenu.idMenu + '" data-appid="' + aplicativoID + '" ';
+                                    <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] !== 1): ?>
+                                    html += 'disabled';
+                                    <?php endif; ?>
+                                    html += '>';
                                     html += '<label for="inlineCheckbox' + (aplicativoNome + '-' + (count + 1)) + '">&nbsp;' + submenu.idMenuSuperior + ' &gt; ' + submenu.idMenu + '&nbsp;&nbsp;</label>';
+                                    if (submenu.menuOp !== "") {
                                     html += '<a class="btn btn-primary btn-sm p-1" id="operacoes-menu-' + aplicativoNome + '-' + submenuID + '" role="button" value="' + submenu.idMenu + '" data-appid="' + aplicativoID + '" style="font-size: 0.5rem;" hidden><i class="bi bi-eye-fill"></i></a>';
+                                    }
                                     html += '</div>';
                                     count++;
                                 });
@@ -325,7 +343,11 @@ $perfil = buscaPerfil($_GET['idPerfil']);
                                 operacao = operacao.trim();
                                 if (operacao) {
                                     checkboxHtml += `<div class="col-md-3">`;
-                                    checkboxHtml += `<input class="form-check-input operacao-checkbox" type="checkbox" value="${operacao}">`;
+                                    checkboxHtml += `<input class="form-check-input operacao-checkbox" type="checkbox" value="${operacao}" `;
+                                    <?php if ($perfil['restrito'] == true && $_SESSION['administradora'] !== 1): ?>
+                                    checkboxHtml += 'disabled';
+                                    <?php endif; ?>
+                                    checkboxHtml += '>';
                                     checkboxHtml += `<label>&nbsp;${operacao}</label>`;
                                     checkboxHtml += `</div>`;
                                 }

@@ -23,10 +23,6 @@ $logado = $_SESSION['usuario'];
 // helio 051023 - retirado toda parte HTML, HEAD, que precisa ficar em cada programa
 
 function operacaoDisponivel($idMenu, $operacao) {
-    if (isset($_SESSION['administradora']) && $_SESSION['administradora'] == 1) {
-        return true; 
-    }
-
     foreach ($_SESSION['menu'] as $menuItem) {
         if ($menuItem['idMenu'] === $idMenu) {
             $operacoes = explode(',', $menuItem['operacoes']);

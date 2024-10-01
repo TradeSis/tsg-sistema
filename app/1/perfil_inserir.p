@@ -9,7 +9,8 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idPerfil     like tsperfil.idPerfil
-    field aplicativos     like tsperfil.aplicativos.
+    field aplicativos     like tsperfil.aplicativos
+    field restrito     like tsperfil.restrito.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
@@ -51,6 +52,7 @@ do on error undo:
 	create tsperfil.
 	tsperfil.idPerfil = ttentrada.idPerfil.
 	tsperfil.aplicativos = ttentrada.aplicativos.
+	tsperfil.restrito = ttentrada.restrito.
 
 end.
 

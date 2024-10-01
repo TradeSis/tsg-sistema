@@ -39,7 +39,7 @@ $empresas = buscaEmpresas();
             </div>
         </div>
 
-        <form action="../database/login.php?operacao=inserir" method="post">
+        <form method="post" id="inserirForm">
             <div class="row mt-3">
                 <div class="col-sm">
                     <label class='form-label ts-label'>Nome do Usuário</label>
@@ -141,6 +141,27 @@ $empresas = buscaEmpresas();
                     c--;
                 }
                 this.setSelectionRange(c, c);
+            });
+        });
+
+        $("#inserirForm").submit(function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "../database/login.php?operacao=inserir",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    var msg = JSON.parse(response);
+                    console.log(msg);
+                    if (msg.status == 200) {
+                        window.location.href = '../configuracao/login.php';
+                    } else {
+                        alert(msg.retorno); 
+                    }
+                }
             });
         });
     </script>

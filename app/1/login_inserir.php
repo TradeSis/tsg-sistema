@@ -35,30 +35,34 @@ if (isset($jsonEntrada['dadosEntrada'])) {
         if (isset($conteudoSaida["conteudoSaida"][0])) { // Conteudo Saida - Caso de erro
             $jsonSaida = $conteudoSaida["conteudoSaida"][0];
         } 
+
+        if($jsonSaida["status"] == 200){
+
+            $loginEntrada= array(
+                "dadosEntrada" => array(
+                    array(
+                        'idLogin' => $jsonSaida['idLogin']
+                    )
+                )
+            );;
+            $retornoLogin = $progr->executarprogress("sistema/app/1/login", json_encode($loginEntrada));
+            $login = json_decode($retornoLogin, true);
+            $login = $login["login"][0]; 
         
-        $loginEntrada= array(
-			"dadosEntrada" => array(
-				array(
-					'idLogin' => $jsonSaida['idLogin']
-				)
-			)
-		);;
-        $retornoLogin = $progr->executarprogress("sistema/app/1/login", json_encode($loginEntrada));
-        $login = json_decode($retornoLogin, true);
-        $login = $login["login"][0]; 
-        
-        $loginNome = "'". $login["loginNome"]."'";
-        $email = "'". $login["email"]."'";
-        $idLogin = $login["idLogin"];
-        $statusUsuario = 1;
-        
-        $conexao = conectaMysql($jsonEntrada['dadosEntrada'][0]['idEmpresa']);
-        fwrite($arquivo, $identificacao . "-APP_INICIAL->" . APP_INICIAL . "\n");
-        if (APP_INICIAL == "servicos") {
-            fwrite($arquivo, $identificacao . "-SERVICOS->" . APP_INICIAL . "\n");
-            $sql = "INSERT INTO `usuario`( `nomeUsuario`, `email`, `idLogin`, `statusUsuario`) VALUES ($loginNome, $email, $idLogin, $statusUsuario)";
-            $atualizar = mysqli_query($conexao, $sql);
+            $loginNome = "'". $login["loginNome"]."'";
+            $email = "'". $login["email"]."'";
+            $idLogin = $login["idLogin"];
+            $statusUsuario = 1;
+            
+            $conexao = conectaMysql($jsonEntrada['dadosEntrada'][0]['idEmpresa']);
+            fwrite($arquivo, $identificacao . "-APP_INICIAL->" . APP_INICIAL . "\n");
+            if (APP_INICIAL == "servicos") {
+                fwrite($arquivo, $identificacao . "-SERVICOS->" . APP_INICIAL . "\n");
+                $sql = "INSERT INTO `usuario`( `nomeUsuario`, `email`, `idLogin`, `statusUsuario`) VALUES ($loginNome, $email, $idLogin, $statusUsuario)";
+                $atualizar = mysqli_query($conexao, $sql);
+            }
         }
+        
 
     } 
     catch (Exception $e) {

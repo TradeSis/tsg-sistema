@@ -45,6 +45,7 @@ $perfis = buscaPerfil();
                 <thead class="ts-headertabelafixo">
                     <tr>
                         <th>Nome Perfil</th>
+                        <th>Restrito</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -56,6 +57,9 @@ $perfis = buscaPerfil();
                     <tr>
                         <td>
                             <?php echo $perfil['idPerfil'] ?>
+                        </td>
+                        <td>
+                            <?php echo $perfil['restrito'] ? "Sim" : "Não" ?>
                         </td>
 
                         <td>
@@ -94,6 +98,14 @@ $perfis = buscaPerfil();
                                 <label class="form-label ts-label">Nome Perfil</label>
                                 <input type="text" class="form-control ts-input" name="idPerfil" required>
                             </div>
+                            <?php if ($_SESSION['administradora'] == 1) { ?>
+                            <div class="col-3">
+                                <div class="mt-4 form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="restrito" id="restrito">
+                                    <label class="form-check-label">Perfil Restrito</label>
+                                </div>
+                            </div>
+                            <?php } ?>
                         </div>
                         <div class="row mt-4">
                             <div class="row">
@@ -123,10 +135,12 @@ $perfis = buscaPerfil();
             $('#inserirForm').submit(function (e) {
                 e.preventDefault();
                 var idPerfil = $('input[name="idPerfil"]').val(); 
+                var restrito = $('#restrito').is(':checked');
                 var aplicativos = [];
                 $('.menu-checkbox:checked').each(function () { aplicativos.push($(this).next('label').text().trim()); });
                 var apiEntrada = {
                     idPerfil: idPerfil,
+                    restrito: restrito,
                     aplicativos: aplicativos.join(',')
                 };
                 $.ajax({

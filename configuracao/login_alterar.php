@@ -49,7 +49,7 @@ $perfis = buscaPerfil();
         </div>
 
 
-        <form action="../database/login.php?operacao=alterar" method="post">
+        <form method="post" id="alterarForm">
             <div class="row mt-3">
                 <div class="col-sm">
                     <label class="form-label ts-label">Nome</label>
@@ -69,13 +69,19 @@ $perfis = buscaPerfil();
                 <div class="col-sm-4">
                     <label class="form-label ts-label">Perfil</label>
                     <select class="form-select ts-input" name="idPerfil">
-                        <option value="<?php echo null ?>"></option>
+                        <option value=""></option> 
                         <?php
-                            foreach ($perfis as $perfil) { ?>
-                                <option <?php if ($usuario['idPerfil'] == $perfil['idPerfil']) {
-                                    echo "selected";
-                                } ?> value="<?php echo $perfil['idPerfil'] ?>"><?php echo $perfil['idPerfil'] ?></option>
-                            <?php } ?>
+                        foreach ($perfis as $perfil) {
+                            if ($_SESSION['administradora'] == 1 || $perfil['restrito'] === false) {
+                                ?>
+                                <option value="<?php echo $perfil['idPerfil']; ?>" 
+                                    <?php if ($usuario['idPerfil'] == $perfil['idPerfil']) echo 'selected'; ?>>
+                                    <?php echo $perfil['idPerfil']; ?>
+                                </option>
+                                <?php
+                            }
+                        }
+                        ?>
                     </select>
                 </div>
                 <div class="col-sm-2">
@@ -477,6 +483,27 @@ $perfis = buscaPerfil();
                 contentType: false,
                 success: function () {
                     window.location.reload();
+                }
+            });
+        });
+
+        $("#alterarForm").submit(function (event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: "../database/login.php?operacao=alterar",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    var msg = JSON.parse(response);
+                    console.log(msg);
+                    if (msg.status == 200) {
+                        window.location.reload();
+                    } else {
+                        alert(msg.retorno); 
+                    }
                 }
             });
         });

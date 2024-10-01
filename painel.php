@@ -48,7 +48,7 @@
             href="<?php echo URLROOT ?>/impostos/">Impostos</a>
         <?php }
         //Lucas 29022024 - id862 alterado campo idEmpresa para administradora
-        if ($_SESSION['administradora'] == 1 && in_array("Sistema", $_SESSION['aplicativo'])) { ?>
+        if (in_array("Sistema", $_SESSION['aplicativo'])) { ?>
             <a class="ts-itemsiderbar <?php if ($url == URLROOT . "/sistema/") {echo " active ";} ?> p-3" 
             href="<?php echo URLROOT ?>/sistema/">Sistema</a>
         <?php }  

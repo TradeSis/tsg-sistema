@@ -59,11 +59,46 @@ end.
 do on error undo:
     if ttentrada.acao = "login"
     then do:
+        if ttentrada.email <> login.email
+        then do:
+            find login where login.email = ttentrada.email no-lock no-error.
+            if avail login
+            then do:
+                create ttsaida.
+                ttsaida.tstatus = 400.
+                ttsaida.retorno = "Email ja possui cadastro".
+
+                hsaida  = temp-table ttsaida:handle.
+
+                lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
+                message string(vlcSaida).
+                return.
+            end.
+        end.
+        if ttentrada.cpfCnpj <> "" and ttentrada.cpfCnpj <> login.cpfCnpj
+        then do:
+            find login where login.cpfCnpj = ttentrada.cpfCnpj no-lock no-error.
+            if avail login
+            then do:
+                create ttsaida.
+                ttsaida.tstatus = 400.
+                ttsaida.retorno = "Cpf ja possui cadastro".
+
+                hsaida  = temp-table ttsaida:handle.
+
+                lokJson = hsaida:WRITE-JSON("LONGCHAR", vlcSaida, TRUE).
+                message string(vlcSaida).
+                return.
+            end.
+        end.
         find login where login.idLogin = ttentrada.idLogin exclusive no-error.
         login.loginNome = ttentrada.loginNome. 
-        login.email = ttentrada.email. 
         login.pedeToken = ttentrada.pedeToken. 
         login.idPerfil = ttentrada.idPerfil.
+        if ttentrada.email <> login.email
+        then do:
+        login.email = ttentrada.email. 
+        end.
         if ttentrada.cpfCnpj <> ""
         then login.cpfCnpj = ttentrada.cpfCnpj. 
     end.

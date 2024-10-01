@@ -71,13 +71,8 @@ if (isset($_GET['operacao'])) {
 		);
 
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'PUT');
-
-		if($login['status'] == 200) {
-			header('Location: ../configuracao/login.php');
-		} else {
-			$mensagem = $login['retorno'];
-			header('Location: ../configuracao/login_inserir.php?mensagem=' . $mensagem);
-		}
+		echo json_encode($login);
+		return $login;
 	}
 
 	if ($operacao == "alterar") {
@@ -98,7 +93,8 @@ if (isset($_GET['operacao'])) {
 		);
 	
 		$login = chamaAPI(null, '/sistema/login', json_encode($apiEntrada), 'POST');
-		header('Location: ../configuracao/login.php');
+		echo json_encode($login);
+		return $login;
 	}
 
 	if ($operacao == "loginalterar") {

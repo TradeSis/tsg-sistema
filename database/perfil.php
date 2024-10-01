@@ -50,6 +50,7 @@ if (isset($_GET['operacao'])) {
 			"dadosEntrada" => array(
 				array(
 					'idPerfil' => $_POST['idPerfil'],
+					'restrito' => $_POST['restrito'],
 					'aplicativos' => $_POST['aplicativos']
 				)
 			)

@@ -66,7 +66,7 @@ $url = (parse_url($URL_ATUAL, PHP_URL_PATH));
                                             echo " selected ";
                                         } ?>>Impostos</option>
                         <?php }
-                        if ($_SESSION['administradora'] == 1 && in_array("Sistema", $_SESSION['aplicativo'])) { ?>
+                        if (in_array("Sistema", $_SESSION['aplicativo'])) { ?>
                         <option value="<?php echo URLROOT ?>/sistema/" <?php if ($url == URLROOT . "/sistema/") {
                                             echo " selected ";
                                         } ?>>Sistema</option>
