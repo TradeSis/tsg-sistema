@@ -19,7 +19,7 @@ function buscaPerfil($idPerfil=null)
 	$perfil = chamaAPI(null, '/sistema/perfil', json_encode($apiEntrada), 'GET');
 	return $perfil;
 }
-function buscaPerfilMenu($idPerfil=null,$idAplicativo=null,$idMenu=null)
+function buscaPerfilMenu($idPerfil=null,$nomeAplicativo=null,)
 {
 
 	$perfilmenu = array();
@@ -29,8 +29,7 @@ function buscaPerfilMenu($idPerfil=null,$idAplicativo=null,$idMenu=null)
 			"dadosEntrada" => array(
 				array(
 					'idPerfil' => $idPerfil,
-					'idAplicativo' => $idAplicativo,
-					'idMenu' => $idMenu
+					'nomeAplicativo' => $nomeAplicativo
 				)
 			)
 		);

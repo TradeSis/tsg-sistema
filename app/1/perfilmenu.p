@@ -10,12 +10,15 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idPerfil  like perfilmenu.idPerfil
-    field idAplicativo  like perfilmenu.idAplicativo
-    field idMenu  like perfilmenu.idMenu.
+    field idAplicativo  like perfilmenu.idAplicativo initial ?
+    field nomeAplicativo  like tsaplic.nomeAplicativo initial ?
+    field idMenu  like perfilmenu.idMenu initial ?.
 
 def temp-table ttperfilmenu  no-undo serialize-name "perfilmenu"  /* JSON SAIDA */
     like perfilmenu
-    field nomeMenu  like tsmenu.nomeMenu
+    field tabMenu  like tsmenu.tabMenu
+    field srcMenu  like tsmenu.srcMenu
+    field titleMenu  like tsmenu.titleMenu
     field idMenuSuperior  like tsmenu.idMenuSuperior.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
@@ -26,6 +29,16 @@ def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CA
 hEntrada = temp-table ttentrada:HANDLE.
 lokJSON = hentrada:READ-JSON("longchar",vlcentrada, "EMPTY") no-error.
 find first ttentrada no-error.
+
+if ttentrada.nomeAplicativo <> ?
+then do:
+    find tsaplic where tsaplic.nomeAplicativo = ttentrada.nomeAplicativo no-lock no-error.
+
+    if avail tsaplic
+    then do:
+        ttentrada.idAplicativo = tsaplic.idAplicativo.
+    end.
+end.
 
 
 IF ttentrada.idPerfil <> ? OR (ttentrada.idPerfil = ? and ttentrada.idAplicativo = ? and ttentrada.idMenu = ?)
@@ -49,7 +62,9 @@ THEN DO:
             find tsmenu where tsmenu.idMenu = perfilmenu.idMenu no-lock no-error.
             if avail tsmenu
             then do:
-                ttperfilmenu.nomeMenu   = tsmenu.nomeMenu.
+                ttperfilmenu.tabMenu   = tsmenu.tabMenu.
+                ttperfilmenu.srcMenu   = tsmenu.srcMenu.
+                ttperfilmenu.titleMenu   = tsmenu.titleMenu.
                 ttperfilmenu.idMenuSuperior   = tsmenu.idMenuSuperior.
             end.
     end.

@@ -4,29 +4,48 @@ include_once "header.php";
 
 
 if (
+    !isset($_SESSION['nomeAplicativo']) || 
+    $_SESSION['nomeAplicativo'] !== 'Sistema' || 
     !isset($_SESSION['menu']) || 
     $_SESSION['menu'] === [""]
 ) { 
+    $_SESSION['nomeAplicativo'] = 'Sistema';
     include_once ROOT . "/sistema/database/perfil.php";
-    $menus = buscaPerfilMenu($_SESSION['idPerfil']);
+    $menus = buscaPerfilMenu($_SESSION['idPerfil'],$_SESSION['nomeAplicativo']);
     $menu = array();
-    if (isset($menus[0]['idMenu'])) {
-        foreach ($menus as $unico) {
-            $menu[] = array(
+    $buscaMenu = array();
+    foreach ($menus as $unico) {
+        $buscaMenu[$unico['idMenu']] = array(
+            "idMenu" => $unico["idMenu"],
+            "tabMenu" => $unico["tabMenu"],
+            "srcMenu" => $unico["srcMenu"],
+            "titleMenu" => $unico["titleMenu"],
+            "operacoes" => $unico["operacoes"],
+            "subMenus" => array() 
+        );
+    }
+    foreach ($menus as $unico) {
+        if (!empty($unico['idMenuSuperior'])) {
+            $buscaMenu[$unico['idMenuSuperior']]['subMenus'][] = array(
                 "idMenu" => $unico["idMenu"],
-                "nomeMenu" => $unico["nomeMenu"],
-                "idMenuSuperior" => $unico["idMenuSuperior"],
+                "tabMenu" => $unico["tabMenu"],
+                "srcMenu" => $unico["srcMenu"],
+                "titleMenu" => $unico["titleMenu"],
                 "operacoes" => $unico["operacoes"]
             );
         }
-    } else {
-        $menu[] = array(
-            "idMenu" => $menus["idMenu"],
-            "nomeMenu" => $menus["nomeMenu"],
-            "idMenuSuperior" => $menus["idMenuSuperior"],
-            "operacoes" => $menus["operacoes"]
-        );
     }
+    $menu = array();
+    foreach ($buscaMenu as $idMenu => $menuItem) {
+        if (empty($menus[array_search($idMenu, array_column($menus, 'idMenu'))]['idMenuSuperior'])) {
+            if (!empty($menuItem['subMenus'])) {
+                $menuItem['idMenuSuperior'] = $menuItem['subMenus'];
+            }
+            unset($menuItem['subMenus']); 
+            $menu[] = $menuItem;
+        }
+    }
+
     $_SESSION['menu'] = $menu;
 } 
 // helio 051023 - TODO PROGRAMA PRECISA TER DOCTYPE/HTML/HEAD no seu inicio
@@ -57,29 +76,26 @@ if (
                         <?php
                         $tab = '';
 
-                        if (isset($_GET['tab'])) {
-                            $tab = $_GET['tab'];
+                        if (isset($_GET['menu'])) {
+                            $tab = $_GET['menu'];
                         }
-                        if ($tab == '') {
-                            $tab = 'empresa';
-                        } ?>
+                        ?>
                         <?php 
-                            foreach ($_SESSION['menu'] as $menu) { 
-                            if ($menu['idMenuSuperior'] === "") { ?>
+                            foreach ($_SESSION['menu'] as $menu) { ?>
                                 <li class="nav-item mr-1 ">
                                     <a class="nav-link 
-                                    <?php if ($tab == $menu['nomeMenu']) {echo " active ";} ?>" 
-                                    href="?tab=<?php echo $menu['nomeMenu'] ?>" role="tab"><?php echo $menu['idMenu'] ?></a>
+                                    <?php if ($tab == $menu['tabMenu']) {echo " active ";} ?>" 
+                                    href="?menu=<?php echo $menu['tabMenu'] ?>" role="tab"><?php echo $menu['idMenu'] ?></a>
                                 </li>
-                        <?php } } ?>
+                        <?php  } ?>
 
                     </ul>
                 </div>
                 <!--Essa coluna só vai aparecer em dispositivo mobile-->
                 <div class="col-7 col-md-9 d-md-block d-lg-none ts-bgAplicativos">
                 <!--atraves do GET testa o valor para selecionar um option no select-->
-                <?php if(isset($_GET['tab'])){
-                    $getTab = $_GET['tab'];
+                <?php if(isset($_GET['menu'])){
+                    $getTab = $_GET['menu'];
                 }else{
                     $getTab = '';
                 }?>
@@ -88,8 +104,8 @@ if (
                         <?php 
                             foreach ($_SESSION['menu'] as $menu) { 
                             if ($menu['idMenuSuperior'] === "") {?>
-                                <option value="<?php echo URLROOT ?>/sistema/?tab=<?php echo $menu['nomeMenu'] ?>"
-                                <?php if ($getTab == $menu['nomeMenu']) {echo " selected ";} ?>><?php echo $menu['idMenu'] ?></option>
+                                <option value="<?php echo URLROOT ?>/sistema/?menu=<?php echo $menu['tabMenu'] ?>"
+                                <?php if ($getTab == $menu['tabMenu']) {echo " selected ";} ?>><?php echo $menu['idMenu'] ?></option>
                         <?php } } ?>
 
                     </select>
@@ -104,41 +120,16 @@ if (
             $src = "";
             $title = "Sistema";
 
-            if ($tab == "empresa") {
-                $src = "configuracao/empresa.php";
-                $title = "Sistema/Empresa";
-            }
-            if ($tab == "login") {
-                $src = "configuracao/login.php";
-                $title = "Sistema/Login";
-            }
-            if ($tab == "aplicativo") {
-                $src = "configuracao/aplicativo.php";
-                $title = "Sistema/Aplicativo";
-            }
-            if ($tab == "anexos") {
-                $src = "configuracao/anexos.php";
-                $title = "Sistema/Anexos";
-            }
-            if ($tab == "perfil") {
-                $src = "configuracao/perfil.php";
-                $title = "Sistema/Perfil";
-            }
-            if ($tab == "aplicativo_padrao") {
-                $src = "configuracao/aplicativo_padrao.php";
-                $title = "Sistema/Aplicativo_padrao";
-            }
-            if ($tab == "clientes") {
-                $src = "configuracao/clientes.php";
-                $title = "Sistema/clientes";
-            }
-            if ($tab == "configuracao") {
-                $src = "configuracao/";
-                $title = "Sistema/Configuração";
+            foreach ($_SESSION['menu'] as $menu) { 
+                if ($tab == $menu['tabMenu']) {
+                    $src = $menu['srcMenu'];
+                    $title = $menu['titleMenu'];
+                }
                 if (isset($_GET['stab'])) {
                     $src = $src . "?stab=" . $_GET['stab'];
                 }
-            }
+            } 
+
             if ($src !== "") { ?>
                 <div class="container-fluid p-0 m-0">
                     <iframe class="row p-0 m-0 ts-iframe"  src="<?php echo URLROOT ?>/sistema/<?php echo $src ?>"></iframe>

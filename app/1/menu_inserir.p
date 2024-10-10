@@ -10,7 +10,10 @@ def var hsaida   as handle.             /* HANDLE SAIDA */
 def temp-table ttentrada no-undo serialize-name "dadosEntrada"   /* JSON ENTRADA */
     field idMenu     like tsmenu.idMenu
     field idAplicativo     like tsmenu.idAplicativo
-    field idMenuSuperior     like tsmenu.idMenuSuperior.
+    field idMenuSuperior     like tsmenu.idMenuSuperior
+    field tabMenu     like tsmenu.tabMenu
+    field srcMenu     like tsmenu.srcMenu
+    field titleMenu     like tsmenu.titleMenu.
 
 def temp-table ttsaida  no-undo serialize-name "conteudoSaida"  /* JSON SAIDA CASO ERRO */
     field tstatus           as int serialize-name "status"
@@ -53,6 +56,9 @@ do on error undo:
 	tsmenu.idMenu = ttentrada.idMenu.
 	tsmenu.idAplicativo = ttentrada.idAplicativo.
 	tsmenu.idMenuSuperior = ttentrada.idMenuSuperior.
+    tsmenu.tabMenu = ttentrada.tabMenu. 
+    tsmenu.srcMenu = ttentrada.srcMenu. 
+    tsmenu.titleMenu = ttentrada.titleMenu. 
 
 end.
 

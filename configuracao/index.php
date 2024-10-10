@@ -17,25 +17,25 @@ include_once(__DIR__ . '/../header.php');
           <a class="nav-link <?php if ($stab == "empresa") {
             echo " active ";
           } ?>"
-            href="?tab=configuracao&stab=empresa" role="tab">Empresa</a>
+            href="?menu=configuracao&stab=empresa" role="tab">Empresa</a>
         </li>
         <li class="nav-item ">
           <a class="nav-link <?php if ($stab == "login") {
             echo " active ";
           } ?>"
-            href="?tab=configuracao&stab=login" role="tab">Login</a>
+            href="?menu=configuracao&stab=login" role="tab">Login</a>
         </li>
         <li class="nav-item ">
           <a class="nav-link <?php if ($stab == "aplicativo") {
             echo " active ";
           } ?>"
-            href="?tab=configuracao&stab=aplicativo" role="tab">Aplicativos</a>
+            href="?menu=configuracao&stab=aplicativo" role="tab">Aplicativos</a>
         </li>
         <li class="nav-item ">
           <a class="nav-link <?php if ($stab == "anexos") {
             echo " active ";
           } ?>"
-            href="?tab=configuracao&stab=anexos" role="tab">Anexos</a>
+            href="?menu=configuracao&stab=anexos" role="tab">Anexos</a>
         </li>
 
     

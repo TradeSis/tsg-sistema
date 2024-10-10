@@ -145,7 +145,10 @@ if (isset($_GET['operacao'])) {
 				array(
 					'idMenu' => $_POST['idMenu'],
 					'idAplicativo' => $_POST['idAplicativo'],
-					'idMenuSuperior' => $_POST['idMenuSuperior']
+					'idMenuSuperior' => $_POST['idMenuSuperior'],
+					'tabMenu' => $_POST['tabMenu'],
+					'srcMenu' => $_POST['srcMenu'],
+					'titleMenu' => $_POST['titleMenu']
 				)
 			)
 		);
@@ -164,6 +167,9 @@ if (isset($_GET['operacao'])) {
 					'idMenu' => $_POST['idMenu'],
 					'idAplicativo' => $_POST['idAplicativo'],
 					'idMenuSuperior' => $_POST['idMenuSuperior'],
+					'tabMenu' => $_POST['tabMenu'],
+					'srcMenu' => $_POST['srcMenu'],
+					'titleMenu' => $_POST['titleMenu'],
 					'menuOp' => $_POST['operacoes']
 				)
 			)

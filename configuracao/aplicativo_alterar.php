@@ -126,6 +126,20 @@ $menus = buscaMenus($_GET['idAplicativo']);
                                     </select>
                                 </div>
                             </div>
+                            <div class="row mt-2">
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Tab</label>
+                                    <input type="text" class="form-control ts-input" name="tabMenu">
+                                </div>
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Caminho</label>
+                                    <input type="text" class="form-control ts-input" name="srcMenu">
+                                </div>
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Titulo</label>
+                                    <input type="text" class="form-control ts-input" name="titleMenu">
+                                </div>
+                            </div>
                     </div><!--body-->
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">Salvar</button>
@@ -162,6 +176,20 @@ $menus = buscaMenus($_GET['idAplicativo']);
                                             </option>
                                         <?php } } ?>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Tab</label>
+                                    <input type="text" class="form-control ts-input" name="tabMenu" id="tabMenu">
+                                </div>
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Caminho</label>
+                                    <input type="text" class="form-control ts-input" name="srcMenu" id="srcMenu">
+                                </div>
+                                <div class="col-md">
+                                    <label class="form-label ts-label">Titulo</label>
+                                    <input type="text" class="form-control ts-input" name="titleMenu" id="titleMenu">
                                 </div>
                             </div>
                             <div class="row mt-4">
@@ -267,6 +295,9 @@ $menus = buscaMenus($_GET['idAplicativo']);
                         $('#idMenu').val(msg.idMenu);
                         $('#idMenuSuperior').val(msg.idMenuSuperior);
                         $('#menuOp').val(msg.menuOp);
+                        $('#tabMenu').val(msg.tabMenu);
+                        $('#srcMenu').val(msg.srcMenu);
+                        $('#titleMenu').val(msg.titleMenu);
 
                         if (msg.menuOp) {
                             var ops = msg.menuOp.split(',');  

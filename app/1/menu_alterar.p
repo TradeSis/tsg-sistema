@@ -50,6 +50,9 @@ do on error undo:
     find tsmenu where tsmenu.idMenu = ttentrada.idMenu exclusive no-error.
     tsmenu.idAplicativo = ttentrada.idAplicativo. 
     tsmenu.idMenuSuperior = ttentrada.idMenuSuperior. 
+    tsmenu.tabMenu = ttentrada.tabMenu. 
+    tsmenu.srcMenu = ttentrada.srcMenu. 
+    tsmenu.titleMenu = ttentrada.titleMenu. 
     tsmenu.menuOp = ttentrada.menuOp. 
 end.
 

@@ -28,7 +28,7 @@ include_once '../header.php';
                             <h3><?php echo isset($_GET['posicao']) ? 'Posição do Cliente' : 'Histórico do Cliente'; ?></h3>
                         </div>
                         <div class="col-sm-4" style="text-align:right">
-                            <a href="clientes.php" role="button" class="btn btn-primary btn-sm">Voltar</a>
+                            <a href="#" onclick="history.back()" role="button" class="btn btn-primary btn-sm">Voltar</a>
                         </div>
                     </div>
                 </div>

@@ -66,8 +66,10 @@ then do:
             ttmenu.idMenu = tsmenu.idMenu.
             ttmenu.idAplicativo = tsmenu.idAplicativo.
             ttmenu.idMenuSuperior = tsmenu.idMenuSuperior.
+            ttmenu.tabMenu = tsmenu.tabMenu.
+            ttmenu.srcMenu = tsmenu.srcMenu.
+            ttmenu.titleMenu = tsmenu.titleMenu.
             ttmenu.menuOp = tsmenu.menuOp.
-            ttmenu.nomeMenu = tsmenu.nomeMenu.
     
             /*perfilmenu*/
             find perfilmenu where perfilmenu.idPerfil = tsperfil.idPerfil and
